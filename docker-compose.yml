@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Aplicación Web PWA de Hospital Puerta de Hierro
+  hospital-puerta-de-hierro:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hospital_puerta_de_hierro_app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL:-}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY:-}
+    networks:
+      - hospital_network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Microservicio Auxiliar de Procesamiento y Normativas en Python
+  hospital-python-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    container_name: hospital_puerta_de_hierro_python
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - NOM_024_STRICT_MODE=1
+    volumes:
+      - ./server:/app
+    networks:
+      - hospital_network
+
+networks:
+  hospital_network:
+    driver: bridge

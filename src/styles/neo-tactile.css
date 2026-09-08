@@ -1,0 +1,500 @@
+/* ==============================================================================
+   CENTRO MÉDICO PUERTA DE HIERRO (TEPIC)
+   SISTEMA DE DISEÑO NEO-TACTILE GLASSMORHISM
+   Basado fielmente en 'diseño color hospital puerta de hierro.jpg'
+   ============================================================================== */
+
+:root {
+  /* Paleta Corporativa Puerta de Hierro */
+  --pdh-blue-royal: #2563eb;
+  --pdh-blue-glow: #3b82f6;
+  --pdh-blue-deep: #1d4ed8;
+  --pdh-cyan-neon: #06b6d4;
+  --pdh-cyan-glow: #22d3ee;
+  --pdh-slate-dark: #0a0f1d;
+  --pdh-slate-card: rgba(18, 26, 44, 0.72);
+  --pdh-slate-border: rgba(255, 255, 255, 0.12);
+  --pdh-slate-border-glow: rgba(59, 130, 246, 0.35);
+  --pdh-text-primary: #f8fafc;
+  --pdh-text-secondary: #94a3b8;
+  --pdh-text-muted: #64748b;
+
+  /* Colores Clínicos Manchester & Alertas */
+  --triage-red: #ef4444;
+  --triage-orange: #f97316;
+  --triage-yellow: #eab308;
+  --triage-green: #10b981;
+  --triage-blue: #3b82f6;
+
+  /* Tipografía */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--pdh-slate-dark);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8) 0%, transparent 100%);
+  background-attachment: fixed;
+  color: var(--pdh-text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==============================================================================
+   CONTENEDORES Y PANELES GLASSMORFISMO NEO-TACTILE
+   ============================================================================== */
+.neo-glass-panel {
+  background: var(--pdh-slate-card);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--pdh-slate-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-glass-panel-glow {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 35px -5px rgba(37, 99, 235, 0.25), 0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Modal y Popovers estilo Neo-Tactile */
+.neo-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 9, 18, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.neo-modal-content {
+  background: rgba(19, 27, 46, 0.95);
+  backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 28px;
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==============================================================================
+   BOTONES TÁCTILES NEO-TACTILE (DEFART Y ACTIVE)
+   ============================================================================== */
+.btn-neo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  position: relative;
+  text-decoration: none;
+}
+
+/* Estado 'Defart' (Gris suave táctil convexo con relieve 3D) */
+.btn-neo-defart {
+  background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
+  color: #0f172a;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    inset 0 2px 2px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.15);
+  padding: 10px 24px;
+}
+
+.btn-neo-defart:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.45),
+    inset 0 2px 2px rgba(255, 255, 255, 1),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.15);
+}
+
+.btn-neo-defart:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Estado 'Active' (Azul Neón Puerta de Hierro con Resplandor Táctil) */
+.btn-neo-active {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+  box-shadow: 
+    0 4px 18px rgba(37, 99, 235, 0.55),
+    inset 0 2px 2px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+  padding: 10px 24px;
+}
+
+.btn-neo-active:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 24px rgba(37, 99, 235, 0.7),
+    inset 0 2px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.btn-neo-active:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 2px 8px rgba(37, 99, 235, 0.4),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Botón Cian Táctil (Acciones de Laboratorio / CEYE) */
+.btn-neo-cyan {
+  background: linear-gradient(180deg, #22d3ee 0%, #06b6d4 100%);
+  color: #042f2e;
+  box-shadow: 
+    0 4px 18px rgba(6, 182, 212, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+  padding: 10px 24px;
+}
+
+.btn-neo-cyan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(6, 182, 212, 0.65);
+}
+
+/* Botón Urgencia / Código Rojo */
+.btn-neo-danger {
+  background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
+  color: #ffffff;
+  box-shadow: 
+    0 4px 18px rgba(220, 38, 38, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+  padding: 10px 24px;
+}
+
+/* Botón Éxito / Alta Médica */
+.btn-neo-success {
+  background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 
+    0 4px 18px rgba(5, 150, 105, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+  padding: 10px 24px;
+}
+
+/* Barra de Acciones Oscura Táctil (Del diseño: Action bar píldora con botones circulares) */
+.neo-action-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #151d2e;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.neo-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #202b42;
+  color: #94a3b8;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.neo-icon-btn:hover {
+  color: #ffffff;
+  background: #2a3857;
+  transform: translateY(-1px);
+}
+
+.neo-icon-btn-active {
+  color: #ffffff;
+  background: #2563eb;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.neo-icon-btn-ring {
+  position: relative;
+}
+
+.neo-icon-btn-ring::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--pdh-cyan-neon);
+  box-shadow: 0 0 10px var(--pdh-cyan-neon);
+  animation: pulseRing 2s infinite ease-in-out;
+}
+
+/* ==============================================================================
+   CONTROLES TÁCTILES: TOGGLE SWITCH Y SLIDER
+   ============================================================================== */
+.neo-toggle {
+  position: relative;
+  display: inline-block;
+  width: 58px;
+  height: 32px;
+}
+
+.neo-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.neo-toggle-track {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #1c273d;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+  transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-toggle-thumb {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 4px;
+  bottom: 3px;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35), inset 0 1px 1px #ffffff;
+  transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-toggle input:checked + .neo-toggle-track {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.neo-toggle input:checked + .neo-toggle-track .neo-toggle-thumb {
+  transform: translateX(24px);
+}
+
+/* Neo-Slider */
+.neo-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #2563eb 0%, #06b6d4 100%);
+  outline: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.neo-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px #ffffff;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.neo-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* ==============================================================================
+   INPUTS Y SELECTS CLÍNICOS NEO-TACTILE
+   ============================================================================== */
+.neo-input {
+  width: 100%;
+  background: rgba(14, 21, 37, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 12px 16px;
+  color: #f8fafc;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+}
+
+.neo-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.35), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.neo-input::placeholder {
+  color: #64748b;
+}
+
+.neo-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* ==============================================================================
+   NOTIFICACIÓN Y BADGES NEO-TACTILE
+   ============================================================================== */
+.neo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.neo-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulseBadge 1.8s infinite;
+}
+
+/* ==============================================================================
+   CHAT MÉDICO ESTILO WHATSAPP
+   ============================================================================== */
+.whatsapp-chat-container {
+  display: flex;
+  height: calc(100vh - 120px);
+  min-height: 580px;
+  background: rgba(14, 20, 33, 0.9);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.whatsapp-sidebar {
+  width: 320px;
+  background: rgba(17, 25, 41, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.whatsapp-chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #0b111e;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.chat-bubble-sent {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  color: #ffffff;
+  border-radius: 18px 18px 4px 18px;
+  padding: 10px 14px;
+  max-width: 75%;
+  align-self: flex-end;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.chat-bubble-received {
+  background: rgba(30, 41, 59, 0.9);
+  color: #f1f5f9;
+  border-radius: 18px 18px 18px 4px;
+  padding: 10px 14px;
+  max-width: 75%;
+  align-self: flex-start;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chat-double-check {
+  color: #38bdf8;
+  display: inline-flex;
+  margin-left: 4px;
+}
+
+/* ==============================================================================
+   ANIMACIONES
+   ============================================================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 0.4; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+@keyframes pulseBadge {
+  0% { transform: scale(0.9); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.6; }
+  100% { transform: scale(0.9); opacity: 1; }
+}
+
+/* Scrollbar estilizada Neo-Tactile */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 15, 29, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.6);
+}

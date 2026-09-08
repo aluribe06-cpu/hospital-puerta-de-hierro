@@ -1,0 +1,17 @@
+{
+  "name": "Hospital Puerta de Hierro - Sistema Hospitalario",
+  "short_name": "Puerta de Hierro",
+  "description": "Plataforma Integral Médica y Administrativa de Hospital Puerta de Hierro Tepic",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0f1d",
+  "theme_color": "#2563eb",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/assets/hospital-logo.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
