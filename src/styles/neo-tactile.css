@@ -1,30 +1,33 @@
 /* ==============================================================================
    CENTRO MÉDICO PUERTA DE HIERRO (TEPIC)
    SISTEMA DE DISEÑO NEO-TACTILE GLASSMORHISM
-   Basado fielmente en 'diseño color hospital puerta de hierro.jpg'
+   Idéntico a la imagen de referencia 'diseño color hospital puerta de hierro.jpg'
    ============================================================================== */
 
 :root {
-  /* Paleta Corporativa Puerta de Hierro */
+  /* Paleta Corporativa Puerta de Hierro & Neo-Tactile */
+  --pdh-blue-electric: #3b82f6;
   --pdh-blue-royal: #2563eb;
-  --pdh-blue-glow: #3b82f6;
-  --pdh-blue-deep: #1d4ed8;
+  --pdh-blue-glow: rgba(59, 130, 246, 0.6);
   --pdh-cyan-neon: #06b6d4;
-  --pdh-cyan-glow: #22d3ee;
-  --pdh-slate-dark: #0a0f1d;
-  --pdh-slate-card: rgba(18, 26, 44, 0.72);
-  --pdh-slate-border: rgba(255, 255, 255, 0.12);
-  --pdh-slate-border-glow: rgba(59, 130, 246, 0.35);
-  --pdh-text-primary: #f8fafc;
-  --pdh-text-secondary: #94a3b8;
-  --pdh-text-muted: #64748b;
+  --pdh-cyan-glow: rgba(6, 182, 212, 0.7);
+  
+  /* Fondos del Estudio Neo-Tactile */
+  --bg-gradient-top: #a5c4e8;
+  --bg-slate-medium: #1e2738;
+  --bg-slate-dark: #0f1523;
+  --bg-slate-deep: #090d16;
 
-  /* Colores Clínicos Manchester & Alertas */
-  --triage-red: #ef4444;
-  --triage-orange: #f97316;
-  --triage-yellow: #eab308;
-  --triage-green: #10b981;
-  --triage-blue: #3b82f6;
+  /* Colores de Porcelana Táctil */
+  --porcelain-bg: linear-gradient(180deg, #ffffff 0%, #eef2f7 100%);
+  --porcelain-border: rgba(255, 255, 255, 0.95);
+  --porcelain-text: #0f172a;
+  --porcelain-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), inset 0 2px 2px #ffffff, inset 0 -2px 3px rgba(0, 0, 0, 0.08);
+
+  /* Texto */
+  --pdh-text-primary: #f8fafc;
+  --pdh-text-secondary: #cbd5e1;
+  --pdh-text-muted: #94a3b8;
 
   /* Tipografía */
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -38,46 +41,137 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ==============================================================================
+   FONDO DEL ESTUDIO NEO-TACTILE (LUMINOSO CON FOCO SUPERIOR-IZQUIERDO)
+   Idéntico al fondo con halo de luz difusa y foco de estudio fotográfico
+   ============================================================================== */
+html, body {
+  height: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
 body {
   font-family: var(--font-sans);
-  background-color: var(--pdh-slate-dark);
+  background-color: #172133;
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8) 0%, transparent 100%);
+    /* Luz difusa ambiental intensa superior-izquierda (spotlight de estudio fotográfico) */
+    radial-gradient(circle 950px at 16% 8%, rgba(235, 245, 255, 0.85) 0%, rgba(190, 218, 248, 0.55) 25%, rgba(120, 155, 198, 0.3) 48%, transparent 75%),
+    /* Resplandor superior suave */
+    radial-gradient(ellipse 1200px 500px at 40% 0%, rgba(215, 235, 255, 0.45) 0%, rgba(100, 140, 190, 0.2) 40%, transparent 70%),
+    /* Resplandor lateral azul médico */
+    radial-gradient(circle 750px at 85% 25%, rgba(59, 130, 246, 0.22) 0%, transparent 60%),
+    /* Resplandor inferior cian quirófano */
+    radial-gradient(circle 800px at 50% 100%, rgba(6, 182, 212, 0.25) 0%, transparent 60%),
+    /* Gradiente base: pizarra azulada clara en la parte superior a carbón elegante abajo */
+    linear-gradient(150deg, #445671 0%, #2b394f 28%, #162031 65%, #0e1422 100%);
   background-attachment: fixed;
   color: var(--pdh-text-primary);
-  min-height: 100vh;
-  overflow-x: hidden;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
 /* ==============================================================================
-   CONTENEDORES Y PANELES GLASSMORFISMO NEO-TACTILE
+   PANEL PRINCIPAL DE VIDRIO ESMERILADO NEO-TACTILE (CON BORDE CYAN Y REFLEJOS)
    ============================================================================== */
 .neo-glass-panel {
-  background: var(--pdh-slate-card);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--pdh-slate-border);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-top: 2px solid rgba(255, 255, 255, 0.8);
+  border-left: 2px solid rgba(255, 255, 255, 0.55);
+  border-bottom: 2.5px solid #00f2fe; /* Borde cian resplandeciente inferior característico */
+  border-radius: 30px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.35),
+    0 0 35px -2px rgba(0, 242, 254, 0.35), /* Reflejo neon cian */
+    inset 0 1px 2px rgba(255, 255, 255, 0.65);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
 .neo-glass-panel-glow {
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 0 35px -5px rgba(37, 99, 235, 0.25), 0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.45);
+  border-bottom-color: #00f2fe;
+  box-shadow: 
+    0 30px 65px -10px rgba(0, 0, 0, 0.45),
+    0 0 45px 0 rgba(0, 242, 254, 0.45),
+    inset 0 2px 3px rgba(255, 255, 255, 0.7);
 }
 
-/* Modal y Popovers estilo Neo-Tactile */
+/* Panel translúcido oscuro complementario */
+.neo-glass-dark {
+  background: rgba(18, 26, 42, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 24px;
+  box-shadow: 
+    0 16px 36px -8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* ==============================================================================
+   TARJETAS BLANCAS DE PORCELANA TÁCTIL (COMO 'COLDED' Y 'MODAL' EN LA IMAGEN)
+   ============================================================================== */
+.neo-porcelain-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%);
+  color: #0f172a !important;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 16px 32px -6px rgba(0, 0, 0, 0.22),
+    0 4px 10px rgba(0, 0, 0, 0.08),
+    inset 0 2px 2px #ffffff,
+    inset 0 -2px 3px rgba(0, 0, 0, 0.06);
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-porcelain-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 22px 40px -8px rgba(0, 0, 0, 0.28),
+    0 6px 14px rgba(0, 0, 0, 0.1),
+    inset 0 2px 2px #ffffff,
+    inset 0 -2px 3px rgba(0, 0, 0, 0.05);
+}
+
+.neo-porcelain-card * {
+  color: inherit;
+}
+
+/* Input y Select anidados dentro de tarjeta de porcelana (estilo 'Selectfield') */
+.neo-porcelain-input {
+  background: #e9eef5;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  padding: 10px 14px;
+  color: #1e293b;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+  outline: none;
+  width: 100%;
+}
+
+.neo-porcelain-input:focus {
+  background: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Modales estilo Neo-Tactile */
 .neo-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(5, 9, 18, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(10, 16, 28, 0.65);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -87,11 +181,15 @@ body {
 }
 
 .neo-modal-content {
-  background: rgba(19, 27, 46, 0.95);
-  backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 28px;
-  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+  color: #0f172a !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-bottom: 3.5px solid #00f2fe;
+  border-radius: 32px;
+  box-shadow: 
+    0 35px 80px -10px rgba(0, 0, 0, 0.35),
+    0 0 45px rgba(0, 242, 254, 0.35),
+    inset 0 2px 2px #ffffff;
   width: 100%;
   max-width: 680px;
   max-height: 90vh;
@@ -99,8 +197,49 @@ body {
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.neo-modal-content h1, 
+.neo-modal-content h2, 
+.neo-modal-content h3, 
+.neo-modal-content h4 {
+  color: #0f172a !important;
+}
+
+.neo-modal-content label {
+  color: #334155 !important;
+}
+
+.neo-modal-content p {
+  color: #475569 !important;
+}
+
+.neo-modal-content .border-b {
+  border-color: #e2e8f0 !important;
+}
+
+.neo-modal-content .neo-input {
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.neo-modal-content .neo-input:focus {
+  background: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.neo-modal-content .neo-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+.neo-modal-content option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
 /* ==============================================================================
-   BOTONES TÁCTILES NEO-TACTILE (DEFART Y ACTIVE)
+   BOTONES TÁCTILES PÍLDORA (DEFART Y ACTIVE) - IDÉNTICOS A LA REFERENCIA
    ============================================================================== */
 .btn-neo {
   display: inline-flex;
@@ -110,7 +249,7 @@ body {
   border-radius: 9999px;
   font-family: var(--font-sans);
   font-size: 0.92rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   outline: none;
   border: none;
@@ -120,135 +259,147 @@ body {
   text-decoration: none;
 }
 
-/* Estado 'Defart' (Gris suave táctil convexo con relieve 3D) */
+/* Botón 'Defart' (Blanco porcelana táctil convexo con relieve 3D) */
 .btn-neo-defart {
-  background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
   color: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.9);
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.35),
-    inset 0 2px 2px rgba(255, 255, 255, 0.95),
-    inset 0 -2px 3px rgba(0, 0, 0, 0.15);
-  padding: 10px 24px;
+    0 8px 18px rgba(0, 0, 0, 0.2),
+    inset 0 2px 2px #ffffff,
+    inset 0 -2px 3px rgba(0, 0, 0, 0.12);
+  padding: 10px 26px;
 }
 
 .btn-neo-defart:hover {
   transform: translateY(-2px);
   box-shadow: 
-    0 6px 16px rgba(0, 0, 0, 0.45),
-    inset 0 2px 2px rgba(255, 255, 255, 1),
-    inset 0 -2px 3px rgba(0, 0, 0, 0.15);
+    0 12px 22px rgba(0, 0, 0, 0.28),
+    inset 0 2px 2px #ffffff,
+    inset 0 -2px 3px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(180deg, #ffffff 0%, #edf2f7 100%);
 }
 
 .btn-neo-defart:active {
   transform: translateY(1px);
   box-shadow: 
-    0 2px 6px rgba(0, 0, 0, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.25);
+    0 3px 8px rgba(0, 0, 0, 0.2),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Estado 'Active' (Azul Neón Puerta de Hierro con Resplandor Táctil) */
+/* Botón 'Active' (Azul Eléctrico Vibrante con Halo Lanza-Luz) */
 .btn-neo-active {
-  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(180deg, #448bfe 0%, #2563eb 100%);
   color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
   box-shadow: 
-    0 4px 18px rgba(37, 99, 235, 0.55),
-    inset 0 2px 2px rgba(255, 255, 255, 0.4),
+    0 8px 25px rgba(37, 99, 235, 0.65),
+    inset 0 2px 2px rgba(255, 255, 255, 0.55),
     inset 0 -2px 3px rgba(0, 0, 0, 0.25);
-  padding: 10px 24px;
+  padding: 10px 26px;
 }
 
 .btn-neo-active:hover {
   transform: translateY(-2px);
   box-shadow: 
-    0 6px 24px rgba(37, 99, 235, 0.7),
-    inset 0 2px 2px rgba(255, 255, 255, 0.5),
-    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+    0 12px 32px rgba(37, 99, 235, 0.8),
+    inset 0 2px 2px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.2);
 }
 
 .btn-neo-active:active {
   transform: translateY(1px);
   box-shadow: 
-    0 2px 8px rgba(37, 99, 235, 0.4),
+    0 3px 10px rgba(37, 99, 235, 0.5),
     inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Botón Cian Táctil (Acciones de Laboratorio / CEYE) */
+/* Botón Cian Neón (Laboratorio / CEYE) */
 .btn-neo-cyan {
   background: linear-gradient(180deg, #22d3ee 0%, #06b6d4 100%);
   color: #042f2e;
+  border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 
-    0 4px 18px rgba(6, 182, 212, 0.5),
-    inset 0 2px 2px rgba(255, 255, 255, 0.6),
+    0 8px 24px rgba(6, 182, 212, 0.55),
+    inset 0 2px 2px rgba(255, 255, 255, 0.7),
     inset 0 -2px 3px rgba(0, 0, 0, 0.2);
-  padding: 10px 24px;
+  padding: 10px 26px;
 }
 
 .btn-neo-cyan:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(6, 182, 212, 0.65);
+  box-shadow: 0 12px 30px rgba(6, 182, 212, 0.75);
 }
 
-/* Botón Urgencia / Código Rojo */
+/* Botón Rojo (Código Urgencias) */
 .btn-neo-danger {
   background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
   color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 
-    0 4px 18px rgba(220, 38, 38, 0.5),
-    inset 0 2px 2px rgba(255, 255, 255, 0.4),
-    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
-  padding: 10px 24px;
+    0 8px 24px rgba(220, 38, 38, 0.6),
+    inset 0 2px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+  padding: 10px 26px;
 }
 
-/* Botón Éxito / Alta Médica */
+/* Botón Verde (Éxito / Alta) */
 .btn-neo-success {
   background: linear-gradient(180deg, #34d399 0%, #059669 100%);
   color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 
-    0 4px 18px rgba(5, 150, 105, 0.5),
-    inset 0 2px 2px rgba(255, 255, 255, 0.4),
-    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
-  padding: 10px 24px;
+    0 8px 24px rgba(5, 150, 105, 0.6),
+    inset 0 2px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+  padding: 10px 26px;
 }
 
-/* Barra de Acciones Oscura Táctil (Del diseño: Action bar píldora con botones circulares) */
+/* ==============================================================================
+   BARRA DE ACCIONES OSCURA TÁCTIL (DEL DISEÑO: ACTION BAR PÍLDORA CON BOTÓN ANILLO NEÓN)
+   ============================================================================== */
 .neo-action-bar {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: #151d2e;
-  padding: 6px 10px;
+  gap: 10px;
+  background: linear-gradient(180deg, #242e42 0%, #171f2f 100%);
+  padding: 8px 14px;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 12px 28px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
 }
 
 .neo-icon-btn {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #202b42;
-  color: #94a3b8;
-  border: none;
+  background: linear-gradient(180deg, #323e57 0%, #253047 100%);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25);
 }
 
 .neo-icon-btn:hover {
   color: #ffffff;
-  background: #2a3857;
+  background: #3e4d6c;
   transform: translateY(-1px);
 }
 
 .neo-icon-btn-active {
   color: #ffffff;
   background: #2563eb;
-  box-shadow: 0 0 12px rgba(37, 99, 235, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  border-color: #60a5fa;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
+/* El famoso botón con Anillo Neón Cian fluorescente de la imagen */
 .neo-icon-btn-ring {
   position: relative;
 }
@@ -256,21 +407,21 @@ body {
 .neo-icon-btn-ring::after {
   content: '';
   position: absolute;
-  inset: -4px;
+  inset: -5px;
   border-radius: 50%;
-  border: 2px solid var(--pdh-cyan-neon);
-  box-shadow: 0 0 10px var(--pdh-cyan-neon);
+  border: 2.5px solid var(--pdh-cyan-neon);
+  box-shadow: 0 0 18px var(--pdh-cyan-neon), inset 0 0 8px var(--pdh-cyan-neon);
   animation: pulseRing 2s infinite ease-in-out;
 }
 
 /* ==============================================================================
-   CONTROLES TÁCTILES: TOGGLE SWITCH Y SLIDER
+   CONTROLES TÁCTILES: TOGGLE SWITCH Y SLIDER (IDÉNTICOS AL DISEÑO)
    ============================================================================== */
 .neo-toggle {
   position: relative;
   display: inline-block;
-  width: 58px;
-  height: 32px;
+  width: 62px;
+  height: 34px;
 }
 
 .neo-toggle input {
@@ -283,36 +434,36 @@ body {
   position: absolute;
   cursor: pointer;
   inset: 0;
-  background: #1c273d;
+  background: #1c263c;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
   transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .neo-toggle-thumb {
   position: absolute;
   content: "";
-  height: 24px;
-  width: 24px;
+  height: 26px;
+  width: 26px;
   left: 4px;
   bottom: 3px;
   background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
   border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35), inset 0 1px 1px #ffffff;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45), inset 0 1px 1px #ffffff;
   transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .neo-toggle input:checked + .neo-toggle-track {
   background: linear-gradient(90deg, #2563eb, #3b82f6);
-  box-shadow: 0 0 14px rgba(37, 99, 235, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 18px rgba(37, 99, 235, 0.5), inset 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .neo-toggle input:checked + .neo-toggle-track .neo-toggle-thumb {
-  transform: translateX(24px);
+  transform: translateX(28px);
 }
 
-/* Neo-Slider */
+/* Neo-Slider con Riel Azul-Cian Luminoso */
 .neo-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -321,17 +472,17 @@ body {
   border-radius: 9999px;
   background: linear-gradient(90deg, #2563eb 0%, #06b6d4 100%);
   outline: none;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .neo-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px #ffffff;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.45), inset 0 1px 1px #ffffff;
   cursor: pointer;
   transition: transform 0.1s ease;
 }
@@ -345,21 +496,21 @@ body {
    ============================================================================== */
 .neo-input {
   width: 100%;
-  background: rgba(14, 21, 37, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 12px 16px;
+  background: rgba(16, 24, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  padding: 12px 18px;
   color: #f8fafc;
   font-family: var(--font-sans);
   font-size: 0.95rem;
   outline: none;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 }
 
 .neo-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.35), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border-color: #38bdf8;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .neo-input::placeholder {
@@ -368,33 +519,44 @@ body {
 
 .neo-select {
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 14px center;
+  background-position: right 16px center;
   background-size: 16px;
-  padding-right: 40px;
+  padding-right: 44px;
 }
 
 /* ==============================================================================
-   NOTIFICACIÓN Y BADGES NEO-TACTILE
+   NOTIFICACIÓN Y BADGES NEO-TACTILE (DEL DISEÑO: NOTIFICATION CON PUNTO CIAN)
    ============================================================================== */
 .neo-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
+  gap: 8px;
+  padding: 6px 14px;
   border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .neo-badge-dot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
   animation: pulseBadge 1.8s infinite;
+}
+
+/* Spinner de carga idéntico a la imagen (Loading state shows animation) */
+.neo-loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px dashed var(--pdh-cyan-neon);
+  border-radius: 50%;
+  animation: spin 3s linear infinite;
+  box-shadow: 0 0 12px var(--pdh-cyan-neon);
 }
 
 /* ==============================================================================
@@ -404,17 +566,19 @@ body {
   display: flex;
   height: calc(100vh - 120px);
   min-height: 580px;
-  background: rgba(14, 20, 33, 0.9);
-  border-radius: 24px;
+  background: rgba(18, 26, 44, 0.92);
+  backdrop-filter: blur(28px);
+  border-radius: 28px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid rgba(6, 182, 212, 0.5);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 35px rgba(6, 182, 212, 0.25);
 }
 
 .whatsapp-sidebar {
   width: 320px;
-  background: rgba(17, 25, 41, 0.95);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(19, 28, 48, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-direction: column;
 }
@@ -423,30 +587,30 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #0b111e;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-color: #0b1220;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
 }
 
 .chat-bubble-sent {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
   color: #ffffff;
   border-radius: 18px 18px 4px 18px;
-  padding: 10px 14px;
+  padding: 10px 15px;
   max-width: 75%;
   align-self: flex-end;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
 .chat-bubble-received {
-  background: rgba(30, 41, 59, 0.9);
+  background: rgba(30, 42, 66, 0.95);
   color: #f1f5f9;
   border-radius: 18px 18px 18px 4px;
-  padding: 10px 14px;
+  padding: 10px 15px;
   max-width: 75%;
   align-self: flex-start;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .chat-double-check {
@@ -469,32 +633,315 @@ body {
 }
 
 @keyframes pulseRing {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 0.4; }
-  100% { transform: scale(0.95); opacity: 0.8; }
+  0% { transform: scale(0.95); opacity: 0.9; }
+  50% { transform: scale(1.15); opacity: 0.4; }
+  100% { transform: scale(0.95); opacity: 0.9; }
 }
 
 @keyframes pulseBadge {
   0% { transform: scale(0.9); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.6; }
+  50% { transform: scale(1.25); opacity: 0.6; }
   100% { transform: scale(0.9); opacity: 1; }
 }
 
-/* Scrollbar estilizada Neo-Tactile */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==============================================================================
+   PLACA FLOTANTE CON EFECTO DE HALO Y RESPLANDOR PARA EL LOGOTIPO
+   ============================================================================== */
+.neo-logo-floating-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+  padding: 5px 9px;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-bottom: 2.5px solid #00f2fe; /* Borde cian neón característico */
+  box-shadow: 
+    0 8px 20px -3px rgba(37, 99, 235, 0.3),
+    0 4px 10px rgba(0, 0, 0, 0.1),
+    0 0 16px rgba(0, 242, 254, 0.25),
+    inset 0 2px 2px #ffffff;
+  animation: floatLogo 4.5s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.neo-logo-floating-badge:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 
+    0 16px 30px -4px rgba(37, 99, 235, 0.45),
+    0 6px 14px rgba(0, 0, 0, 0.15),
+    0 0 25px rgba(0, 242, 254, 0.45),
+    inset 0 2px 2px #ffffff;
+}
+
+/* Halo de luz difusa ambiental posterior */
+.neo-logo-floating-badge::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 24px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.5) 0%, rgba(59, 130, 246, 0.3) 45%, transparent 75%);
+  filter: blur(8px);
+  z-index: -1;
+  opacity: 0.85;
+  animation: pulseLogoHalo 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes floatLogo {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3.5px);
+  }
+}
+
+@keyframes pulseLogoHalo {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* Scrollbars Estilizadas */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(10, 15, 29, 0.5);
+  background: rgba(15, 23, 42, 0.5);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.35);
+  background: rgba(56, 189, 248, 0.4);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.6);
+  background: rgba(56, 189, 248, 0.7);
+}
+
+/* ==============================================================================
+   MÓDULOS FLOTANTES CON TRASFONDO DIFUMINADO Y COLORES PASTELES CLAROS
+   ============================================================================== */
+/* ==============================================================================
+   TARJETA CLÍNICA DE ALTA ESPECIALIDAD (ESTILO INSTITUCIONAL UNIFICADO PUERTA DE HIERRO)
+   ============================================================================== */
+.neo-tech-floating-card {
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(165deg, #ffffff 0%, #f8fafc 55%, #f1f5f9 100%);
+  border: 1.5px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 
+    0 10px 24px -4px rgba(15, 23, 42, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.02),
+    inset 0 2px 2px #ffffff,
+    inset 0 -2px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Difuminado suave de luz institucional en la esquina superior */
+.neo-tech-floating-card::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 242, 254, 0.25) 0%, transparent 70%);
+  opacity: 0.35;
+  filter: blur(20px);
+  transition: all 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Efecto al pasar el cursor (Hover / Pre-selección): Levitación y Resplandor Institucional Cian/Zafiro */
+.neo-tech-floating-card:hover {
+  transform: translateY(-7px) scale(1.02);
+  border-color: #00f2fe;
+  box-shadow: 
+    0 22px 45px -6px rgba(15, 23, 42, 0.22),
+    0 0 30px 2px rgba(0, 242, 254, 0.4),
+    inset 0 2px 3px #ffffff;
+}
+
+.neo-tech-floating-card:hover::before {
+  opacity: 0.8;
+  background: radial-gradient(circle, rgba(0, 242, 254, 0.45) 0%, transparent 70%);
+  transform: scale(1.3);
+}
+
+/* Efecto al hacer clic / Selección Activa (Click / Active) */
+.neo-tech-floating-card:active {
+  transform: translateY(-1px) scale(0.97);
+  box-shadow: 
+    0 6px 16px -4px rgba(15, 23, 42, 0.2),
+    0 0 35px rgba(0, 242, 254, 0.7);
+}
+
+/* Destello y Pulso de Selección Confirmada */
+.neo-tech-floating-card.card-clicking {
+  animation: techCardClickPulse 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.neo-tech-floating-card.card-clicking::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 242, 254, 0.5) 0%, rgba(2, 132, 199, 0.3) 50%, transparent 80%);
+  animation: trasfondoFlash 0.38s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ==============================================================================
+   BOTÓN PÍLDORA BLANCO 3D ELEVADO TIPO CLAYMORPHISM (IDÉNTICO A LA REFERENCIA)
+   ============================================================================== */
+.neo-clay-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 16px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 
+    0 4px 10px -2px rgba(15, 23, 42, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    inset 0 1.5px 1.5px #ffffff;
+  color: #0369a1;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.neo-tech-floating-card:hover .neo-clay-pill-btn {
+  transform: translateY(-2px) scale(1.04);
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #1e3a8a 100%);
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 8px 18px -2px rgba(2, 132, 199, 0.35),
+    0 0 16px rgba(0, 242, 254, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.neo-tech-floating-card:active .neo-clay-pill-btn {
+  transform: translateY(0.5px) scale(0.96);
+  box-shadow: 
+    0 2px 6px -1px rgba(15, 23, 42, 0.15),
+    inset 0 1px 1px #ffffff;
+}
+
+
+@keyframes techCardClickPulse {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(0.96);
+    box-shadow: 0 0 45px var(--card-glow, rgba(37, 99, 235, 0.8));
+  }
+  100% {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px var(--card-glow, rgba(37, 99, 235, 0.6));
+  }
+}
+
+@keyframes trasfondoFlash {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1.3);
+  }
+}
+
+/* ==============================================================================
+   BOTONES DE ACCESO RÁPIDO FLOTANTES CON DISEÑO TECNOLÓGICO Y RESPLANDOR
+   ============================================================================== */
+.neo-floating-action-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #ffffff !important;
+  cursor: pointer;
+  border: 1.5px solid var(--btn-border, rgba(255, 255, 255, 0.3));
+  background: var(--btn-bg, linear-gradient(135deg, #1e293b 0%, #0f172a 100%));
+  box-shadow: 
+    0 4px 14px -2px rgba(0, 0, 0, 0.35),
+    0 0 14px -2px var(--btn-glow, rgba(0, 242, 254, 0.35)),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  transition: all 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.neo-floating-action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+/* Efecto flotante al pasar el mouse */
+.neo-floating-action-btn:hover {
+  transform: translateY(-3.5px) scale(1.04);
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow: 
+    0 10px 22px -3px rgba(0, 0, 0, 0.45),
+    0 0 24px 2px var(--btn-glow, rgba(0, 242, 254, 0.65)),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.65);
+}
+
+.neo-floating-action-btn:hover::before {
+  left: 100%;
+}
+
+/* Presión táctil en clic */
+.neo-floating-action-btn:active {
+  transform: translateY(-0.5px) scale(0.97);
+  box-shadow: 
+    0 2px 6px -1px rgba(0, 0, 0, 0.35),
+    0 0 12px var(--btn-glow, rgba(0, 242, 254, 0.5));
 }

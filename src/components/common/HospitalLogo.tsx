@@ -8,40 +8,33 @@ interface HospitalLogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   showSubtitle?: boolean;
+  onClick?: () => void;
 }
 
 export const HospitalLogo: React.FC<HospitalLogoProps> = ({
   className = '',
   size = 'md',
   showSubtitle = true,
+  onClick,
 }) => {
   const logoDimensions = {
-    sm: { imgH: '32px', titleSize: '0.95rem', subSize: '0.68rem' },
-    md: { imgH: '44px', titleSize: '1.2rem', subSize: '0.78rem' },
-    lg: { imgH: '64px', titleSize: '1.6rem', subSize: '0.9rem' },
+    sm: { imgH: '34px', titleSize: '1rem', subSize: '0.7rem' },
+    md: { imgH: '46px', titleSize: '1.3rem', subSize: '0.8rem' },
+    lg: { imgH: '64px', titleSize: '1.65rem', subSize: '0.92rem' },
   }[size];
 
   return (
-    <div className={`flex items-center gap-3 select-none ${className}`}>
-      {/* Contenedor táctil con el logotipo oficial del Hospital Puerta de Hierro */}
-      <div 
-        style={{
-          borderRadius: '14px',
-          overflow: 'hidden',
-          boxShadow: '0 4px 15px rgba(37, 99, 235, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
-          background: '#ffffff',
-          padding: '2px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0
-        }}
-      >
+    <div 
+      onClick={onClick}
+      className={`flex items-center gap-3.5 select-none ${onClick ? 'cursor-pointer group' : ''} ${className}`}
+      title={onClick ? 'Volver al Menú Principal' : undefined}
+    >
+      {/* Placa táctil flotante con halo de resplandor del Hospital Puerta de Hierro */}
+      <div className="neo-logo-floating-badge">
         <img
           src="/assets/hospital-logo.jpg"
           alt="Centro Médico Puerta de Hierro"
-          style={{ height: logoDimensions.imgH, width: 'auto', objectFit: 'contain', display: 'block' }}
+          style={{ height: logoDimensions.imgH, width: 'auto', objectFit: 'contain', display: 'block', borderRadius: '10px' }}
           onError={(e) => {
             // Fallback si la imagen no cargara directamente
             const target = e.target as HTMLElement;
@@ -50,30 +43,30 @@ export const HospitalLogo: React.FC<HospitalLogoProps> = ({
         />
       </div>
 
-      <div className="flex flex-col leading-tight">
-        <div className="flex items-center gap-1.5">
+      <div className="flex flex-col justify-center leading-tight">
+        <div className="flex items-center gap-2">
           <span
             style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontWeight: 800,
+              fontWeight: 900,
               fontSize: logoDimensions.titleSize,
               letterSpacing: '-0.02em',
-              background: 'linear-gradient(180deg, #ffffff 30%, #cbd5e1 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: '#0f172a',
+              textShadow: '0 1px 2px rgba(255, 255, 255, 0.9)',
             }}
           >
             PUERTA DE HIERRO
           </span>
           <span 
             style={{ 
-              fontSize: '0.65rem', 
-              color: '#38bdf8', 
-              fontWeight: 700,
-              padding: '2px 6px',
-              borderRadius: '999px',
-              background: 'rgba(56, 189, 248, 0.15)',
-              border: '1px solid rgba(56, 189, 248, 0.3)'
+              fontSize: '0.68rem', 
+              color: '#ffffff', 
+              fontWeight: 800,
+              padding: '2px 8px',
+              borderRadius: '9999px',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.4)',
+              letterSpacing: '0.04em'
             }}
           >
             TEPIC
@@ -83,10 +76,11 @@ export const HospitalLogo: React.FC<HospitalLogoProps> = ({
           <span
             style={{
               fontSize: logoDimensions.subSize,
-              color: '#94a3b8',
-              fontWeight: 500,
-              letterSpacing: '0.04em',
+              color: '#334155',
+              fontWeight: 700,
+              letterSpacing: '0.05em',
               textTransform: 'uppercase',
+              marginTop: '2px'
             }}
           >
             Centro Médico de Alta Especialidad

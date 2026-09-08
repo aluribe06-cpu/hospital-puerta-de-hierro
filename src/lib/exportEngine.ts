@@ -9,40 +9,171 @@ import autoTable from 'jspdf-autotable';
 import { Patient, TriageAdmission, HospitalBed, PharmacyItem, CashTransaction } from '../types/hospital';
 
 /**
- * Exportar censo de pacientes a Excel (.xlsx)
+ * Exportar censo de pacientes a Excel (.xlsx) con membrete oficial Hospital Puerta de Hierro
  */
 export function exportPatientsToExcel(patients: Patient[]) {
-  const data = patients.map(p => ({
-    'Expediente': p.patientNumber,
-    'Nombre Completo': `${p.firstName} ${p.lastName}`,
-    'CURP': p.curp,
-    'Fecha Nacimiento': p.birthDate,
-    'Género': p.gender,
-    'Grupo Sanguíneo': p.bloodType,
-    'Peso (kg)': p.weightKg,
-    'Talla (cm)': p.heightCm,
-    'IMC': p.calculatedBmi || 'N/A',
-    'Alergias': p.allergies,
-    'Padecimiento Crónico': p.chronicConditions || 'Ninguno',
-    'Seguro Médico': p.insuranceCompany,
-    'No. Póliza': p.insurancePolicyNumber || 'N/A',
-    'Contacto Emergencia': `${p.emergencyContactName} (${p.emergencyContactPhone})`,
-    'Fecha Registro': p.createdAt.split('T')[0],
-  }));
+  const emitDate = new Date();
+  const fechaStr = emitDate.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+  const horaStr = emitDate.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Pacientes Puerta de Hierro');
-  
-  // Auto-ajustar ancho de columnas
-  worksheet['!cols'] = [
-    { wch: 16 }, { wch: 28 }, { wch: 20 }, { wch: 14 },
-    { wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 10 },
-    { wch: 8 }, { wch: 30 }, { wch: 30 }, { wch: 18 },
-    { wch: 18 }, { wch: 30 }, { wch: 14 }
+  const headerRows: any[][] = [
+    ['🏥 CENTRO MÉDICO PUERTA DE HIERRO TEPIC - ALTA ESPECIALIDAD'],
+    ['LOGOTIPO INSTITUCIONAL: [HOSPITAL PUERTA DE HIERRO] • SISTEMA DE EXPEDIENTE CLÍNICO'],
+    ['Sede Tepic | Av. Emilio M. González #221, Cd. Industrial, Nayarit | Tel: (311) 129-5200 | Urgencias: (311) 129-5206'],
+    ['PADRÓN DE PACIENTES REGISTRADOS - CUMPLIMIENTO NOM-024-SSA3-2012 / NOM-004-SSA3-2012'],
+    [`Fecha y Hora de Emisión: ${fechaStr} a las ${horaStr} | Licencia Sanitaria: 18-AM-18-017-0004`],
+    [],
+    [
+      'No. de Expediente',
+      'Nombre Completo del Paciente',
+      'CURP Oficial',
+      'Fecha de Nacimiento',
+      'Género',
+      'Grupo Sanguíneo',
+      'Peso Corporal (kg)',
+      'Talla / Altura (cm)',
+      'Índice Masa Corporal (IMC)',
+      'Alergias Conocidas',
+      'Padecimientos Crónicos',
+      'Aseguradora / Empresa',
+      'No. de Póliza',
+      'Contacto de Emergencia',
+      'Fecha de Registro'
+    ]
   ];
 
+  const dataRows: any[][] = patients.map(p => [
+    p.patientNumber,
+    `${p.firstName} ${p.lastName}`,
+    p.curp,
+    p.birthDate,
+    p.gender,
+    p.bloodType,
+    p.weightKg,
+    p.heightCm,
+    p.calculatedBmi || 'N/A',
+    p.allergies,
+    p.chronicConditions || 'Ninguno',
+    p.insuranceCompany,
+    p.insurancePolicyNumber || 'N/A',
+    `${p.emergencyContactName} (${p.emergencyContactPhone})`,
+    p.createdAt.split('T')[0]
+  ]);
+
+  const fullSheet = [...headerRows, ...dataRows];
+  const worksheet = XLSX.utils.aoa_to_sheet(fullSheet);
+  const workbook = XLSX.utils.book_new();
+
+  // Ancho automático garantizado de 20 a 35 caracteres por columna
+  const minCols = [24, 35, 24, 20, 16, 18, 20, 20, 24, 30, 30, 26, 22, 35, 20];
+  const cols = minCols.map((minW, idx) => {
+    let maxLen = minW;
+    dataRows.forEach(row => {
+      const strLen = String(row[idx] || '').length + 3;
+      if (strLen > maxLen) maxLen = strLen;
+    });
+    return { wch: maxLen };
+  });
+
+  worksheet['!cols'] = cols;
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Pacientes Puerta de Hierro');
   XLSX.writeFile(workbook, `Pacientes_Hospital_Puerta_de_Hierro_${Date.now()}.xlsx`);
+}
+
+/**
+ * Exportar censo hospitalario de camas a Excel (.xlsx) con membrete institucional,
+ * datos del Hospital Puerta de Hierro y autoajuste de ancho de columnas (20 a 35 caracteres mínimo).
+ */
+export function exportBedsToExcel(beds: HospitalBed[]) {
+  const emitDate = new Date();
+  const fechaStr = emitDate.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+  const horaStr = emitDate.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  // Encabezado Institucional Puerta de Hierro con Logotipo y datos sanitarios
+  const headerRows: any[][] = [
+    ['🏥 CENTRO MÉDICO PUERTA DE HIERRO TEPIC - ALTA ESPECIALIDAD'],
+    ['LOGOTIPO INSTITUCIONAL: [HOSPITAL PUERTA DE HIERRO] • DIRECCIÓN MÉDICA GENERAL'],
+    ['Sede Tepic | Av. Emilio M. González #221, Cd. Industrial, Nayarit | Tel: (311) 129-5200 | Urgencias: (311) 129-5206'],
+    ['SISTEMA INTEGRAL DE CENSO HOSPITALARIO, INTERNAMIENTOS Y CAMAS CRÍTICAS'],
+    ['CUMPLIMIENTO LEGAL: NOM-024-SSA3-2012 (SIRES/ECE) • NOM-004-SSA3-2012 • NOM-016-SSA3-2012'],
+    [`Fecha y Hora de Emisión: ${fechaStr} a las ${horaStr} | Licencia Sanitaria: 18-AM-18-017-0004`],
+    [], // Fila en blanco de separación
+    [
+      'Cama Hospitalaria',
+      'Área del Hospital',
+      'Estado de la Cama',
+      'Nombre del Paciente',
+      'No. de Expediente',
+      'Médico Tratante',
+      'Enfermera Responsable',
+      'Tipo de Dieta',
+      'Aislamiento Clínico',
+      'Fecha de Ingreso',
+      'Hora de Ingreso',
+      'Diagnóstico / Notas de Evolución'
+    ]
+  ];
+
+  const dataRows: any[][] = beds.map(b => {
+    let fechaIngreso = 'N/A';
+    let horaIngreso = 'N/A';
+    if (b.admissionDate) {
+      const parts = b.admissionDate.split('T');
+      fechaIngreso = parts[0] || 'N/A';
+      horaIngreso = parts[1] ? parts[1].substring(0, 5) : 'N/A';
+    }
+
+    return [
+      b.bedNumber,
+      b.area.replace(/_/g, ' '),
+      b.status.replace(/_/g, ' '),
+      b.currentPatientName || 'CAMA DISPONIBLE',
+      b.currentPatientNumber || 'N/A',
+      b.attendingPhysician || 'SIN ASIGNAR',
+      b.assignedNurse || 'PERSONAL DE GUARDIA',
+      b.dietType || 'AYUNO NORMAL',
+      b.clinicalIsolation ? 'SÍ (AISLADO)' : 'NO (ESTÁNDAR)',
+      fechaIngreso,
+      horaIngreso,
+      b.notes || 'Sin observaciones registradas'
+    ];
+  });
+
+  const fullSheet = [...headerRows, ...dataRows];
+  const worksheet = XLSX.utils.aoa_to_sheet(fullSheet);
+  const workbook = XLSX.utils.book_new();
+
+  // Columnas automáticas con mínimo garantizado de 20 a 35 caracteres
+  const minWidths = [
+    22, // Cama Hospitalaria (20-30 chars)
+    28, // Área del Hospital (20-30 chars)
+    24, // Estado de la Cama (20-30 chars)
+    36, // Nombre del Paciente (20-35 chars)
+    24, // No. de Expediente (20-30 chars)
+    32, // Médico Tratante (20-35 chars)
+    28, // Enfermera Responsable (20-30 chars)
+    28, // Tipo de Dieta (20-30 chars)
+    24, // Aislamiento Clínico (20-30 chars)
+    22, // Fecha de Ingreso (20-30 chars)
+    20, // Hora de Ingreso (20-30 chars)
+    38, // Notas / Diagnóstico (20-38 chars)
+  ];
+
+  const cols = minWidths.map((minW, colIdx) => {
+    let maxContentLen = minW;
+    dataRows.forEach(row => {
+      const cellLen = String(row[colIdx] || '').length + 3;
+      if (cellLen > maxContentLen) {
+        maxContentLen = cellLen;
+      }
+    });
+    return { wch: maxContentLen };
+  });
+
+  worksheet['!cols'] = cols;
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Censo de Camas');
+  XLSX.writeFile(workbook, `Censo_Hospitalario_Puerta_de_Hierro_${Date.now()}.xlsx`);
 }
 
 /**

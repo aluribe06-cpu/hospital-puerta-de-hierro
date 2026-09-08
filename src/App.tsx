@@ -21,10 +21,12 @@ import {
   FileSpreadsheet,
   Menu,
   X,
-  Bell
+  Bell,
+  Home
 } from 'lucide-react';
 
 import { HospitalLogo } from './components/common/HospitalLogo';
+import { MainMenuHub } from './components/menu/MainMenuHub';
 import { DashboardOverview } from './components/dashboard/DashboardOverview';
 import { TriageModule } from './components/triage/TriageModule';
 import { ScheduledAdmissionsModule } from './components/admision/ScheduledAdmissionsModule';
@@ -72,8 +74,8 @@ import {
 import { exportPatientsToExcel } from './lib/exportEngine';
 
 export function App() {
-  // Pestaña Activa
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  // Pestaña Activa (Por defecto inicia en el Menú Principal)
+  const [activeTab, setActiveTab] = useState<string>('menu');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Estados de Datos con persistencia local
@@ -267,6 +269,7 @@ export function App() {
 
   // Elementos de navegación
   const navItems = [
+    { id: 'menu', label: 'Menú Principal', icon: Home },
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'triage', label: 'Triage Urgencias', icon: Activity, badge: triageList.filter(t => t.priority === 'ROJO_REANIMACION').length > 0 ? '🚨' : undefined },
     { id: 'admision_programada', label: 'Admisión Programada', icon: CalendarCheck },
@@ -282,9 +285,9 @@ export function App() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100">
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden text-slate-100">
       {/* 1. Encabezado Maestro Hospital Puerta de Hierro */}
-      <header className="sticky top-0 z-50 neo-glass-panel border-x-0 border-t-0 rounded-none px-4 md:px-8 py-3">
+      <header className="shrink-0 z-50 neo-glass-panel border-x-0 border-t-0 rounded-none px-4 md:px-6 py-2 bg-white/10 backdrop-blur-2xl">
         <div className="flex items-center justify-between gap-4">
           {/* Logotipo y Título */}
           <div className="flex items-center gap-4">
@@ -294,14 +297,56 @@ export function App() {
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-            <HospitalLogo size="md" />
+            <HospitalLogo size="md" onClick={() => setActiveTab('menu')} />
+          </div>
+
+          {/* Barra de Acciones Neo-Tactile (Idéntica a la imagen de referencia) */}
+          <div className="hidden xl:flex items-center gap-4">
+            {/* Cluster de Acciones Táctiles con Botón de Anillo Neón Cian */}
+            <div className="neo-action-bar">
+              <button 
+                onClick={() => setActiveTab('menu')} 
+                className={`neo-icon-btn ${activeTab === 'menu' ? 'neo-icon-btn-active' : ''}`}
+                title="Menú Principal (Inicio)"
+              >
+                🏠
+              </button>
+              <button 
+                onClick={() => setActiveTab('dashboard')} 
+                className={`neo-icon-btn ${activeTab === 'dashboard' ? 'neo-icon-btn-active' : ''}`}
+                title="Panel de Control General"
+              >
+                ≡
+              </button>
+              <button 
+                onClick={() => setActiveTab('triage')} 
+                className={`neo-icon-btn ${activeTab === 'triage' ? 'neo-icon-btn-active' : ''}`}
+                title="Triage Choque"
+              >
+                +
+              </button>
+              <button 
+                onClick={() => setActiveTab('hospitalizacion')} 
+                className={`neo-icon-btn ${activeTab === 'hospitalizacion' ? 'neo-icon-btn-active' : ''}`}
+                title="Camas"
+              >
+                ·
+              </button>
+              <button 
+                onClick={() => setActiveTab('chat')} 
+                className="neo-icon-btn neo-icon-btn-ring neo-icon-btn-active"
+                title="Chat Médico y Códigos de Urgencia"
+              >
+                💬
+              </button>
+            </div>
           </div>
 
           {/* Información de Guardia y Usuario Activo */}
           <div className="flex items-center gap-3">
             {/* Badge de Turno */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-white/10 text-xs">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-white/15 text-xs shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+              <span className="neo-badge-dot bg-cyan-400"></span>
               <span className="text-slate-400">TURNO:</span>
               <strong className="text-cyan-300 font-mono">MATUTINO (07:00 - 15:00)</strong>
             </div>
@@ -324,7 +369,7 @@ export function App() {
               </select>
             </div>
 
-            {/* Botón de Emergencia Táctil con Anillo Neón */}
+            {/* Botón de Emergencia Táctil */}
             <button 
               onClick={() => {
                 setActiveTab('chat');
@@ -338,33 +383,57 @@ export function App() {
         </div>
       </header>
 
-      {/* 2. Barra de Navegación Táctil Neo-Tactile (Píldoras Defart / Active) */}
-      <nav className="neo-glass-panel border-x-0 rounded-none px-4 md:px-8 py-2.5 overflow-x-auto hidden lg:flex items-center gap-2 bg-slate-950/60">
-        {navItems.map((item) => {
-          const isActive = activeTab === item.id;
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`btn-neo text-xs px-4 py-2 shrink-0 ${
-                isActive ? 'btn-neo-active' : 'btn-neo-defart'
-              }`}
-            >
-              <Icon size={15} />
-              <span>{item.label}</span>
-              {item.badge && (
-                <span className="text-[10px] font-bold ml-1">{item.badge}</span>
-              )}
-            </button>
-          );
-        })}
-      </nav>
+      {/* 2. Barra de Navegación Táctil Neo-Tactile (Solo visible cuando se navega dentro de un módulo para no duplicar el Menú Principal) */}
+      {activeTab !== 'menu' && (
+        <nav className="shrink-0 neo-glass-panel border-x-0 rounded-none px-4 md:px-6 py-1.5 overflow-x-auto hidden lg:flex items-center gap-2 bg-white/5 backdrop-blur-xl animate-fadeIn">
+          {/* Botón Destacado para Regresar al Menú Principal */}
+          <button
+            onClick={() => setActiveTab('menu')}
+            className="btn-neo text-xs px-3.5 py-2 shrink-0 flex items-center gap-1.5 font-bold bg-cyan-950/70 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-900 shadow-[0_0_15px_rgba(0,242,254,0.2)] hover:scale-105 transition-all"
+            title="Volver al Menú Principal"
+          >
+            <Home size={15} className="text-cyan-400" />
+            <span>← Menú Principal</span>
+          </button>
+
+          <div className="w-px h-5 bg-white/20 shrink-0 mx-1"></div>
+
+          {navItems.filter(item => item.id !== 'menu').map((item) => {
+            const isActive = activeTab === item.id;
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`btn-neo text-xs px-4 py-2 shrink-0 ${
+                  isActive ? 'btn-neo-active' : 'btn-neo-defart'
+                }`}
+              >
+                <Icon size={15} />
+                <span>{item.label}</span>
+                {item.badge && (
+                  <span className="text-[10px] font-bold ml-1">{item.badge}</span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+      )}
 
       {/* Menú Móvil Desplegable */}
       {mobileMenuOpen && (
         <div className="lg:hidden neo-glass-panel m-3 p-4 rounded-2xl border border-white/15 space-y-2 z-40 animate-fadeIn">
-          {navItems.map((item) => {
+          <button
+            onClick={() => {
+              setActiveTab('menu');
+              setMobileMenuOpen(false);
+            }}
+            className="w-full flex items-center gap-3 p-3 rounded-xl text-left text-xs font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/40 shadow-sm"
+          >
+            <Home size={18} />
+            <span>🏠 Ir al Menú Principal</span>
+          </button>
+          {navItems.filter(item => item.id !== 'menu').map((item) => {
             const isActive = activeTab === item.id;
             const Icon = item.icon;
             return (
@@ -390,7 +459,16 @@ export function App() {
       )}
 
       {/* 3. Contenido Principal */}
-      <main className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto pb-20 md:pb-8">
+      <main className="flex-1 overflow-y-auto px-4 py-2.5 md:px-6 md:py-2.5 max-w-7xl w-full mx-auto pb-16 lg:pb-2">
+        {activeTab === 'menu' && (
+          <MainMenuHub
+            currentUser={currentUser}
+            triageList={triageList}
+            beds={beds}
+            onSelectModule={(tab) => setActiveTab(tab)}
+          />
+        )}
+
         {activeTab === 'dashboard' && (
           <DashboardOverview
             patients={patients}
@@ -519,23 +597,20 @@ export function App() {
         })}
       </div>
 
-      {/* 5. Pie de Página Institucional y Cumplimiento de Normas Mexicanas */}
-      <footer className="border-t border-white/10 bg-slate-950/90 py-6 px-4 md:px-8 text-center text-xs text-slate-500 space-y-2">
-        <div className="flex items-center justify-center gap-4 flex-wrap text-[11px] text-slate-400">
+      {/* 5. Pie de Página Institucional y Cumplimiento de Normas Mexicanas (Barra de estado compacta) */}
+      <footer className="shrink-0 border-t border-white/15 bg-white/5 backdrop-blur-xl py-1.5 px-4 md:px-6 text-xs text-slate-400 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-3 text-[11px] text-slate-300">
           <span>🏛️ Hospital Puerta de Hierro Tepic</span>
           <span>•</span>
-          <span>Av. Emilio M. González #221, Cd. Industrial, Tepic, Nayarit</span>
-          <span>•</span>
-          <span>Tel: (311) 129-5200</span>
-          <span>•</span>
-          <span className="text-cyan-400">Urgencias: (311) 129-5206</span>
+          <span className="text-cyan-300 font-mono font-semibold">NOM-024 / NOM-004 / NOM-016 / NOM-007</span>
+          <span className="hidden md:inline">•</span>
+          <span className="hidden md:inline text-slate-400">Protección LFPDPPP</span>
         </div>
-        <p>
-          Sistema Certificado en cumplimiento de las Normas Oficiales Mexicanas: <strong>NOM-024-SSA3-2012</strong> (Sistemas de Información de Registro Electrónico para la Salud), <strong>NOM-004-SSA3-2012</strong> (Del Expediente Clínico), <strong>NOM-016-SSA3-2012</strong> (Infraestructura Quirúrgica y CEYE) y <strong>NOM-007-SSA3-2011</strong> (Laboratorios Clínicos).
-        </p>
-        <p className="text-[10px] text-slate-600">
-          Protección de Datos Personales Sensibles de Salud garantizada bajo la Ley Federal de Protección de Datos Personales en Posesión de Particulares (LFPDPPP).
-        </p>
+        <div className="flex items-center gap-3 text-[11px] text-slate-300">
+          <span>Av. Emilio M. González #221, Cd. Industrial</span>
+          <span>•</span>
+          <span className="text-cyan-400 font-bold font-mono">Urgencias: (311) 129-5206</span>
+        </div>
       </footer>
     </div>
   );

@@ -8,7 +8,9 @@
 #root {
   width: 100%;
   max-width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   display: flex;
@@ -64,6 +66,8 @@
 }
 
 @media (min-width: 768px) {
+  .md\:flex { display: flex !important; }
+  .md\:hidden { display: none !important; }
   .md\:flex-row { flex-direction: row; }
   .md\:items-center { align-items: center; }
   .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -73,11 +77,19 @@
 }
 
 @media (min-width: 1024px) {
+  .lg\:flex { display: flex !important; }
+  .lg\:hidden { display: none !important; }
+  .lg\:block { display: block !important; }
   .lg\:flex-row { flex-direction: row; }
   .lg\:items-center { align-items: center; }
   .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .lg\:col-span-2 { grid-column: span 2 / span 2; }
+}
+
+@media (min-width: 1280px) {
+  .xl\:flex { display: flex !important; }
+  .xl\:hidden { display: none !important; }
 }
 
 /* Espaciados verticales */

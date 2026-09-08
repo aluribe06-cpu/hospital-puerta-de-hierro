@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { HospitalBed, BedArea, BedStatus, Patient } from '../../types/hospital';
 import { logAuditAction } from '../../lib/supabaseClient';
+import { exportBedsToExcel } from '../../lib/exportEngine';
 import * as XLSX from 'xlsx';
 
 interface HospitalizacionModuleProps {
@@ -105,24 +106,8 @@ export const HospitalizacionModule: React.FC<HospitalizacionModuleProps> = ({
     setActiveBedModal(null);
   };
 
-  const exportBedsToExcel = () => {
-    const data = beds.map(b => ({
-      'Cama': b.bedNumber,
-      'Área Hospitalaria': b.area.replace(/_/g, ' '),
-      'Estado': b.status.replace(/_/g, ' '),
-      'Paciente': b.currentPatientName || 'Disponible',
-      'No. Expediente': b.currentPatientNumber || 'N/A',
-      'Médico Tratante': b.attendingPhysician || 'N/A',
-      'Enfermera': b.assignedNurse || 'N/A',
-      'Dieta': b.dietType,
-      'Aislamiento': b.clinicalIsolation ? 'SÍ' : 'NO',
-      'Fecha Ingreso': b.admissionDate ? b.admissionDate.replace('T', ' ').substring(0, 16) : 'N/A',
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Censo de Camas');
-    XLSX.writeFile(workbook, `Censo_Camas_Puerta_de_Hierro_${Date.now()}.xlsx`);
+  const handleExportBeds = () => {
+    exportBedsToExcel(beds);
   };
 
   const filteredBeds = beds.filter(b => {
@@ -165,7 +150,7 @@ export const HospitalizacionModule: React.FC<HospitalizacionModuleProps> = ({
 
         <div className="flex items-center gap-3">
           <button 
-            onClick={exportBedsToExcel}
+            onClick={handleExportBeds}
             className="btn-neo btn-neo-defart text-xs"
           >
             <FileSpreadsheet size={16} />
