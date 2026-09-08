@@ -258,23 +258,23 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
   return (
     <div className="space-y-3 max-w-7xl mx-auto">
       {/* Banner de Bienvenida y Estado del Menú Principal */}
-      <div className="neo-glass-panel p-3 md:p-3.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+      <div className="neo-glass-panel bg-slate-950/45 p-3 md:p-3.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#00f2fe] animate-pulse"></span>
-            <span className="text-[11px] font-mono font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="text-[11px] font-mono font-black text-cyan-300 uppercase tracking-wider flex items-center gap-1.5 drop-shadow-sm">
               <Sparkles size={12} className="text-cyan-400" />
               Menú Principal de Servicios Clínicos
             </span>
-            <span className="hidden sm:inline text-xs text-slate-400">•</span>
-            <span className="hidden sm:inline text-[11px] text-slate-300 font-medium">
+            <span className="hidden sm:inline text-xs text-cyan-200/60">•</span>
+            <span className="hidden sm:inline text-[11px] text-cyan-100 font-bold drop-shadow-sm">
               Centro Médico Puerta de Hierro Tepic
             </span>
           </div>
-          <h1 className="text-lg md:text-xl font-black text-white tracking-tight mt-0.5">
+          <h1 className="text-lg md:text-xl font-black text-white tracking-tight mt-0.5 drop-shadow-sm">
             Bienvenido, {currentUser.fullName}
           </h1>
-          <p className="text-xs text-slate-300">
+          <p className="text-xs font-bold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] mt-0.5">
             Haga clic en el módulo deseado para acceder de inmediato a su estación de trabajo hospitalaria.
           </p>
         </div>
@@ -394,11 +394,11 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
       </div>
 
       {/* Barra Inferior Táctil de Acciones de Emergencia Rápida */}
-      <div className="neo-glass-panel p-2.5 px-4 flex flex-wrap items-center justify-between gap-2 text-xs shadow-md">
-        <div className="flex items-center gap-2 text-slate-300">
+      <div className="neo-glass-panel bg-slate-950/45 p-2.5 px-4 flex flex-wrap items-center justify-between gap-2 text-xs shadow-md">
+        <div className="flex items-center gap-2 text-slate-200">
           <Zap size={14} className="text-amber-400" />
           <span className="font-bold text-white">Accesos Rápidos de Emergencia:</span>
-          <span className="text-slate-400 hidden sm:inline">Pase directo a áreas de atención crítica inmediata</span>
+          <span className="text-slate-200 font-semibold hidden sm:inline">Pase directo a áreas de atención crítica inmediata</span>
         </div>
 
         <div className="flex items-center gap-2.5">
