@@ -142,8 +142,37 @@ docker-compose up --build -d
 
 ---
 
+## ▲ Despliegue en Vercel
+
+La plataforma está 100% preparada y optimizada para **Vercel** con enrutamiento de SPA (Single Page Application), cabeceras de seguridad hospitalaria y funciones Serverless.
+
+### Opción A: Despliegue Directo desde Terminal (Vercel CLI)
+```bash
+# Iniciar sesión y desplegar en entorno de prueba (Preview)
+npx vercel
+
+# Desplegar directamente a Producción
+npx vercel --prod
+```
+
+### Opción B: Integración Continua con GitHub y Vercel (Recomendado)
+1. Sube tu código a GitHub.
+2. Ingresa a tu panel de [Vercel Dashboard](https://vercel.com/new).
+3. Selecciona **Import Git Repository** y escoge el repositorio de `Hospital Puerta de Hierro`.
+4. Vercel detectará automáticamente la configuración en [vercel.json](file:///Users/alfonsouribe/Documentos/Things/Hospital%20Puerta%20de%20Hierro/vercel.json):
+   - **Framework Preset**: `Vite`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+5. En la sección **Environment Variables**, añade tus credenciales de Supabase:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+6. Haz clic en **Deploy**. Tendrás un dominio con SSL/TLS global automático (ej. `https://hospital-puerta-de-hierro.vercel.app`).
+
+---
+
 ## 📱 Experiencia Multi-dispositivo (PWA)
 
 - **iPad y Tabletas**: Interfaz táctil optimizada para rondas médicas y enfermería en estaciones de hospitalización.
 - **Teléfonos Inteligentes (iPhone / Android)**: Barra de navegación inferior rápida y chat médico a pantalla completa. Puede instalarse directamente en la pantalla de inicio como App nativa mediante el botón "Agregar a pantalla de inicio" gracias al `manifest.json`.
 - **Laptops y Estaciones de Escritorio**: Panel de control expandido con analítica completa y visor de rayos X de alta resolución.
+
