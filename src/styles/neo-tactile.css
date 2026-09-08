@@ -870,6 +870,171 @@ body {
   z-index: 10;
 }
 
+/* ==============================================================================
+   DISEÑO INFOGRÁFICO DE EXPEDIENTES / FOLDER TAB CARDS (REFERENCIA INFOGRAPHIC STEP)
+   ============================================================================== */
+.neo-folder-card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-radius: 18px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  min-height: 126px;
+  margin-top: 10px; /* Espacio para que la pestaña superior (Tab) sobresalga con elegancia */
+}
+
+/* Lado Izquierdo: Carpeta / Expediente Clínico con Pestaña Superior 3D */
+.neo-folder-left {
+  position: relative;
+  width: 36%;
+  min-width: 104px;
+  max-width: 122px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 18px;
+  background: var(--folder-bg, linear-gradient(150deg, #57b6d4 0%, #3692af 100%));
+  padding: 10px 10px 8px 11px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    7px 0 16px -2px rgba(15, 23, 42, 0.28),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.65),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Pestaña Superior del Folder (Folder Tab) */
+.neo-folder-tab {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 65%;
+  height: 14px;
+  background: var(--folder-bg, linear-gradient(150deg, #57b6d4 0%, #3692af 100%));
+  border-top-left-radius: 8px;
+  border-top-right-radius: 7px;
+  box-shadow: 
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.8),
+    -1px -1px 3px rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Filamento brillante superior que une la pestaña con el lomo de la carpeta */
+.neo-folder-left::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.65);
+  filter: blur(0.3px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Patrón de Barras Diagonales Técnicas (////// como en la referencia) */
+.neo-folder-stripes {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0.85) 2px,
+    transparent 2px,
+    transparent 5.5px
+  );
+}
+
+/* Lado Derecho: Repisa / Bandeja de Información Clínica en Porcelana Blanca */
+.neo-folder-right {
+  flex: 1;
+  background: linear-gradient(165deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-left: none;
+  border-top-right-radius: 18px;
+  border-bottom-right-radius: 18px;
+  padding: 10px 12px 9px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    0 6px 18px -3px rgba(15, 23, 42, 0.07),
+    inset 0 1.5px 1.5px #ffffff;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* Marca de Agua / Iluminación Ambiental Suave en la repisa */
+.neo-folder-right::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--folder-glow, rgba(87, 182, 212, 0.25)) 0%, transparent 70%);
+  opacity: 0.35;
+  filter: blur(15px);
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+/* Interacción al pasar el cursor (Hover) */
+.neo-folder-card:hover {
+  transform: translateY(-6px) scale(1.015);
+}
+
+.neo-folder-card:hover .neo-folder-left {
+  box-shadow: 10px 0 24px -3px rgba(15, 23, 42, 0.38);
+  filter: brightness(1.06);
+}
+
+.neo-folder-card:hover .neo-folder-tab {
+  filter: brightness(1.06);
+}
+
+.neo-folder-card:hover .neo-folder-right {
+  border-color: var(--folder-accent, #38bdf8);
+  box-shadow: 
+    0 16px 32px -6px rgba(15, 23, 42, 0.16),
+    0 0 22px -2px var(--folder-glow, rgba(87, 182, 212, 0.45)),
+    inset 0 1.5px 1.5px #ffffff;
+}
+
+.neo-folder-card:hover .neo-folder-right::before {
+  opacity: 0.85;
+  transform: scale(1.3);
+}
+
+/* Presión Táctil en Clic / Selección */
+.neo-folder-card:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.neo-folder-card.card-clicking {
+  animation: techCardClickPulse 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.neo-folder-card.card-clicking::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: radial-gradient(circle at center, var(--folder-glow, rgba(87, 182, 212, 0.5)) 0%, transparent 75%);
+  animation: trasfondoFlash 0.38s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+
 
 @keyframes techCardClickPulse {
   0% {

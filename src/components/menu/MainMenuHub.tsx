@@ -12,13 +12,13 @@ import {
   MessageSquare, 
   Users, 
   LayoutDashboard,
-  Clock,
-  CheckCircle2,
-  ChevronRight,
-  Shield,
-  Zap,
-  ArrowUpRight,
-  Sparkles
+  Clock, 
+  CheckCircle2, 
+  ChevronRight, 
+  Shield, 
+  Zap, 
+  ArrowUpRight, 
+  Sparkles 
 } from 'lucide-react';
 import { UserProfile, TriageAdmission, HospitalBed } from '../../types/hospital';
 
@@ -51,229 +51,205 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
   const modules = [
     {
       id: 'triage',
+      stepNumber: '01',
       title: 'Triage Urgencias',
       subtitle: 'Clasificación Manchester & Choque',
       icon: Activity,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #fff1f2 100%)',
-      cardBorder: 'rgba(244, 63, 94, 0.35)',
-      cardAccent: '#e11d48',
-      glowColor: 'rgba(225, 29, 72, 0.35)',
-      titleColor: '#9f1239',
-      subColor: '#be123c',
-      iconBg: 'linear-gradient(135deg, #f43f5e 0%, #be123c 100%)',
-      iconShadow: '0 4px 14px rgba(225, 29, 72, 0.4)',
+      folderBg: 'linear-gradient(150deg, #6fd2e6 0%, #4faccc 50%, #328ea9 100%)',
+      folderAccent: '#36b0d1',
+      folderGlow: 'rgba(79, 172, 204, 0.45)',
+      badgeBg: '#e0f7fa',
+      badgeColor: '#0e7490',
+      tagColor: '#0284c7',
+      indicator: urgentCount > 0 ? 'CRÍTICO' : '100%',
       badge: urgentCount > 0 ? `${urgentCount} Urgencias Activas` : 'Atención Inmediata',
-      badgeBg: 'bg-rose-100 text-rose-800 border-rose-300',
-      badgeDot: 'bg-rose-600',
       norm: 'NOM-004 / NOM-024',
       tag: 'Urgencias 24/7'
     },
     {
       id: 'admision_programada',
+      stepNumber: '02',
       title: 'Admisión Programada',
       subtitle: 'Cirugías Electivas & Procedimientos',
       icon: CalendarCheck,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #ecfeff 100%)',
-      cardBorder: 'rgba(6, 182, 212, 0.35)',
-      cardAccent: '#0891b2',
-      glowColor: 'rgba(6, 182, 212, 0.35)',
-      titleColor: '#0e7490',
-      subColor: '#155e75',
-      iconBg: 'linear-gradient(135deg, #06b6d4 0%, #0284c7 100%)',
-      iconShadow: '0 4px 14px rgba(6, 182, 212, 0.4)',
+      folderBg: 'linear-gradient(150deg, #9ca6c4 0%, #7d85a1 50%, #5b6480 100%)',
+      folderAccent: '#7d85a1',
+      folderGlow: 'rgba(125, 133, 161, 0.45)',
+      badgeBg: '#eceff7',
+      badgeColor: '#475569',
+      tagColor: '#475569',
+      indicator: '75%',
       badge: '3 Programadas Hoy',
-      badgeBg: 'bg-cyan-100 text-cyan-800 border-cyan-300',
-      badgeDot: 'bg-cyan-600',
       norm: 'Ayuno & Hemodinamia',
       tag: 'Quirófanos'
     },
     {
       id: 'consultorios',
+      stepNumber: '03',
       title: 'Consultorios ECE',
       subtitle: 'Expediente Clínico Electrónico',
       icon: Stethoscope,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #eff6ff 100%)',
-      cardBorder: 'rgba(37, 99, 235, 0.35)',
-      cardAccent: '#2563eb',
-      glowColor: 'rgba(37, 99, 235, 0.35)',
-      titleColor: '#1e40af',
-      subColor: '#1d4ed8',
-      iconBg: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-      iconShadow: '0 4px 14px rgba(37, 99, 235, 0.4)',
+      folderBg: 'linear-gradient(150deg, #679ebf 0%, #467591 50%, #29516a 100%)',
+      folderAccent: '#467591',
+      folderGlow: 'rgba(70, 117, 145, 0.45)',
+      badgeBg: '#e2eff7',
+      badgeColor: '#1e3a8a',
+      tagColor: '#2563eb',
+      indicator: '50%',
       badge: 'Consulta Externa',
-      badgeBg: 'bg-blue-100 text-blue-800 border-blue-300',
-      badgeDot: 'bg-blue-600',
       norm: 'NOM-024-SSA3-2012',
       tag: 'Especialidades'
     },
     {
       id: 'hospitalizacion',
+      stepNumber: '04',
       title: 'Hospitalización y Camas',
       subtitle: 'Censo UCI, UCIN, Terapia y Pisos',
       icon: Bed,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #fff7ed 100%)',
-      cardBorder: 'rgba(249, 115, 22, 0.35)',
-      cardAccent: '#ea580c',
-      glowColor: 'rgba(234, 88, 12, 0.35)',
-      titleColor: '#9a3412',
-      subColor: '#c2410c',
-      iconBg: 'linear-gradient(135deg, #f97316 0%, #c2410c 100%)',
-      iconShadow: '0 4px 14px rgba(234, 88, 12, 0.4)',
+      folderBg: 'linear-gradient(150deg, #5e6e76 0%, #45545b 50%, #29363c 100%)',
+      folderAccent: '#45545b',
+      folderGlow: 'rgba(69, 84, 91, 0.45)',
+      badgeBg: '#e6ebed',
+      badgeColor: '#0f172a',
+      tagColor: '#334155',
+      indicator: '100%',
       badge: `${occupiedBeds}/${totalBeds} Camas Ocupadas`,
-      badgeBg: 'bg-orange-100 text-orange-900 border-orange-300',
-      badgeDot: 'bg-orange-600',
       norm: 'Censo en Tiempo Real',
       tag: 'Enfermería Piso'
     },
     {
       id: 'farmacia',
+      stepNumber: '05',
       title: 'Farmacia Hospitalaria',
       subtitle: 'Dispensación y Kárdex Clínico',
       icon: Pill,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #fffbeb 100%)',
-      cardBorder: 'rgba(245, 158, 11, 0.35)',
-      cardAccent: '#d97706',
-      glowColor: 'rgba(245, 158, 11, 0.35)',
-      titleColor: '#92400e',
-      subColor: '#b45309',
-      iconBg: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-      iconShadow: '0 4px 14px rgba(245, 158, 11, 0.4)',
+      folderBg: 'linear-gradient(150deg, #6fd2e6 0%, #4faccc 50%, #328ea9 100%)',
+      folderAccent: '#36b0d1',
+      folderGlow: 'rgba(79, 172, 204, 0.45)',
+      badgeBg: '#e0f7fa',
+      badgeColor: '#0e7490',
+      tagColor: '#0284c7',
+      indicator: '85%',
       badge: 'Psicotrópicos Fracc. I',
-      badgeBg: 'bg-amber-100 text-amber-900 border-amber-300',
-      badgeDot: 'bg-amber-600',
       norm: 'Lotes & Caducidades',
       tag: 'Abasto Clínico'
     },
     {
       id: 'laboratorio',
+      stepNumber: '06',
       title: 'Laboratorio Clínico',
       subtitle: 'Química, Hemometría & Troponinas',
       icon: FlaskConical,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #fdf2f8 100%)',
-      cardBorder: 'rgba(236, 72, 153, 0.35)',
-      cardAccent: '#db2777',
-      glowColor: 'rgba(236, 72, 153, 0.35)',
-      titleColor: '#9d174d',
-      subColor: '#be185d',
-      iconBg: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
-      iconShadow: '0 4px 14px rgba(236, 72, 153, 0.4)',
+      folderBg: 'linear-gradient(150deg, #9ca6c4 0%, #7d85a1 50%, #5b6480 100%)',
+      folderAccent: '#7d85a1',
+      folderGlow: 'rgba(125, 133, 161, 0.45)',
+      badgeBg: '#eceff7',
+      badgeColor: '#475569',
+      tagColor: '#475569',
+      indicator: '90%',
       badge: 'Validación QFB en Línea',
-      badgeBg: 'bg-pink-100 text-pink-900 border-pink-300',
-      badgeDot: 'bg-pink-600',
       norm: 'NOM-007-SSA3-2011',
       tag: 'Diagnóstico'
     },
     {
       id: 'rayosx',
+      stepNumber: '07',
       title: 'Rayos X e Imagen',
       subtitle: 'Tomografía, Ultrasonido y TAC',
       icon: Eye,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #f5f3ff 100%)',
-      cardBorder: 'rgba(139, 92, 246, 0.35)',
-      cardAccent: '#7c3aed',
-      glowColor: 'rgba(124, 58, 237, 0.35)',
-      titleColor: '#5b21b6',
-      subColor: '#6d28d9',
-      iconBg: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
-      iconShadow: '0 4px 14px rgba(124, 58, 237, 0.4)',
+      folderBg: 'linear-gradient(150deg, #679ebf 0%, #467591 50%, #29516a 100%)',
+      folderAccent: '#467591',
+      folderGlow: 'rgba(70, 117, 145, 0.45)',
+      badgeBg: '#e2eff7',
+      badgeColor: '#1e3a8a',
+      tagColor: '#2563eb',
+      indicator: '65%',
       badge: 'Visor DICOM Digital',
-      badgeBg: 'bg-violet-100 text-violet-900 border-violet-300',
-      badgeDot: 'bg-violet-600',
       norm: 'PACS Hospitalario',
       tag: 'Imagenología'
     },
     {
       id: 'caja',
+      stepNumber: '08',
       title: 'Caja y Cobro',
       subtitle: 'Facturación, Seguros & Cortes',
       icon: DollarSign,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #ecfdf5 100%)',
-      cardBorder: 'rgba(16, 185, 129, 0.35)',
-      cardAccent: '#059669',
-      glowColor: 'rgba(16, 185, 129, 0.35)',
-      titleColor: '#065f46',
-      subColor: '#047857',
-      iconBg: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-      iconShadow: '0 4px 14px rgba(16, 185, 129, 0.4)',
+      folderBg: 'linear-gradient(150deg, #5e6e76 0%, #45545b 50%, #29363c 100%)',
+      folderAccent: '#45545b',
+      folderGlow: 'rgba(69, 84, 91, 0.45)',
+      badgeBg: '#e6ebed',
+      badgeColor: '#0f172a',
+      tagColor: '#334155',
+      indicator: '100%',
       badge: 'GNP / AXA / MetLife',
-      badgeBg: 'bg-emerald-100 text-emerald-900 border-emerald-300',
-      badgeDot: 'bg-emerald-600',
       norm: 'CFDI 4.0 Hospitalario',
       tag: 'Financiero'
     },
     {
       id: 'ceye',
+      stepNumber: '09',
       title: 'CEYE Quirófano',
       subtitle: 'Esterilización e Instrumental',
       icon: ShieldCheck,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #f0f9ff 100%)',
-      cardBorder: 'rgba(56, 189, 248, 0.35)',
-      cardAccent: '#0284c7',
-      glowColor: 'rgba(56, 189, 248, 0.35)',
-      titleColor: '#0369a1',
-      subColor: '#0284c7',
-      iconBg: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
-      iconShadow: '0 4px 14px rgba(56, 189, 248, 0.4)',
+      folderBg: 'linear-gradient(150deg, #6fd2e6 0%, #4faccc 50%, #328ea9 100%)',
+      folderAccent: '#36b0d1',
+      folderGlow: 'rgba(79, 172, 204, 0.45)',
+      badgeBg: '#e0f7fa',
+      badgeColor: '#0e7490',
+      tagColor: '#0284c7',
+      indicator: '100%',
       badge: 'Trazabilidad Storz',
-      badgeBg: 'bg-sky-100 text-sky-900 border-sky-300',
-      badgeDot: 'bg-sky-600',
       norm: 'NOM-016-SSA3-2012',
       tag: 'Esterilización'
     },
     {
       id: 'chat',
+      stepNumber: '10',
       title: 'Chat Médico & Códigos',
       subtitle: 'Comunicación Tipo WhatsApp',
       icon: MessageSquare,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #ecfeff 100%)',
-      cardBorder: 'rgba(6, 182, 212, 0.35)',
-      cardAccent: '#0891b2',
-      glowColor: 'rgba(6, 182, 212, 0.35)',
-      titleColor: '#0f766e',
-      subColor: '#155e75',
-      iconBg: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-      iconShadow: '0 4px 14px rgba(6, 182, 212, 0.4)',
+      folderBg: 'linear-gradient(150deg, #9ca6c4 0%, #7d85a1 50%, #5b6480 100%)',
+      folderAccent: '#7d85a1',
+      folderGlow: 'rgba(125, 133, 161, 0.45)',
+      badgeBg: '#eceff7',
+      badgeColor: '#475569',
+      tagColor: '#475569',
+      indicator: 'ACTIVO',
       badge: 'Código Infarto Activo',
-      badgeBg: 'bg-cyan-100 text-cyan-900 border-cyan-300',
-      badgeDot: 'bg-cyan-600',
       norm: 'Cifrado End-to-End',
       tag: 'Canal Clínico'
     },
     {
       id: 'personal',
+      stepNumber: '11',
       title: 'Personal & Turnos',
       subtitle: 'Gestión Médica, Guardias y Roles',
       icon: Users,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%)',
-      cardBorder: 'rgba(100, 116, 139, 0.35)',
-      cardAccent: '#475569',
-      glowColor: 'rgba(100, 116, 139, 0.35)',
-      titleColor: '#0f172a',
-      subColor: '#334155',
-      iconBg: 'linear-gradient(135deg, #64748b 0%, #334155 100%)',
-      iconShadow: '0 4px 14px rgba(71, 85, 105, 0.4)',
+      folderBg: 'linear-gradient(150deg, #679ebf 0%, #467591 50%, #29516a 100%)',
+      folderAccent: '#467591',
+      folderGlow: 'rgba(70, 117, 145, 0.45)',
+      badgeBg: '#e2eff7',
+      badgeColor: '#1e3a8a',
+      tagColor: '#2563eb',
+      indicator: '70%',
       badge: 'Turno Matutino',
-      badgeBg: 'bg-slate-100 text-slate-900 border-slate-300',
-      badgeDot: 'bg-slate-600',
       norm: 'Control de Asistencias',
       tag: 'Recursos Humanos'
     },
     {
       id: 'dashboard',
+      stepNumber: '12',
       title: 'Dashboard Ejecutivo',
       subtitle: 'Métricas, Ocupación y Monitoreo Global',
       icon: LayoutDashboard,
-      cardBg: 'linear-gradient(145deg, #ffffff 0%, #eff6ff 100%)',
-      cardBorder: 'rgba(37, 99, 235, 0.35)',
-      cardAccent: '#1d4ed8',
-      glowColor: 'rgba(37, 99, 235, 0.35)',
-      titleColor: '#1e3a8a',
-      subColor: '#1d4ed8',
-      iconBg: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
-      iconShadow: '0 4px 14px rgba(37, 99, 235, 0.4)',
+      folderBg: 'linear-gradient(150deg, #5e6e76 0%, #45545b 50%, #29363c 100%)',
+      folderAccent: '#45545b',
+      folderGlow: 'rgba(69, 84, 91, 0.45)',
+      badgeBg: '#e6ebed',
+      badgeColor: '#0f172a',
+      tagColor: '#334155',
+      indicator: '100%',
       badge: 'Visión 360° Hospitalaria',
-      badgeBg: 'bg-blue-100 text-blue-900 border-blue-300',
-      badgeDot: 'bg-blue-600',
       norm: 'KPIs en Tiempo Real',
       tag: 'Dirección Médica'
     },
@@ -322,8 +298,8 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
         </div>
       </div>
 
-      {/* Cuadrícula Táctil de Módulos Flotantes con Colores Pasteles y Letras de Contraste (12 Módulos) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      {/* Cuadrícula Táctil con Diseño de Expedientes / Folder Tab (Inspirado en Infographic Step) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pt-2">
         {modules.map((mod) => {
           const Icon = mod.icon;
           const isClicking = clickingModule === mod.id;
@@ -331,76 +307,86 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
             <div
               key={mod.id}
               onClick={() => handleCardClick(mod.id)}
-              className={`neo-tech-floating-card p-3.5 flex flex-col justify-between group ${
-                isClicking ? 'card-clicking' : ''
-              }`}
+              className={`neo-folder-card group ${isClicking ? 'card-clicking' : ''}`}
               style={{ 
-                '--card-bg': mod.cardBg,
-                '--card-border': mod.cardBorder,
-                '--card-accent': mod.cardAccent,
-                '--card-glow': mod.glowColor,
-                minHeight: '138px' 
+                '--folder-bg': mod.folderBg,
+                '--folder-accent': mod.folderAccent,
+                '--folder-glow': mod.folderGlow,
               } as React.CSSProperties}
             >
-              {/* Barra Superior con Efecto Neón Resplandeciente */}
-              <div className="neo-card-neon-strip" />
+              {/* Lado Izquierdo: Carpeta / Expediente Clínico con Pestaña Superior 3D */}
+              <div className="neo-folder-left">
+                {/* Pestaña Superior del Expediente (Folder Tab) */}
+                <div className="neo-folder-tab" />
 
-              {/* Encabezado de la Tarjeta: Icono Flotante Sólido y Píldora de Estatus */}
-              <div className="relative z-10 flex items-start justify-between gap-2">
-                <div 
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center text-white border border-white/40 group-hover:scale-110 transition-transform shrink-0"
-                  style={{ 
-                    background: mod.iconBg,
-                    boxShadow: mod.iconShadow
-                  }}
-                >
-                  <Icon size={22} className="text-white drop-shadow-sm" />
+                {/* Encabezado del Folder: Etiqueta y Micro Icono */}
+                <div className="relative z-10 flex items-center justify-between text-white/85">
+                  <span className="text-[9px] font-black tracking-widest uppercase">
+                    STEP
+                  </span>
+                  <Icon size={14} className="text-white/95 drop-shadow-xs" />
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border tracking-tight flex items-center gap-1 shadow-xs ${mod.badgeBg}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${mod.badgeDot} animate-pulse`}></span>
+
+                {/* Número Grande del Paso en Tipografía Negrita de la Referencia */}
+                <div className="relative z-10 my-0.5">
+                  <span className="text-3xl font-black text-white tracking-tight leading-none drop-shadow-sm">
+                    {mod.stepNumber}
+                  </span>
+                </div>
+
+                {/* Barra de Progreso e Indicador Técnico con Rayas Diagonales ////// */}
+                <div className="relative z-10 flex items-center gap-1.5 pt-0.5 border-t border-white/25 text-white">
+                  <span className="text-[8.5px] font-mono font-black tracking-tight text-white/90 shrink-0">
+                    {mod.indicator}
+                  </span>
+                  <div className="neo-folder-stripes flex-1 h-1.5 rounded-xs opacity-80" />
+                </div>
+              </div>
+
+              {/* Lado Derecho: Repisa / Bandeja de Información Clínica en Porcelana Blanca */}
+              <div className="neo-folder-right">
+                {/* Cabecera de la Repisa: Badge de Servicio y Flecha ↗ */}
+                <div className="relative z-10 flex items-center justify-between gap-1">
+                  <span 
+                    className="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full border shadow-2xs truncate max-w-[170px]"
+                    style={{ 
+                      color: mod.badgeColor, 
+                      backgroundColor: mod.badgeBg,
+                      borderColor: 'rgba(226, 232, 240, 0.8)' 
+                    }}
+                  >
                     {mod.badge}
                   </span>
-                  <span 
-                    className="text-[9px] font-black tracking-wider uppercase"
-                    style={{ color: mod.subColor }}
+
+                  <div 
+                    className="w-5 h-5 rounded-full flex items-center justify-center bg-slate-100/90 group-hover:scale-110 transition-transform shrink-0 shadow-2xs"
                   >
-                    {mod.tag}
+                    <ArrowUpRight size={12} style={{ color: mod.folderAccent }} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </div>
+                </div>
+
+                {/* Contenido Clínico: Título y Subtítulo */}
+                <div className="relative z-10 mt-1">
+                  <h3 className="text-xs md:text-sm font-black text-slate-900 tracking-tight line-clamp-1 group-hover:text-cyan-700 transition-colors">
+                    {mod.title}
+                  </h3>
+                  <p className="text-[11px] font-semibold text-slate-600 line-clamp-1 mt-0.5">
+                    {mod.subtitle}
+                  </p>
+                </div>
+
+                {/* Pie de Repisa: Norma Oficial y Enlace de Entrada */}
+                <div className="relative z-10 mt-1 pt-1.5 border-t border-slate-200/70 flex items-center justify-between text-[10px]">
+                  <span className="text-slate-400 font-bold truncate max-w-[130px]">
+                    {mod.norm}
+                  </span>
+                  <span 
+                    className="font-black group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
+                    style={{ color: mod.tagColor }}
+                  >
+                    Abrir <ChevronRight size={11} />
                   </span>
                 </div>
-              </div>
-
-              {/* Título y Subtítulo con color que va de acuerdo a cada módulo */}
-              <div className="relative z-10 mt-2">
-                <h3 
-                  className="text-xs md:text-sm font-black transition-colors flex items-center justify-between"
-                  style={{ color: mod.titleColor }}
-                >
-                  <span>{mod.title}</span>
-                  <div 
-                    className="w-5 h-5 rounded-full flex items-center justify-center transition-all shrink-0 shadow-xs"
-                    style={{ background: 'rgba(0, 0, 0, 0.05)', color: mod.titleColor }}
-                  >
-                    <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </div>
-                </h3>
-                <p 
-                  className="text-[11px] font-bold line-clamp-1 mt-0.5"
-                  style={{ color: mod.subColor }}
-                >
-                  {mod.subtitle}
-                </p>
-              </div>
-
-              {/* Footer de Tarjeta con Línea Divisoria y Enlace de Entrada */}
-              <div className="relative z-10 mt-2 pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[10px]">
-                <span className="text-slate-500 font-bold truncate">{mod.norm}</span>
-                <span 
-                  className="font-black group-hover:underline flex items-center gap-0.5"
-                  style={{ color: mod.titleColor }}
-                >
-                  Abrir Módulo <ChevronRight size={11} />
-                </span>
               </div>
             </div>
           );
