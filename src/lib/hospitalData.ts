@@ -758,6 +758,30 @@ export const INITIAL_CHAT: ChatMessage[] = [
 
 export const INITIAL_AUDIT_LOGS: AuditLog[] = [
   {
+    id: 'aud-login-1',
+    timestamp: '2026-09-08T08:00:15Z',
+    userName: 'Ing. Alfonso Uribe',
+    userRole: 'ADMINISTRADOR_UNICO',
+    userLicense: 'ING-DIR-001',
+    ipAddress: '192.168.1.10 (Dirección General Tepic)',
+    actionType: 'INICIO_SESION_EXITOSO',
+    resourceAffected: 'Portal de Acceso Hospitalario',
+    details: 'Autenticación exitosa de Administrador Único. Acceso total autorizado a los 14 módulos hospitalarios.',
+    sha256Hash: '9c5f8e3c7b2d1e045f8a6c7b9e0123456789abcdef0123456789abcdef0123456',
+  },
+  {
+    id: 'aud-login-2',
+    timestamp: '2026-09-08T08:15:30Z',
+    userName: 'Dr. Carlos Mendoza Alatorre',
+    userRole: 'DIRECTOR_MEDICO',
+    userLicense: '4981203',
+    ipAddress: '192.168.1.12 (Jefatura Médica)',
+    actionType: 'INICIO_SESION_EXITOSO',
+    resourceAffected: 'Portal de Acceso Hospitalario',
+    details: 'Autenticación exitosa con credenciales biométricas y clave. Acceso concedido a estación clínica.',
+    sha256Hash: '8b7e2c1a0f9e834c7b6a5d4e3f2109876543210fedcba9876543210fedcba98a',
+  },
+  {
     id: 'aud-1',
     timestamp: '2026-09-07T07:15:22Z',
     userName: 'Dra. Sofía Valenzuela Ríos',

@@ -295,6 +295,12 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
     },
   ];
 
+  const isFullAdmin = currentUser.role === 'ADMINISTRADOR_UNICO' || (currentUser.allowedModules && currentUser.allowedModules.includes('*'));
+
+  const visibleModules = isFullAdmin 
+    ? modules 
+    : modules.filter(m => !currentUser.allowedModules || currentUser.allowedModules.includes(m.id));
+
   return (
     <div className="space-y-3 max-w-7xl mx-auto">
       {/* Banner de Bienvenida y Estado del Menú Principal */}
@@ -340,7 +346,7 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
 
       {/* Cuadrícula Táctil con Diseño de Expedientes / Folder Tab (Inspirado en Infographic Step) */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pt-2">
-        {modules.map((mod) => {
+        {visibleModules.map((mod) => {
           const Icon = mod.icon;
           const isClicking = clickingModule === mod.id;
           return (

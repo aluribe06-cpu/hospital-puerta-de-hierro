@@ -121,6 +121,11 @@ export function App() {
     return saved ? JSON.parse(saved) : INITIAL_STAFF;
   });
 
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
+    const saved = localStorage.getItem('hpdh_audit_logs');
+    return saved ? JSON.parse(saved) : INITIAL_AUDIT_LOGS;
+  });
+
   // Estado de Autenticación y Sesión Clínica
   const [authUser, setAuthUser] = useState<UserProfile | null>(() => {
     const saved = localStorage.getItem('hpdh_auth_user');
@@ -142,6 +147,24 @@ export function App() {
     setAuthUser(user);
     setCurrentUser(user);
     localStorage.setItem('hpdh_auth_user', JSON.stringify(user));
+
+    // Registrar inicio de sesión en la bitácora NOM-024
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    const formattedTime = now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const newLog: AuditLog = {
+      id: 'log-login-' + Date.now(),
+      timestamp: now.toISOString(),
+      userName: user.fullName,
+      userRole: user.role,
+      userLicense: user.professionalLicense || 'N/A',
+      ipAddress: `192.168.1.${Math.floor(Math.random() * 80 + 10)} (Terminal HPDH)`,
+      actionType: 'INICIO_SESION_EXITOSO',
+      resourceAffected: 'Portal de Seguridad / Estación Clínica',
+      details: `Inicio de sesión verificado para ${user.fullName} (${user.role.replace(/_/g, ' ')}). Acceso autorizado a las ${formattedTime} del ${formattedDate}.`,
+      sha256Hash: Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+    };
+    setAuditLogs(prev => [newLog, ...prev]);
   };
 
   const handleLogout = () => {
@@ -204,10 +227,6 @@ export function App() {
     return saved ? JSON.parse(saved) : INITIAL_CHAT;
   });
 
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
-    const saved = localStorage.getItem('hpdh_audit_logs');
-    return saved ? JSON.parse(saved) : INITIAL_AUDIT_LOGS;
-  });
 
   const [warehouse, setWarehouse] = useState<WarehouseItem[]>(() => {
     const saved = localStorage.getItem('hpdh_warehouse');
@@ -278,6 +297,10 @@ export function App() {
   useEffect(() => {
     localStorage.setItem('hpdh_staff', JSON.stringify(staff));
   }, [staff]);
+
+  useEffect(() => {
+    localStorage.setItem('hpdh_audit_logs', JSON.stringify(auditLogs));
+  }, [auditLogs]);
 
   useEffect(() => {
     localStorage.setItem('hpdh_warehouse', JSON.stringify(warehouse));
@@ -373,6 +396,19 @@ export function App() {
 
   const handleAddUser = (user: UserProfile) => {
     setStaff([...staff, user]);
+  };
+
+  const handleUpdateUser = (updatedUser: UserProfile) => {
+    setStaff(prev => prev.map(u => u.id === updatedUser.id ? updatedUser : u));
+    if (authUser && authUser.id === updatedUser.id) {
+      setAuthUser(updatedUser);
+      setCurrentUser(updatedUser);
+      localStorage.setItem('hpdh_auth_user', JSON.stringify(updatedUser));
+    }
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    setStaff(prev => prev.filter(u => u.id !== userId));
   };
 
   // Manejadores de Almacén General
@@ -780,7 +816,10 @@ export function App() {
           <PersonalTurnosModule
             staff={staff}
             auditLogs={auditLogs}
+            currentUser={currentUser}
             onAddUser={handleAddUser}
+            onUpdateUser={handleUpdateUser}
+            onDeleteUser={handleDeleteUser}
           />
         )}
 

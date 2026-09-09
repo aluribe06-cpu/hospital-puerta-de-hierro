@@ -13,30 +13,21 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
   onLoginSuccess,
 }) => {
   // Por defecto precargado con el Administrador Único para máxima conveniencia
-  const defaultAdmin = staffList.find(s => s.role === 'ADMINISTRADOR_UNICO') || staffList[0];
-
-  const [usernameInput, setUsernameInput] = useState(defaultAdmin ? defaultAdmin.fullName : 'Ing. Alfonso Uribe');
-  const [passwordInput, setPasswordInput] = useState(defaultAdmin?.password || 'password123');
+  const [usernameInput, setUsernameInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Buscar usuario coincidente en tiempo real por nombre, usuario o email
-  const matchedUser = staffList.find(s => {
+  // Buscar usuario coincidente cuando haya ingresado su identificador
+  const matchedUser = usernameInput.trim().length >= 3 ? staffList.find(s => {
     const query = usernameInput.trim().toLowerCase();
-    if (!query) return false;
     return (
       s.fullName.toLowerCase().includes(query) ||
       s.email.toLowerCase().includes(query) ||
       (s.username && s.username.toLowerCase().includes(query))
     );
-  });
-
-  const handleSelectQuickAccount = (user: UserProfile) => {
-    setUsernameInput(user.fullName);
-    setPasswordInput(user.password || 'password123');
-    setErrorMsg(null);
-  };
+  }) : null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +44,8 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
           s.fullName.toLowerCase() === cleanUser ||
           s.email.toLowerCase() === cleanUser ||
           (s.username && s.username.toLowerCase() === cleanUser) ||
-          s.fullName.toLowerCase().includes(cleanUser)
+          s.fullName.toLowerCase().includes(cleanUser) ||
+          (s.username && s.username.toLowerCase().includes(cleanUser))
         );
       });
 
@@ -63,7 +55,7 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
         return;
       }
 
-      // Validar contraseña (por defecto password123)
+      // Validar contraseña secreta
       const validPass = found.password || 'password123';
       if (cleanPass !== validPass) {
         setErrorMsg('Contraseña incorrecta. Por favor verifique sus credenciales.');
@@ -99,47 +91,8 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
           </p>
         </div>
 
-        {/* Píldoras de Acceso Rápido */}
-        <div className="mb-4">
-          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-            Acceso Rápido por Perfil:
-          </label>
-          <div className="flex flex-wrap gap-1.5">
-            {defaultAdmin && (
-              <button
-                type="button"
-                onClick={() => handleSelectQuickAccount(defaultAdmin)}
-                className={`neo-quick-role-pill admin-special ${
-                  matchedUser?.id === defaultAdmin.id ? 'ring-2 ring-cyan-400' : ''
-                }`}
-                title="Acceso total irrestricto a todos los módulos"
-              >
-                <Sparkles size={12} className="text-yellow-400 shrink-0" />
-                <span className="font-extrabold text-cyan-100">Ing. Alfonso Uribe (Admin Único)</span>
-              </button>
-            )}
-
-            {staffList
-              .filter(s => s.role !== 'ADMINISTRADOR_UNICO')
-              .slice(0, 3)
-              .map(user => (
-                <button
-                  key={user.id}
-                  type="button"
-                  onClick={() => handleSelectQuickAccount(user)}
-                  className={`neo-quick-role-pill ${
-                    matchedUser?.id === user.id ? 'active' : ''
-                  }`}
-                >
-                  <span>{user.role === 'MEDICO_URGENCIOLOGO' ? '🩺' : user.role === 'FARMACEUTICO' ? '💊' : '🏨'}</span>
-                  <span>{user.fullName.split(' ')[0]} {user.fullName.split(' ')[1]}</span>
-                </button>
-              ))}
-          </div>
-        </div>
-
         {/* Formulario de Inicio de Sesión */}
-        <form onSubmit={handleSubmit} className="space-y-3.5">
+        <form onSubmit={handleSubmit} className="space-y-3.5 mt-3">
           {/* Campo de Usuario */}
           <div>
             <label className="block text-[11.5px] font-bold text-slate-300 mb-1.5">
@@ -155,8 +108,9 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
                   setUsernameInput(e.target.value);
                   setErrorMsg(null);
                 }}
-                placeholder="Ej. Ing. Alfonso Uribe o alfonso.uribe"
+                placeholder="Nombre de usuario o correo institucional"
                 className="neo-auth-input"
+                autoComplete="username"
               />
             </div>
           </div>
@@ -176,8 +130,9 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
                   setPasswordInput(e.target.value);
                   setErrorMsg(null);
                 }}
-                placeholder="Ingrese contraseña"
+                placeholder="Ingrese su contraseña"
                 className="neo-auth-input"
+                autoComplete="current-password"
               />
               <button
                 type="button"
@@ -190,7 +145,7 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
             </div>
           </div>
 
-          {/* Indicador de Rol y Atributos Detectados en Vivo */}
+          {/* Indicador de Rol y Atributos Detectados */}
           {matchedUser && (
             <div className="p-2.5 rounded-xl bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-between text-xs animate-fadeIn">
               <div className="flex items-center gap-2">
@@ -239,12 +194,9 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
           </button>
         </form>
 
-        {/* Pie Normativo y Credenciales de Ayuda */}
+        {/* Pie Institucional Limpio y Seguro */}
         <div className="mt-5 pt-3 border-t border-white/10 text-center">
-          <p className="text-[10.5px] text-slate-400">
-            Administrador Único Registrado: <strong className="text-cyan-300">Ing. Alfonso Uribe</strong> (Clave: <code className="bg-slate-900/80 px-1 py-0.5 rounded text-cyan-200 font-mono">password123</code>)
-          </p>
-          <p className="text-[9.5px] text-slate-500 mt-1 font-mono">
+          <p className="text-[10px] text-slate-400 font-mono">
             Hospital Puerta de Hierro • Av. Emilio M. González #221, Cd. Industrial
           </p>
         </div>
