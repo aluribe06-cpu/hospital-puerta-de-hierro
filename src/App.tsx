@@ -316,9 +316,10 @@ export function App() {
               id="mobile-menu-trigger-btn"
               aria-label="Abrir Menú Módulos"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-400 hover:text-white"
+              className={`lg:hidden neo-mobile-menu-trigger ${mobileMenuOpen ? 'active' : ''}`}
+              title="Módulos Hospitalarios"
             >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileMenuOpen ? <X size={20} strokeWidth={2.6} /> : <Menu size={21} strokeWidth={2.6} />}
             </button>
             <HospitalLogo size="md" onClick={() => setActiveTab('menu')} />
           </div>
