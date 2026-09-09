@@ -19,13 +19,17 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Normaliza texto quitando puntuación para comparación flexible
+  const normalize = (str: string) =>
+    str.toLowerCase().replace(/[^a-záéíóúüñ0-9@._\s]/gi, '').replace(/\s+/g, ' ').trim();
+
   // Buscar usuario coincidente cuando haya ingresado su identificador
   const matchedUser = usernameInput.trim().length >= 3 ? staffList.find(s => {
-    const query = usernameInput.trim().toLowerCase();
+    const query = normalize(usernameInput);
     return (
-      s.fullName.toLowerCase().includes(query) ||
-      s.email.toLowerCase().includes(query) ||
-      (s.username && s.username.toLowerCase().includes(query))
+      normalize(s.fullName).includes(query) ||
+      normalize(s.email).includes(query) ||
+      (s.username && normalize(s.username).includes(query))
     );
   }) : null;
 
@@ -35,17 +39,21 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
     setIsLoading(true);
 
     setTimeout(() => {
-      const cleanUser = usernameInput.trim().toLowerCase();
+      const cleanUser = normalize(usernameInput);
       const cleanPass = passwordInput.trim();
 
-      // Buscar usuario en catálogo de personal
+      // Buscar usuario en catálogo de personal con comparación flexible
       const found = staffList.find(s => {
+        const nameNorm = normalize(s.fullName);
+        const emailNorm = normalize(s.email);
+        const userNorm = s.username ? normalize(s.username) : '';
         return (
-          s.fullName.toLowerCase() === cleanUser ||
-          s.email.toLowerCase() === cleanUser ||
-          (s.username && s.username.toLowerCase() === cleanUser) ||
-          s.fullName.toLowerCase().includes(cleanUser) ||
-          (s.username && s.username.toLowerCase().includes(cleanUser))
+          nameNorm === cleanUser ||
+          emailNorm === cleanUser ||
+          userNorm === cleanUser ||
+          nameNorm.includes(cleanUser) ||
+          userNorm.includes(cleanUser) ||
+          emailNorm.includes(cleanUser)
         );
       });
 
@@ -137,8 +145,9 @@ export const LoginWelcomeModal: React.FC<LoginWelcomeModalProps> = ({
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-slate-400 hover:text-white transition-colors p-1"
+                className="text-slate-400 hover:text-cyan-300 transition-colors p-1 bg-transparent border-none outline-none"
                 title={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+                style={{ background: 'none' }}
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
