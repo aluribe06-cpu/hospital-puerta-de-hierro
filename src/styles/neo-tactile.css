@@ -1546,3 +1546,157 @@ body {
   color: #ffffff !important;
   text-shadow: 0 1px 3px rgba(2, 44, 80, 0.4) !important;
 }
+
+/* ==============================================================================
+   PORTAL FLOTANTE MODERNO DE BIENVENIDA Y AUTENTICACIÓN (LOGIN)
+   ============================================================================== */
+.neo-auth-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: radial-gradient(circle at 50% 30%, rgba(14, 116, 144, 0.25) 0%, rgba(10, 15, 29, 0.94) 70%) !important;
+  backdrop-filter: blur(32px) !important;
+  -webkit-backdrop-filter: blur(32px) !important;
+  z-index: 20000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+}
+
+.neo-auth-card {
+  width: 100% !important;
+  max-width: 440px !important;
+  background: linear-gradient(170deg, rgba(26, 38, 59, 0.95) 0%, rgba(13, 21, 39, 0.98) 100%) !important;
+  border-radius: 30px !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.4) !important;
+  border-bottom: 3.5px solid #00f2fe !important;
+  box-shadow: 
+    0 35px 85px -15px rgba(0, 0, 0, 0.9),
+    0 0 50px rgba(6, 182, 212, 0.22),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.25) !important;
+  padding: 28px 24px !important;
+  position: relative !important;
+  animation: neoModalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  color: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+.neo-auth-badge-container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 20px !important;
+  text-align: center !important;
+}
+
+.neo-auth-input-box {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px 16px !important;
+  border-radius: 16px !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35) !important;
+  transition: all 0.22s ease !important;
+  box-sizing: border-box !important;
+}
+
+.neo-auth-input-box:focus-within {
+  border-color: #38bdf8 !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  box-shadow: 
+    0 0 16px rgba(56, 189, 248, 0.35),
+    inset 0 2px 4px rgba(0, 0, 0, 0.25) !important;
+}
+
+.neo-auth-input {
+  flex: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+}
+
+.neo-auth-input::placeholder {
+  color: #64748b !important;
+  font-weight: 500 !important;
+}
+
+.neo-auth-submit-btn {
+  width: 100% !important;
+  padding: 13px 20px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 
+    0 8px 25px rgba(2, 132, 199, 0.55),
+    0 0 20px rgba(56, 189, 248, 0.45),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.7) !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  user-select: none !important;
+  outline: none !important;
+}
+
+.neo-auth-submit-btn:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 
+    0 12px 30px rgba(2, 132, 199, 0.65),
+    0 0 24px rgba(56, 189, 248, 0.6) !important;
+}
+
+.neo-auth-submit-btn:active {
+  transform: scale(0.96) !important;
+  box-shadow: 
+    0 4px 12px rgba(2, 132, 199, 0.7),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.neo-quick-role-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 12px !important;
+  border-radius: 20px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #cbd5e1 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  user-select: none !important;
+}
+
+.neo-quick-role-pill:hover,
+.neo-quick-role-pill.active {
+  background: rgba(6, 182, 212, 0.2) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.neo-quick-role-pill.admin-special {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(6, 182, 212, 0.35) 100%) !important;
+  border: 1.5px solid #00f2fe !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(0, 242, 254, 0.35) !important;
+}
+

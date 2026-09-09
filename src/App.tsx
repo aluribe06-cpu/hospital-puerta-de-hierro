@@ -23,9 +23,11 @@ import {
   X,
   Bell,
   Home,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from 'lucide-react';
 
+import { LoginWelcomeModal } from './components/auth/LoginWelcomeModal';
 import { HospitalLogo } from './components/common/HospitalLogo';
 import { MainMenuHub } from './components/menu/MainMenuHub';
 import { DashboardOverview } from './components/dashboard/DashboardOverview';
@@ -105,7 +107,33 @@ export function App() {
     return saved ? JSON.parse(saved) : INITIAL_STAFF;
   });
 
-  const [currentUser, setCurrentUser] = useState<UserProfile>(staff[1] || INITIAL_STAFF[1]); // Dra. Sofía Valenzuela
+  // Estado de Autenticación y Sesión Clínica
+  const [authUser, setAuthUser] = useState<UserProfile | null>(() => {
+    const saved = localStorage.getItem('hpdh_auth_user');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null; // Muestra el portal flotante de bienvenida y login al inicio
+  });
+
+  const [currentUser, setCurrentUser] = useState<UserProfile>(() => {
+    return staff[0] || INITIAL_STAFF[0]; // Ing. Alfonso Uribe (Administrador Único)
+  });
+
+  const handleLoginSuccess = (user: UserProfile) => {
+    setAuthUser(user);
+    setCurrentUser(user);
+    localStorage.setItem('hpdh_auth_user', JSON.stringify(user));
+  };
+
+  const handleLogout = () => {
+    setAuthUser(null);
+    localStorage.removeItem('hpdh_auth_user');
+  };
 
   const [patients, setPatients] = useState<Patient[]>(() => {
     const saved = localStorage.getItem('hpdh_patients');
@@ -289,7 +317,7 @@ export function App() {
   };
 
   // Elementos de navegación
-  const navItems = [
+  const allNavItems = [
     { id: 'menu', label: 'Menú Principal', icon: Home },
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'triage', label: 'Triage Urgencias', icon: Activity, badge: triageList.filter(t => t.priority === 'ROJO_REANIMACION').length > 0 ? '🚨' : undefined },
@@ -304,6 +332,12 @@ export function App() {
     { id: 'chat', label: 'Chat Médico', icon: MessageSquare, badge: '💬' },
     { id: 'personal', label: 'Personal & Turnos', icon: Users },
   ];
+
+  const isFullAdmin = currentUser.role === 'ADMINISTRADOR_UNICO' || (currentUser.allowedModules && currentUser.allowedModules.includes('*'));
+
+  const navItems = isFullAdmin
+    ? allNavItems
+    : allNavItems.filter(item => item.id === 'menu' || (currentUser.allowedModules && currentUser.allowedModules.includes(item.id)));
 
   return (
     <div className="flex flex-col h-screen max-h-screen overflow-hidden text-slate-100">
@@ -368,12 +402,20 @@ export function App() {
 
           {/* Información de Guardia y Usuario Activo */}
           <div className="flex items-center gap-3">
-            {/* Badge de Turno */}
-            <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-white/15 text-xs shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-              <span className="neo-badge-dot bg-cyan-400"></span>
-              <span className="text-slate-400">TURNO:</span>
-              <strong className="text-cyan-300 font-mono">MATUTINO (07:00 - 15:00)</strong>
-            </div>
+            {/* Badge de Administrador Único si aplica */}
+            {currentUser.role === 'ADMINISTRADOR_UNICO' ? (
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-sky-600/30 to-cyan-500/30 border border-cyan-400 text-xs shadow-[0_0_15px_rgba(0,242,254,0.35)]">
+                <span className="text-yellow-400 text-xs">⭐</span>
+                <span className="text-cyan-200 font-extrabold tracking-wide">ADMIN ÚNICO</span>
+              </div>
+            ) : (
+              /* Badge de Turno */
+              <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-white/15 text-xs shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+                <span className="neo-badge-dot bg-cyan-400"></span>
+                <span className="text-slate-400">TURNO:</span>
+                <strong className="text-cyan-300 font-mono">MATUTINO (07:00 - 15:00)</strong>
+              </div>
+            )}
 
             {/* Selector de Usuario Activo Táctil */}
             <div className="relative">
@@ -381,17 +423,31 @@ export function App() {
                 value={currentUser.id}
                 onChange={(e) => {
                   const u = staff.find(s => s.id === e.target.value);
-                  if (u) setCurrentUser(u);
+                  if (u) {
+                    setCurrentUser(u);
+                    setAuthUser(u);
+                    localStorage.setItem('hpdh_auth_user', JSON.stringify(u));
+                  }
                 }}
                 className="neo-input neo-select text-xs py-1.5 pl-3 pr-8 font-semibold bg-slate-900/90 text-white border-blue-500/40"
               >
                 {staff.map(u => (
                   <option key={u.id} value={u.id} className="bg-slate-900 text-white">
-                    {u.fullName} ({u.role.replace(/_/g, ' ')})
+                    {u.fullName} ({u.role === 'ADMINISTRADOR_UNICO' ? '⭐ ADMIN ÚNICO' : u.role.replace(/_/g, ' ')})
                   </option>
                 ))}
               </select>
             </div>
+
+            {/* Botón Cerrar Sesión 3D Porcelana */}
+            <button
+              onClick={handleLogout}
+              className="btn-neo btn-neo-defart text-xs px-2.5 py-1.5 flex items-center gap-1 text-rose-300 hover:text-rose-100 hover:bg-rose-950/40 border border-rose-500/30 transition-all active:scale-95"
+              title="Cerrar sesión y volver a la pantalla de bienvenida"
+            >
+              <LogOut size={13} className="text-rose-400 shrink-0" />
+              <span className="hidden sm:inline font-bold">Salir</span>
+            </button>
 
             {/* Botón de Emergencia Táctil */}
             <button 
@@ -677,6 +733,14 @@ export function App() {
           <span className="text-cyan-400 font-bold font-mono">Urgencias: (311) 129-5206</span>
         </div>
       </footer>
+
+      {/* Portal Flotante y Moderno de Bienvenida y Autenticación con Logotipo Oficial 3D */}
+      {!authUser && (
+        <LoginWelcomeModal
+          staffList={staff}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      )}
     </div>
   );
 }

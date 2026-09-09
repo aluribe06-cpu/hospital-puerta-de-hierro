@@ -4,6 +4,7 @@
 // ==============================================================================
 
 export type UserRole =
+  | 'ADMINISTRADOR_UNICO'
   | 'DIRECTOR_MEDICO'
   | 'MEDICO_ESPECIALISTA'
   | 'MEDICO_URGENCIOLOGO'
@@ -48,6 +49,8 @@ export type BedArea =
 export interface UserProfile {
   id: string;
   email: string;
+  username?: string;
+  password?: string;
   fullName: string;
   role: UserRole;
   professionalLicense: string; // Cédula Profesional (NOM-004)
@@ -56,6 +59,7 @@ export interface UserProfile {
   phone?: string;
   isActive: boolean;
   avatarUrl?: string;
+  allowedModules?: string[]; // ['*'] para todos los módulos o lista específica
 }
 
 export interface Patient {

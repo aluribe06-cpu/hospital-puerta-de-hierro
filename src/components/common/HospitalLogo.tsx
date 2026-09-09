@@ -8,6 +8,7 @@ interface HospitalLogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   showSubtitle?: boolean;
+  textColor?: string;
   onClick?: () => void;
 }
 
@@ -15,6 +16,7 @@ export const HospitalLogo: React.FC<HospitalLogoProps> = ({
   className = '',
   size = 'md',
   showSubtitle = true,
+  textColor,
   onClick,
 }) => {
   const logoDimensions = {
@@ -51,8 +53,8 @@ export const HospitalLogo: React.FC<HospitalLogoProps> = ({
               fontWeight: 900,
               fontSize: logoDimensions.titleSize,
               letterSpacing: '-0.02em',
-              color: '#0f172a',
-              textShadow: '0 1px 2px rgba(255, 255, 255, 0.9)',
+              color: textColor || '#0f172a',
+              textShadow: textColor === '#ffffff' ? '0 2px 4px rgba(0, 0, 0, 0.6)' : '0 1px 2px rgba(255, 255, 255, 0.9)',
             }}
           >
             PUERTA DE HIERRO
