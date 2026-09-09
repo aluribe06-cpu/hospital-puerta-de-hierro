@@ -15,6 +15,8 @@ export type UserRole =
   | 'FARMACEUTICO'
   | 'INSTRUMENTISTA_CEYE'
   | 'CAJERO_RECEPCION'
+  | 'JEFE_ALMACEN'
+  | 'COORDINADOR_COMPRAS'
   | 'ADMINISTRADOR_SISTEMA';
 
 export type ShiftType =
@@ -293,3 +295,129 @@ export interface AuditLog {
   details: string;
   sha256Hash: string; // Cumplimiento inmutable NOM-024
 }
+
+// ==============================================================================
+// MÓDULO 13: ALMACÉN GENERAL DE INSUMOS HOSPITALARIOS
+// ==============================================================================
+
+export type WarehouseItemCategory =
+  | 'MATERIAL_CURACION'        // Gasas, jeringas, catéteres, agujas, apósitos, cintas
+  | 'SOLUCIONES_PARENTERALES'   // Fisiológica, Hartmann, Dextrosa, Cloruro de Sodio
+  | 'EQUIPO_PROTECCION'        // Guantes estériles, cubrebocas N95, batas quirúrgicas
+  | 'ROPERIA_LENCERIA'         // Sábanas, campos quirúrgicos, fundas, compresas
+  | 'REACTIVOS_INSUMOS'        // Tubos vacutainer, lancetas, gel conductor
+  | 'PAPELERIA_MEDICA';        // Formatos NOM, recetas, brazaletes de paciente
+
+export interface WarehouseItem {
+  id: string;
+  sku: string; // Ej: ALM-CUR-001, ALM-SOL-004
+  itemName: string;
+  category: WarehouseItemCategory;
+  unit: 'PIEZA' | 'CAJA' | 'PAQUETE' | 'FRASCO' | 'ROLLO' | 'EQUIPO';
+  stockCurrent: number;
+  stockMinimum: number;
+  stockMaximum: number;
+  locationRack: string; // Ej: 'Pasillo A - Estante 2 - Nivel 3'
+  unitCost: number;     // Costo de compra $ MXN
+  lastRestockDate: string;
+  batchNumber?: string;
+  expirationDate?: string;
+  notes?: string;
+}
+
+export interface WarehouseDispatch {
+  id: string;
+  dispatchFolio: string; // VALE-2026-XXXX
+  requestingDepartment: 'QUIROFANOS' | 'URGENCIAS' | 'UCI_ADULTOS' | 'UCIN_NEONATAL' | 'PISOS_HOSPITALIZACION' | 'CONSULTORIOS' | 'CEYE';
+  requestedBy: string;
+  deliveredBy: string;
+  dispatchedDate: string;
+  items: {
+    itemId: string;
+    itemName: string;
+    sku: string;
+    quantity: number;
+  }[];
+  notes?: string;
+  status: 'ENTREGADO' | 'PENDIENTE' | 'CANCELADO';
+}
+
+// ==============================================================================
+// MÓDULO 14: ÁREA DE COMPRAS Y PROVEEDORES
+// ==============================================================================
+
+export type SupplierCategory =
+  | 'MATERIAL_CURACION'
+  | 'FARMACOS_SOLUCIONES'
+  | 'EQUIPO_BIOMEDICO'
+  | 'GASES_MEDICINALES'
+  | 'ROPERIA_UNIFORMES'
+  | 'MANTENIMIENTO_HOSPITALARIO';
+
+export interface Supplier {
+  id: string;
+  businessName: string; // Razón Social Oficial
+  rfc: string;          // Registro Federal de Contribuyentes
+  commercialName: string;
+  contactPerson: string;
+  email: string;
+  phone: string;
+  category: SupplierCategory;
+  creditDays: number;   // Días de crédito ej: 30, 45, 60
+  rating: number;       // 1-5 estrellas
+  address: string;
+  status: 'ACTIVO' | 'EN_EVALUACION' | 'SUSPENDIDO';
+}
+
+export type PurchaseOrderStatus =
+  | 'BORRADOR'
+  | 'PENDIENTE_AUTORIZACION'
+  | 'AUTORIZADA'
+  | 'ENVIADA_PROVEEDOR'
+  | 'SURTIDA_COMPLETA'
+  | 'SURTIDA_PARCIAL'
+  | 'CANCELADA';
+
+export interface PurchaseOrderItem {
+  itemId: string;
+  sku: string;
+  description: string;
+  quantity: number;
+  unitCost: number;
+  subtotal: number;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  orderFolio: string; // OC-2026-XXXX
+  supplierId: string;
+  supplierName: string;
+  supplierRfc: string;
+  requestingDepartment: string;
+  orderDate: string;
+  expectedDeliveryDate: string;
+  items: PurchaseOrderItem[];
+  subtotal: number;
+  taxIva: number; // 16% IVA
+  totalAmount: number;
+  status: PurchaseOrderStatus;
+  authorizedBy?: string; // Ej: 'Ing. Alfonso Uribe (Administrador Único)'
+  authorizedAt?: string;
+  paymentTerms: string; // 'Crédito 30 días', 'Contado', etc.
+  notes?: string;
+}
+
+export interface PurchaseRequisition {
+  id: string;
+  requisitionFolio: string; // REQ-2026-XXXX
+  department: string;
+  requestedBy: string;
+  requestDate: string;
+  urgency: 'NORMAL' | 'URGENTE_DESABASTO' | 'EXTRAORDINARIA';
+  itemsDescription: string;
+  estimatedBudget: number;
+  status: 'PENDIENTE' | 'APROBADA_PARA_OC' | 'RECHAZADA';
+  linkedOrderFolio?: string;
+  notes?: string;
+}
+

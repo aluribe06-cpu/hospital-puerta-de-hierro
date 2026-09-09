@@ -18,7 +18,9 @@ import {
   Shield, 
   Zap, 
   ArrowUpRight, 
-  Sparkles 
+  Sparkles,
+  Boxes,
+  ShoppingBag
 } from 'lucide-react';
 import { UserProfile, TriageAdmission, HospitalBed } from '../../types/hospital';
 
@@ -26,6 +28,8 @@ interface MainMenuHubProps {
   currentUser: UserProfile;
   triageList: TriageAdmission[];
   beds: HospitalBed[];
+  criticalWarehouseCount?: number;
+  pendingOrdersCount?: number;
   onSelectModule: (moduleId: string) => void;
 }
 
@@ -33,6 +37,8 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
   currentUser,
   triageList,
   beds,
+  criticalWarehouseCount = 1,
+  pendingOrdersCount = 2,
   onSelectModule,
 }) => {
   const [clickingModule, setClickingModule] = useState<string | null>(null);
@@ -252,6 +258,40 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
       badge: 'Visión 360° Hospitalaria',
       norm: 'KPIs en Tiempo Real',
       tag: 'Dirección Médica'
+    },
+    {
+      id: 'almacen',
+      stepNumber: '13',
+      title: 'Almacén General',
+      subtitle: 'Material de Curación & Suministros',
+      icon: Boxes,
+      folderBg: 'linear-gradient(150deg, #6fd2e6 0%, #4faccc 50%, #328ea9 100%)',
+      folderAccent: '#36b0d1',
+      folderGlow: 'rgba(79, 172, 204, 0.45)',
+      badgeBg: '#e0f7fa',
+      badgeColor: '#0e7490',
+      tagColor: '#0284c7',
+      indicator: criticalWarehouseCount > 0 ? 'REORDEN' : '100%',
+      badge: criticalWarehouseCount > 0 ? `${criticalWarehouseCount} Insumo(s) en Reorden` : 'Abasto Completo',
+      norm: 'Control de Racks & Kárdex',
+      tag: 'Logística'
+    },
+    {
+      id: 'compras',
+      stepNumber: '14',
+      title: 'Compras & Proveedores',
+      subtitle: 'Requisiciones & Órdenes de Compra',
+      icon: ShoppingBag,
+      folderBg: 'linear-gradient(150deg, #9ca6c4 0%, #7d85a1 50%, #5b6480 100%)',
+      folderAccent: '#7d85a1',
+      folderGlow: 'rgba(125, 133, 161, 0.45)',
+      badgeBg: '#eceff7',
+      badgeColor: '#475569',
+      tagColor: '#475569',
+      indicator: pendingOrdersCount > 0 ? 'PENDIENTE' : 'ACTIVO',
+      badge: pendingOrdersCount > 0 ? `${pendingOrdersCount} OC por Autorizar` : 'Padrón Calificado',
+      norm: 'Firma Digital NOM-024',
+      tag: 'Adquisiciones'
     },
   ];
 

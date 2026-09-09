@@ -6,7 +6,16 @@
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { Patient, TriageAdmission, HospitalBed, PharmacyItem, CashTransaction } from '../types/hospital';
+import { 
+  Patient, 
+  TriageAdmission, 
+  HospitalBed, 
+  PharmacyItem, 
+  CashTransaction,
+  WarehouseItem,
+  PurchaseOrder,
+  Supplier
+} from '../types/hospital';
 
 /**
  * Exportar censo de pacientes a Excel (.xlsx) con membrete oficial Hospital Puerta de Hierro
@@ -422,3 +431,178 @@ export function generateTriageSheetPDF(triage: TriageAdmission, patient: Patient
 
   doc.save(`Triage_${triage.patientNumber}_${Date.now()}.pdf`);
 }
+
+/**
+ * Exportar Kárdex e Inventario de Almacén General a Excel (.xlsx) con membrete oficial
+ */
+export function exportWarehouseToExcel(items: WarehouseItem[]) {
+  const emitDate = new Date();
+  const fechaStr = emitDate.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+  const horaStr = emitDate.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+
+  const totalPiezas = items.reduce((acc, curr) => acc + curr.stockCurrent, 0);
+  const totalValor = items.reduce((acc, curr) => acc + (curr.stockCurrent * curr.unitCost), 0);
+
+  const headerRows: any[][] = [
+    ['🏥 CENTRO MÉDICO PUERTA DE HIERRO TEPIC - ALTA ESPECIALIDAD'],
+    ['ALMACÉN GENERAL DE INSUMOS Y MATERIAL DE CURACIÓN HOSPITALARIO'],
+    ['Sede Tepic | Av. Emilio M. González #221, Cd. Industrial, Nayarit | Tel: (311) 129-5200 | Urgencias: (311) 129-5206'],
+    ['KÁRDEX GENERAL DE EXISTENCIAS, RACKS Y CONTROL DE DESABASTO'],
+    [`Fecha y Hora de Emisión: ${fechaStr} a las ${horaStr} | Responsable: Dirección de Almacén & Logística`],
+    [`Total SKUs: ${items.length} | Existencia Total: ${totalPiezas} unidades | Valor Valuado: $${totalValor.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`],
+    [],
+    [
+      'Código SKU',
+      'Descripción Oficial del Insumo',
+      'Categoría Hospitalaria',
+      'Unidad de Manejo',
+      'Existencia Actual',
+      'Stock Mínimo (Reorden)',
+      'Stock Máximo',
+      'Nivel de Abasto (%)',
+      'Estatus / Alerta',
+      'Ubicación en Rack',
+      'Costo Unitario ($ MXN)',
+      'Valor Total ($ MXN)',
+      'No. Lote',
+      'Fecha Caducidad',
+      'Último Reabastecimiento',
+      'Notas y Observaciones'
+    ]
+  ];
+
+  const dataRows: any[][] = items.map(item => {
+    const abastoPct = item.stockMinimum > 0 ? Math.round((item.stockCurrent / item.stockMinimum) * 100) : 100;
+    const estatus = item.stockCurrent <= item.stockMinimum ? '⚠️ ALERTA: REORDEN URGENTE' : '✅ STOCK ÓPTIMO';
+    const valorItem = item.stockCurrent * item.unitCost;
+
+    return [
+      item.sku,
+      item.itemName,
+      item.category.replace(/_/g, ' '),
+      item.unit,
+      item.stockCurrent,
+      item.stockMinimum,
+      item.stockMaximum,
+      `${abastoPct}%`,
+      estatus,
+      item.locationRack,
+      item.unitCost,
+      valorItem,
+      item.batchNumber || 'N/A',
+      item.expirationDate || 'N/A',
+      item.lastRestockDate,
+      item.notes || ''
+    ];
+  });
+
+  const fullSheet = [...headerRows, ...dataRows];
+  const worksheet = XLSX.utils.aoa_to_sheet(fullSheet);
+  const workbook = XLSX.utils.book_new();
+
+  // Configuración de anchos de columna (20 a 38 caracteres)
+  const minCols = [18, 38, 26, 18, 18, 24, 18, 20, 28, 32, 22, 22, 18, 18, 24, 35];
+  const cols = minCols.map((minW, idx) => {
+    let maxLen = minW;
+    fullSheet.forEach(row => {
+      if (row && row[idx] !== undefined && row[idx] !== null) {
+        const valStr = String(row[idx]);
+        if (valStr.length > maxLen && valStr.length < 50) {
+          maxLen = valStr.length;
+        }
+      }
+    });
+    return { wch: maxLen + 3 };
+  });
+
+  worksheet['!cols'] = cols;
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Almacen_General_PuertaHierro');
+
+  const fileName = `Almacen_General_PuertaDeHierro_${new Date().toISOString().split('T')[0]}.xlsx`;
+  XLSX.writeFile(workbook, fileName);
+}
+
+/**
+ * Exportar Órdenes de Compra y Proveedores a Excel (.xlsx) con membrete oficial
+ */
+export function exportPurchaseOrdersToExcel(orders: PurchaseOrder[], suppliers: Supplier[]) {
+  const emitDate = new Date();
+  const fechaStr = emitDate.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+  const horaStr = emitDate.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+
+  const totalGastos = orders.reduce((acc, curr) => acc + curr.totalAmount, 0);
+
+  const headerRows: any[][] = [
+    ['🏥 CENTRO MÉDICO PUERTA DE HIERRO TEPIC - ALTA ESPECIALIDAD'],
+    ['ÁREA DE COMPRAS, ADQUISICIONES & PROVEEDORES HOSPITALARIOS'],
+    ['Sede Tepic | Av. Emilio M. González #221, Cd. Industrial, Nayarit | Tel: (311) 129-5200 | Urgencias: (311) 129-5206'],
+    ['REPORTE EJECUTIVO DE ÓRDENES DE COMPRA (OC) Y COMPROMISOS PRESUPUESTALES'],
+    [`Fecha y Hora de Emisión: ${fechaStr} a las ${horaStr} | Autorización: Dirección General`],
+    [`Total Órdenes: ${orders.length} | Gasto Comprometido: $${totalGastos.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN | Proveedores Calificados: ${suppliers.length}`],
+    [],
+    [
+      'Folio OC',
+      'Proveedor Adjudicado',
+      'RFC Proveedor',
+      'Departamento Solicitante',
+      'Fecha de Emisión',
+      'Promesa de Entrega',
+      'Condiciones de Pago',
+      'Estatus de la Orden',
+      'Subtotal ($ MXN)',
+      'IVA 16% ($ MXN)',
+      'Total ($ MXN)',
+      'Autorizado Por',
+      'Fecha Autorización',
+      'Desglose de Partidas Insumos',
+      'Observaciones'
+    ]
+  ];
+
+  const dataRows: any[][] = orders.map(ord => {
+    const partidasStr = ord.items.map(it => `${it.description} (x${it.quantity} @ $${it.unitCost})`).join(' | ');
+
+    return [
+      ord.orderFolio,
+      ord.supplierName,
+      ord.supplierRfc,
+      ord.requestingDepartment,
+      ord.orderDate,
+      ord.expectedDeliveryDate,
+      ord.paymentTerms,
+      ord.status.replace(/_/g, ' '),
+      ord.subtotal,
+      ord.taxIva,
+      ord.totalAmount,
+      ord.authorizedBy || 'PENDIENTE DE AUTORIZACIÓN',
+      ord.authorizedAt || 'N/A',
+      partidasStr,
+      ord.notes || ''
+    ];
+  });
+
+  const fullSheet = [...headerRows, ...dataRows];
+  const worksheet = XLSX.utils.aoa_to_sheet(fullSheet);
+  const workbook = XLSX.utils.book_new();
+
+  const minCols = [18, 36, 20, 28, 18, 20, 22, 26, 20, 18, 20, 36, 20, 45, 30];
+  const cols = minCols.map((minW, idx) => {
+    let maxLen = minW;
+    fullSheet.forEach(row => {
+      if (row && row[idx] !== undefined && row[idx] !== null) {
+        const valStr = String(row[idx]);
+        if (valStr.length > maxLen && valStr.length < 55) {
+          maxLen = valStr.length;
+        }
+      }
+    });
+    return { wch: maxLen + 3 };
+  });
+
+  worksheet['!cols'] = cols;
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Ordenes_Compra_PuertaHierro');
+
+  const fileName = `Compras_Ordenes_PuertaDeHierro_${new Date().toISOString().split('T')[0]}.xlsx`;
+  XLSX.writeFile(workbook, fileName);
+}
+

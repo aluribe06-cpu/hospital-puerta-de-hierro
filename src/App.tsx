@@ -24,7 +24,9 @@ import {
   Bell,
   Home,
   ChevronRight,
-  LogOut
+  LogOut,
+  Boxes,
+  ShoppingBag
 } from 'lucide-react';
 
 import { LoginWelcomeModal } from './components/auth/LoginWelcomeModal';
@@ -42,6 +44,8 @@ import { CajaCobroModule } from './components/caja/CajaCobroModule';
 import { CeyeModule } from './components/ceye/CeyeModule';
 import { MedicalChatModule } from './components/chat/MedicalChatModule';
 import { PersonalTurnosModule } from './components/personal/PersonalTurnosModule';
+import { AlmacenModule } from './components/almacen/AlmacenModule';
+import { ComprasModule } from './components/compras/ComprasModule';
 
 import {
   INITIAL_STAFF,
@@ -56,6 +60,11 @@ import {
   INITIAL_TRANSACTIONS,
   INITIAL_CHAT,
   INITIAL_AUDIT_LOGS,
+  INITIAL_WAREHOUSE_ITEMS,
+  INITIAL_WAREHOUSE_DISPATCHES,
+  INITIAL_SUPPLIERS,
+  INITIAL_PURCHASE_ORDERS,
+  INITIAL_REQUISITIONS,
 } from './lib/hospitalData';
 
 import { 
@@ -71,7 +80,12 @@ import {
   CeyeBatch, 
   ChatMessage, 
   AuditLog, 
-  UserProfile 
+  UserProfile,
+  WarehouseItem,
+  WarehouseDispatch,
+  Supplier,
+  PurchaseOrder,
+  PurchaseRequisition
 } from './types/hospital';
 
 import { exportPatientsToExcel } from './lib/exportEngine';
@@ -195,6 +209,31 @@ export function App() {
     return saved ? JSON.parse(saved) : INITIAL_AUDIT_LOGS;
   });
 
+  const [warehouse, setWarehouse] = useState<WarehouseItem[]>(() => {
+    const saved = localStorage.getItem('hpdh_warehouse');
+    return saved ? JSON.parse(saved) : INITIAL_WAREHOUSE_ITEMS;
+  });
+
+  const [warehouseDispatches, setWarehouseDispatches] = useState<WarehouseDispatch[]>(() => {
+    const saved = localStorage.getItem('hpdh_warehouse_dispatches');
+    return saved ? JSON.parse(saved) : INITIAL_WAREHOUSE_DISPATCHES;
+  });
+
+  const [suppliers, setSuppliers] = useState<Supplier[]>(() => {
+    const saved = localStorage.getItem('hpdh_suppliers');
+    return saved ? JSON.parse(saved) : INITIAL_SUPPLIERS;
+  });
+
+  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>(() => {
+    const saved = localStorage.getItem('hpdh_purchase_orders');
+    return saved ? JSON.parse(saved) : INITIAL_PURCHASE_ORDERS;
+  });
+
+  const [requisitions, setRequisitions] = useState<PurchaseRequisition[]>(() => {
+    const saved = localStorage.getItem('hpdh_requisitions');
+    return saved ? JSON.parse(saved) : INITIAL_REQUISITIONS;
+  });
+
   // Guardar en LocalStorage cada vez que cambian
   useEffect(() => {
     localStorage.setItem('hpdh_patients', JSON.stringify(patients));
@@ -239,6 +278,26 @@ export function App() {
   useEffect(() => {
     localStorage.setItem('hpdh_staff', JSON.stringify(staff));
   }, [staff]);
+
+  useEffect(() => {
+    localStorage.setItem('hpdh_warehouse', JSON.stringify(warehouse));
+  }, [warehouse]);
+
+  useEffect(() => {
+    localStorage.setItem('hpdh_warehouse_dispatches', JSON.stringify(warehouseDispatches));
+  }, [warehouseDispatches]);
+
+  useEffect(() => {
+    localStorage.setItem('hpdh_suppliers', JSON.stringify(suppliers));
+  }, [suppliers]);
+
+  useEffect(() => {
+    localStorage.setItem('hpdh_purchase_orders', JSON.stringify(purchaseOrders));
+  }, [purchaseOrders]);
+
+  useEffect(() => {
+    localStorage.setItem('hpdh_requisitions', JSON.stringify(requisitions));
+  }, [requisitions]);
 
   // Manejadores de eventos de actualización
   const handleAddTriage = (newTriage: TriageAdmission) => {
@@ -316,6 +375,46 @@ export function App() {
     setStaff([...staff, user]);
   };
 
+  // Manejadores de Almacén General
+  const handleAddWarehouseItem = (item: WarehouseItem) => {
+    setWarehouse([item, ...warehouse]);
+  };
+
+  const handleDispatchWarehouse = (disp: WarehouseDispatch) => {
+    setWarehouseDispatches([disp, ...warehouseDispatches]);
+  };
+
+  const handleUpdateWarehouseStock = (id: string, newStock: number) => {
+    setWarehouse(warehouse.map(item => item.id === id ? { ...item, stockCurrent: newStock } : item));
+  };
+
+  // Manejadores de Compras y Proveedores
+  const handleAddPurchaseOrder = (order: PurchaseOrder) => {
+    setPurchaseOrders([order, ...purchaseOrders]);
+  };
+
+  const handleUpdateOrderStatus = (orderId: string, status: PurchaseOrder['status'], authorizedBy?: string) => {
+    setPurchaseOrders(purchaseOrders.map(o => {
+      if (o.id === orderId) {
+        return {
+          ...o,
+          status,
+          authorizedBy: authorizedBy || o.authorizedBy,
+          authorizedAt: authorizedBy ? new Date().toISOString().replace('T', ' ').substring(0, 16) : o.authorizedAt
+        };
+      }
+      return o;
+    }));
+  };
+
+  const handleAddSupplier = (supplier: Supplier) => {
+    setSuppliers([supplier, ...suppliers]);
+  };
+
+  const handleApproveRequisition = (reqId: string) => {
+    setRequisitions(requisitions.map(r => r.id === reqId ? { ...r, status: 'APROBADA_PARA_OC' } : r));
+  };
+
   // Elementos de navegación
   const allNavItems = [
     { id: 'menu', label: 'Menú Principal', icon: Home },
@@ -331,6 +430,8 @@ export function App() {
     { id: 'ceye', label: 'CEYE Quirófano', icon: ShieldCheck },
     { id: 'chat', label: 'Chat Médico', icon: MessageSquare, badge: '💬' },
     { id: 'personal', label: 'Personal & Turnos', icon: Users },
+    { id: 'almacen', label: 'Almacén General', icon: Boxes, badge: warehouse.filter(i => i.stockCurrent <= i.stockMinimum).length > 0 ? '⚠️' : undefined },
+    { id: 'compras', label: 'Compras & Proveedores', icon: ShoppingBag, badge: purchaseOrders.filter(o => o.status === 'PENDIENTE_AUTORIZACION').length > 0 ? '📝' : undefined },
   ];
 
   const isFullAdmin = currentUser.role === 'ADMINISTRADOR_UNICO' || (currentUser.allowedModules && currentUser.allowedModules.includes('*'));
@@ -576,6 +677,8 @@ export function App() {
             currentUser={currentUser}
             triageList={triageList}
             beds={beds}
+            criticalWarehouseCount={warehouse.filter(i => i.stockCurrent <= i.stockMinimum).length}
+            pendingOrdersCount={purchaseOrders.filter(o => o.status === 'PENDIENTE_AUTORIZACION').length}
             onSelectModule={(tab) => setActiveTab(tab)}
           />
         )}
@@ -678,6 +781,29 @@ export function App() {
             staff={staff}
             auditLogs={auditLogs}
             onAddUser={handleAddUser}
+          />
+        )}
+
+        {activeTab === 'almacen' && (
+          <AlmacenModule
+            inventory={warehouse}
+            dispatches={warehouseDispatches}
+            onAddItem={handleAddWarehouseItem}
+            onDispatchItems={handleDispatchWarehouse}
+            onUpdateStock={handleUpdateWarehouseStock}
+          />
+        )}
+
+        {activeTab === 'compras' && (
+          <ComprasModule
+            orders={purchaseOrders}
+            suppliers={suppliers}
+            requisitions={requisitions}
+            currentUser={currentUser}
+            onAddOrder={handleAddPurchaseOrder}
+            onUpdateOrderStatus={handleUpdateOrderStatus}
+            onAddSupplier={handleAddSupplier}
+            onApproveRequisition={handleApproveRequisition}
           />
         )}
 

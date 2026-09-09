@@ -15,7 +15,12 @@ import {
   CashTransaction,
   CeyeBatch,
   ChatMessage,
-  AuditLog
+  AuditLog,
+  WarehouseItem,
+  WarehouseDispatch,
+  Supplier,
+  PurchaseOrder,
+  PurchaseRequisition
 } from '../types/hospital';
 
 export const INITIAL_STAFF: UserProfile[] = [
@@ -777,3 +782,486 @@ export const INITIAL_AUDIT_LOGS: AuditLog[] = [
     sha256Hash: 'b8e7d2c1a0f9e834c7b6a5d4e3f2109876543210fedcba9876543210fedcba98',
   },
 ];
+
+// ==============================================================================
+// MÓDULO 13: ALMACÉN GENERAL DE INSUMOS HOSPITALARIOS
+// ==============================================================================
+
+export const INITIAL_WAREHOUSE_ITEMS: WarehouseItem[] = [
+  {
+    id: 'alm-1',
+    sku: 'ALM-CUR-001',
+    itemName: 'Catéter Intravenoso Periférico BD Insyte 18G Verde',
+    category: 'MATERIAL_CURACION',
+    unit: 'CAJA',
+    stockCurrent: 145,
+    stockMinimum: 50,
+    stockMaximum: 300,
+    locationRack: 'Pasillo A - Estante 1 - Nivel 2',
+    unitCost: 485.00,
+    lastRestockDate: '2026-09-02',
+    batchNumber: 'L-2026-BD18',
+    expirationDate: '2028-12-31',
+    notes: 'Insumo de alta rotación para Quirófanos y Urgencias (Caja c/50 pzas)'
+  },
+  {
+    id: 'alm-2',
+    sku: 'ALM-CUR-002',
+    itemName: 'Catéter Intravenoso Periférico BD Insyte 20G Rosa',
+    category: 'MATERIAL_CURACION',
+    unit: 'CAJA',
+    stockCurrent: 120,
+    stockMinimum: 50,
+    stockMaximum: 300,
+    locationRack: 'Pasillo A - Estante 1 - Nivel 2',
+    unitCost: 485.00,
+    lastRestockDate: '2026-09-02',
+    batchNumber: 'L-2026-BD20',
+    expirationDate: '2028-11-30',
+    notes: 'Caja c/50 pzas'
+  },
+  {
+    id: 'alm-3',
+    sku: 'ALM-CUR-003',
+    itemName: 'Jeringa Desechable BD Plastipak 5ml c/Aguja 21G',
+    category: 'MATERIAL_CURACION',
+    unit: 'CAJA',
+    stockCurrent: 85,
+    stockMinimum: 40,
+    stockMaximum: 200,
+    locationRack: 'Pasillo A - Estante 2 - Nivel 1',
+    unitCost: 320.00,
+    lastRestockDate: '2026-08-28',
+    batchNumber: 'L-2026-PL5',
+    expirationDate: '2029-05-31',
+    notes: 'Caja c/100 pzas con pivote Luer-Lok'
+  },
+  {
+    id: 'alm-4',
+    sku: 'ALM-CUR-004',
+    itemName: 'Gasas Estériles Hartmann 10x10 cm c/Trama Radiopaca',
+    category: 'MATERIAL_CURACION',
+    unit: 'PAQUETE',
+    stockCurrent: 32,
+    stockMinimum: 20,
+    stockMaximum: 100,
+    locationRack: 'Pasillo B - Estante 1 - Nivel 3',
+    unitCost: 265.00,
+    lastRestockDate: '2026-08-30',
+    batchNumber: 'L-2026-H10',
+    expirationDate: '2029-03-31',
+    notes: 'Paquete con 200 gasas para uso quirúrgico'
+  },
+  {
+    id: 'alm-5',
+    sku: 'ALM-CUR-005',
+    itemName: 'Sutura Vicryl 3-0 Absorbible Trenzada Aguja SH 26mm',
+    category: 'MATERIAL_CURACION',
+    unit: 'CAJA',
+    stockCurrent: 18,
+    stockMinimum: 15,
+    stockMaximum: 50,
+    locationRack: 'Pasillo B - Estante 3 - Nivel 1',
+    unitCost: 1420.00,
+    lastRestockDate: '2026-08-20',
+    batchNumber: 'L-2026-V30',
+    expirationDate: '2028-09-30',
+    notes: 'Caja c/36 sobres para Cirugía General y Gineco'
+  },
+  {
+    id: 'alm-6',
+    sku: 'ALM-CUR-006',
+    itemName: 'Apósito Transparente 3M Tegaderm Film 10x12 cm',
+    category: 'MATERIAL_CURACION',
+    unit: 'CAJA',
+    stockCurrent: 8,
+    stockMinimum: 15,
+    stockMaximum: 60,
+    locationRack: 'Pasillo A - Estante 3 - Nivel 2',
+    unitCost: 890.00,
+    lastRestockDate: '2026-08-15',
+    batchNumber: 'L-2026-TG10',
+    expirationDate: '2028-04-30',
+    notes: '⚠️ NIVEL CRÍTICO: Reabastecimiento urgente para UCI y Terapia'
+  },
+  {
+    id: 'alm-7',
+    sku: 'ALM-SOL-001',
+    itemName: 'Solución Cloruro de Sodio 0.9% Fisiológica 1000ml Baxter',
+    category: 'SOLUCIONES_PARENTERALES',
+    unit: 'CAJA',
+    stockCurrent: 65,
+    stockMinimum: 30,
+    stockMaximum: 150,
+    locationRack: 'Pasillo C - Estante 1 - Nivel 1',
+    unitCost: 340.00,
+    lastRestockDate: '2026-09-01',
+    batchNumber: 'L-2026-CS1K',
+    expirationDate: '2028-10-31',
+    notes: 'Caja c/12 bolsas Viaflex libres de PVC'
+  },
+  {
+    id: 'alm-8',
+    sku: 'ALM-SOL-002',
+    itemName: 'Solución Hartmann Electrolitos Balanceados 1000ml Baxter',
+    category: 'SOLUCIONES_PARENTERALES',
+    unit: 'CAJA',
+    stockCurrent: 52,
+    stockMinimum: 25,
+    stockMaximum: 120,
+    locationRack: 'Pasillo C - Estante 1 - Nivel 2',
+    unitCost: 365.00,
+    lastRestockDate: '2026-09-01',
+    batchNumber: 'L-2026-HM1K',
+    expirationDate: '2028-11-30',
+    notes: 'Caja c/12 bolsas Viaflex para reposición hidroelectrolítica'
+  },
+  {
+    id: 'alm-9',
+    sku: 'ALM-SOL-003',
+    itemName: 'Solución Glucosada al 5% 500ml Baxter',
+    category: 'SOLUCIONES_PARENTERALES',
+    unit: 'CAJA',
+    stockCurrent: 14,
+    stockMinimum: 20,
+    stockMaximum: 80,
+    locationRack: 'Pasillo C - Estante 2 - Nivel 1',
+    unitCost: 310.00,
+    lastRestockDate: '2026-08-18',
+    batchNumber: 'L-2026-GL500',
+    expirationDate: '2028-08-31',
+    notes: '⚠️ Requiere requisición a compras'
+  },
+  {
+    id: 'alm-10',
+    sku: 'ALM-PRO-001',
+    itemName: 'Guantes Quirúrgicos Estériles de Látex Sin Polvo 7.5',
+    category: 'EQUIPO_PROTECCION',
+    unit: 'CAJA',
+    stockCurrent: 110,
+    stockMinimum: 40,
+    stockMaximum: 250,
+    locationRack: 'Pasillo D - Estante 1 - Nivel 2',
+    unitCost: 780.00,
+    lastRestockDate: '2026-09-03',
+    batchNumber: 'L-2026-GQ75',
+    expirationDate: '2029-01-31',
+    notes: 'Caja c/50 pares estériles empaque individual'
+  },
+  {
+    id: 'alm-11',
+    sku: 'ALM-PRO-002',
+    itemName: 'Mascarilla Quirúrgica Respirador N95 3M 1860',
+    category: 'EQUIPO_PROTECCION',
+    unit: 'CAJA',
+    stockCurrent: 45,
+    stockMinimum: 20,
+    stockMaximum: 100,
+    locationRack: 'Pasillo D - Estante 2 - Nivel 1',
+    unitCost: 520.00,
+    lastRestockDate: '2026-08-25',
+    batchNumber: 'L-2026-3M95',
+    expirationDate: '2030-12-31',
+    notes: 'Caja c/20 piezas aprobadas NIOSH para áreas críticas'
+  },
+  {
+    id: 'alm-12',
+    sku: 'ALM-ROP-001',
+    itemName: 'Bata Quirúrgica Desechable Reforzada Estéril Talla XL',
+    category: 'ROPERIA_LENCERIA',
+    unit: 'PAQUETE',
+    stockCurrent: 35,
+    stockMinimum: 15,
+    stockMaximum: 80,
+    locationRack: 'Pasillo E - Estante 1 - Nivel 1',
+    unitCost: 1150.00,
+    lastRestockDate: '2026-08-29',
+    batchNumber: 'L-2026-BQXL',
+    expirationDate: '2029-08-31',
+    notes: 'Paquete con 25 batas de alta protección hidrorepelente'
+  },
+  {
+    id: 'alm-13',
+    sku: 'ALM-REC-001',
+    itemName: 'Tubos Vacutainer BD Tapa Lila EDTA K2 4ml',
+    category: 'REACTIVOS_INSUMOS',
+    unit: 'PAQUETE',
+    stockCurrent: 28,
+    stockMinimum: 15,
+    stockMaximum: 60,
+    locationRack: 'Pasillo F - Estante 1 - Nivel 2',
+    unitCost: 410.00,
+    lastRestockDate: '2026-08-27',
+    batchNumber: 'L-2026-EDTA',
+    expirationDate: '2028-06-30',
+    notes: 'Gradilla c/100 tubos para Biometría Hemática'
+  }
+];
+
+export const INITIAL_WAREHOUSE_DISPATCHES: WarehouseDispatch[] = [
+  {
+    id: 'val-1',
+    dispatchFolio: 'VALE-2026-0182',
+    requestingDepartment: 'QUIROFANOS',
+    requestedBy: 'Dr. Fernando Covarrubias',
+    deliveredBy: 'T.S. Gabriel Montes (Almacén)',
+    dispatchedDate: '2026-09-08 07:45',
+    status: 'ENTREGADO',
+    items: [
+      { itemId: 'alm-8', itemName: 'Solución Hartmann 1000ml', sku: 'ALM-SOL-002', quantity: 4 },
+      { itemId: 'alm-5', itemName: 'Sutura Vicryl 3-0', sku: 'ALM-CUR-005', quantity: 2 },
+      { itemId: 'alm-12', itemName: 'Bata Quirúrgica Reforzada XL', sku: 'ALM-ROP-001', quantity: 2 }
+    ],
+    notes: 'Suministro para Programación Quirúrgica Matutina'
+  },
+  {
+    id: 'val-2',
+    dispatchFolio: 'VALE-2026-0183',
+    requestingDepartment: 'URGENCIAS',
+    requestedBy: 'Dra. Sofía Valenzuela Ríos',
+    deliveredBy: 'T.S. Gabriel Montes (Almacén)',
+    dispatchedDate: '2026-09-08 08:15',
+    status: 'ENTREGADO',
+    items: [
+      { itemId: 'alm-1', itemName: 'Catéter Periférico 18G Verde', sku: 'ALM-CUR-001', quantity: 3 },
+      { itemId: 'alm-7', itemName: 'Solución Fisiológica 0.9% 1000ml', sku: 'ALM-SOL-001', quantity: 5 },
+      { itemId: 'alm-3', itemName: 'Jeringa Plastipak 5ml', sku: 'ALM-CUR-003', quantity: 3 }
+    ],
+    notes: 'Dotación de Sala de Choque y Observación'
+  },
+  {
+    id: 'val-3',
+    dispatchFolio: 'VALE-2026-0184',
+    requestingDepartment: 'UCI_ADULTOS',
+    requestedBy: 'Enf. Jefa Rocío Barajas',
+    deliveredBy: 'T.S. Gabriel Montes (Almacén)',
+    dispatchedDate: '2026-09-08 08:40',
+    status: 'ENTREGADO',
+    items: [
+      { itemId: 'alm-6', itemName: 'Apósito Tegaderm 10x12', sku: 'ALM-CUR-006', quantity: 2 },
+      { itemId: 'alm-10', itemName: 'Guantes Quirúrgicos 7.5', sku: 'ALM-PRO-001', quantity: 4 }
+    ],
+    notes: 'Cambio de apósitos catéter venoso central y vías invasivas'
+  }
+];
+
+// ==============================================================================
+// MÓDULO 14: ÁREA DE COMPRAS Y PROVEEDORES
+// ==============================================================================
+
+export const INITIAL_SUPPLIERS: Supplier[] = [
+  {
+    id: 'sup-1',
+    businessName: 'Baxter México S.A. de C.V.',
+    rfc: 'BME850612KP4',
+    commercialName: 'Baxter Hospitalaria',
+    contactPerson: 'Lic. Mariana Villarreal Torres',
+    email: 'atencion.hospitales@baxter.com',
+    phone: '55-5279-7000',
+    category: 'FARMACOS_SOLUCIONES',
+    creditDays: 45,
+    rating: 5.0,
+    address: 'Av. Insurgentes Sur #1196, Benito Juárez, CDMX',
+    status: 'ACTIVO'
+  },
+  {
+    id: 'sup-2',
+    businessName: 'Becton Dickinson de México S.A. de C.V.',
+    rfc: 'BDM5708219H1',
+    commercialName: 'BD Medical México',
+    contactPerson: 'Ing. Roberto Fuentes Galindo',
+    email: 'contacto.pedidos@bd.com',
+    phone: '55-5999-8200',
+    category: 'MATERIAL_CURACION',
+    creditDays: 30,
+    rating: 5.0,
+    address: 'Monte Pelvoux #111, Lomas de Chapultepec, CDMX',
+    status: 'ACTIVO'
+  },
+  {
+    id: 'sup-3',
+    businessName: '3M Medical Healthcare México S.A. de C.V.',
+    rfc: 'TMM820304DA2',
+    commercialName: '3M División Médica',
+    contactPerson: 'Lic. Claudia Estrada Ruiz',
+    email: 'salud.mexico@mmm.com',
+    phone: '55-5270-0400',
+    category: 'MATERIAL_CURACION',
+    creditDays: 30,
+    rating: 4.8,
+    address: 'Av. Santa Fe #190, Álvaro Obregón, CDMX',
+    status: 'ACTIVO'
+  },
+  {
+    id: 'sup-4',
+    businessName: 'Medtronic México S. de R.L. de C.V.',
+    rfc: 'MME910408B12',
+    commercialName: 'Medtronic Surgical',
+    contactPerson: 'Dr. Alejandro Peña Lozano',
+    email: 'ordenes.mexico@medtronic.com',
+    phone: '55-5804-1500',
+    category: 'EQUIPO_BIOMEDICO',
+    creditDays: 60,
+    rating: 4.9,
+    address: 'Paseo de la Reforma #483, Cuauhtémoc, CDMX',
+    status: 'ACTIVO'
+  },
+  {
+    id: 'sup-5',
+    businessName: 'Distribuidora Médica de Occidente S.A. de C.V.',
+    rfc: 'DMO090415AB2',
+    commercialName: 'DIMED Occidente (Guadalajara-Tepic)',
+    contactPerson: 'C.P. Javier Morales Cárdenas',
+    email: 'ventas@dimedoccidente.com.mx',
+    phone: '33-3615-8940',
+    category: 'MATERIAL_CURACION',
+    creditDays: 30,
+    rating: 4.7,
+    address: 'Av. Vallarta #2440, Arcos Vallarta, Guadalajara, Jal.',
+    status: 'ACTIVO'
+  },
+  {
+    id: 'sup-6',
+    businessName: 'Infra del Centro S.A. de C.V.',
+    rfc: 'ICE780312MN9',
+    commercialName: 'Grupo Infra Gases Medicinales',
+    contactPerson: 'Ing. Ernesto Sánchez Godoy',
+    email: 'gases.hospitalarios@infra.com.mx',
+    phone: '311-213-4450',
+    category: 'GASES_MEDICINALES',
+    creditDays: 15,
+    rating: 4.9,
+    address: 'Carretera Tepic-Guadalajara Km 5, Tepic, Nayarit',
+    status: 'ACTIVO'
+  }
+];
+
+export const INITIAL_PURCHASE_ORDERS: PurchaseOrder[] = [
+  {
+    id: 'oc-1',
+    orderFolio: 'OC-2026-0038',
+    supplierId: 'sup-1',
+    supplierName: 'Baxter México S.A. de C.V.',
+    supplierRfc: 'BME850612KP4',
+    requestingDepartment: 'Almacén General & Farmacia',
+    orderDate: '2026-09-01',
+    expectedDeliveryDate: '2026-09-04',
+    paymentTerms: 'Crédito 45 días',
+    subtotal: 41896.55,
+    taxIva: 6703.45,
+    totalAmount: 48600.00,
+    status: 'SURTIDA_COMPLETA',
+    authorizedBy: 'Ing. Alfonso Uribe (Administrador Único)',
+    authorizedAt: '2026-09-01 11:30',
+    notes: 'Surtida en Almacén con remisión BAX-98412',
+    items: [
+      { itemId: 'alm-7', sku: 'ALM-SOL-001', description: 'Solución Fisiológica 0.9% 1000ml (Caja c/12)', quantity: 70, unitCost: 340.00, subtotal: 23800.00 },
+      { itemId: 'alm-8', sku: 'ALM-SOL-002', description: 'Solución Hartmann 1000ml (Caja c/12)', quantity: 50, unitCost: 365.00, subtotal: 18250.00 }
+    ]
+  },
+  {
+    id: 'oc-2',
+    orderFolio: 'OC-2026-0041',
+    supplierId: 'sup-3',
+    supplierName: '3M Medical Healthcare México S.A. de C.V.',
+    supplierRfc: 'TMM820304DA2',
+    requestingDepartment: 'Almacén General / UCI',
+    orderDate: '2026-09-06',
+    expectedDeliveryDate: '2026-09-11',
+    paymentTerms: 'Crédito 30 días',
+    subtotal: 18491.38,
+    taxIva: 2958.62,
+    totalAmount: 21450.00,
+    status: 'ENVIADA_PROVEEDOR',
+    authorizedBy: 'Ing. Alfonso Uribe (Administrador Único)',
+    authorizedAt: '2026-09-06 14:15',
+    notes: 'Confirmada por ejecutivo 3M con guía DHL 77812903',
+    items: [
+      { itemId: 'alm-6', sku: 'ALM-CUR-006', description: 'Apósito Tegaderm 10x12 cm (Caja c/50)', quantity: 15, unitCost: 890.00, subtotal: 13350.00 },
+      { itemId: 'alm-11', sku: 'ALM-PRO-002', description: 'Mascarilla N95 3M 1860 (Caja c/20)', quantity: 15, unitCost: 520.00, subtotal: 7800.00 }
+    ]
+  },
+  {
+    id: 'oc-3',
+    orderFolio: 'OC-2026-0042',
+    supplierId: 'sup-2',
+    supplierName: 'Becton Dickinson de México S.A. de C.V.',
+    supplierRfc: 'BDM5708219H1',
+    requestingDepartment: 'Almacén General / Urgencias',
+    orderDate: '2026-09-08',
+    expectedDeliveryDate: '2026-09-13',
+    paymentTerms: 'Crédito 30 días',
+    subtotal: 31724.14,
+    taxIva: 5075.86,
+    totalAmount: 36800.00,
+    status: 'PENDIENTE_AUTORIZACION',
+    notes: 'Reabastecimiento preventivo mensual de insumos de punción',
+    items: [
+      { itemId: 'alm-1', sku: 'ALM-CUR-001', description: 'Catéter BD Insyte 18G Verde (Caja c/50)', quantity: 30, unitCost: 485.00, subtotal: 14550.00 },
+      { itemId: 'alm-2', sku: 'ALM-CUR-002', description: 'Catéter BD Insyte 20G Rosa (Caja c/50)', quantity: 25, unitCost: 485.00, subtotal: 12125.00 },
+      { itemId: 'alm-3', sku: 'ALM-CUR-003', description: 'Jeringa BD Plastipak 5ml (Caja c/100)', quantity: 30, unitCost: 320.00, subtotal: 9600.00 }
+    ]
+  },
+  {
+    id: 'oc-4',
+    orderFolio: 'OC-2026-0043',
+    supplierId: 'sup-4',
+    supplierName: 'Medtronic México S. de R.L. de C.V.',
+    supplierRfc: 'MME910408B12',
+    requestingDepartment: 'Quirófano / Cirugía Especializada',
+    orderDate: '2026-09-08',
+    expectedDeliveryDate: '2026-09-15',
+    paymentTerms: 'Crédito 60 días',
+    subtotal: 46724.14,
+    taxIva: 7475.86,
+    totalAmount: 54200.00,
+    status: 'PENDIENTE_AUTORIZACION',
+    notes: 'Suturas y hemostáticos de alta especialidad para Laparoscopía y Cardiovascular',
+    items: [
+      { itemId: 'alm-5', sku: 'ALM-CUR-005', description: 'Sutura Vicryl 3-0 Trenzada (Caja c/36)', quantity: 20, unitCost: 1420.00, subtotal: 28400.00 },
+      { itemId: 'ins-sut2', sku: 'ALM-CUR-008', description: 'Sutura Prolene 4-0 Cardiovascular (Caja c/36)', quantity: 15, unitCost: 1720.00, subtotal: 25800.00 }
+    ]
+  }
+];
+
+export const INITIAL_REQUISITIONS: PurchaseRequisition[] = [
+  {
+    id: 'req-1',
+    requisitionFolio: 'REQ-2026-0089',
+    department: 'Quirófano Central',
+    requestedBy: 'Dr. Fernando Covarrubias',
+    requestDate: '2026-09-08',
+    urgency: 'URGENTE_DESABASTO',
+    itemsDescription: '20 cajas Sutura Vicryl 3-0 y 15 cajas Prolene 4-0 cardiovascular',
+    estimatedBudget: 54200.00,
+    status: 'APROBADA_PARA_OC',
+    linkedOrderFolio: 'OC-2026-0043',
+    notes: 'Programación quirúrgica intensiva de la próxima semana'
+  },
+  {
+    id: 'req-2',
+    requisitionFolio: 'REQ-2026-0090',
+    department: 'Unidad de Cuidados Intensivos (UCI)',
+    requestedBy: 'Enf. Jefa Rocío Barajas',
+    requestDate: '2026-09-08',
+    urgency: 'NORMAL',
+    itemsDescription: '25 cajas Apósito Tegaderm 10x12 y 50 circuitos de ventilador mecánico',
+    estimatedBudget: 32500.00,
+    status: 'PENDIENTE',
+    notes: 'Consumo promedio mensual para pacientes críticos'
+  },
+  {
+    id: 'req-3',
+    requisitionFolio: 'REQ-2026-0091',
+    department: 'Triage & Sala de Choque Urgencias',
+    requestedBy: 'Dra. Sofía Valenzuela Ríos',
+    requestDate: '2026-09-08',
+    urgency: 'URGENTE_DESABASTO',
+    itemsDescription: 'Catéteres 18G, Soluciones Hartmann 1000ml y jeringas 5ml/10ml',
+    estimatedBudget: 36800.00,
+    status: 'APROBADA_PARA_OC',
+    linkedOrderFolio: 'OC-2026-0042',
+    notes: 'Reposición de stock de contingencia'
+  }
+];
+
