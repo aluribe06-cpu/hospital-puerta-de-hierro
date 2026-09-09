@@ -1126,3 +1126,365 @@ body {
     0 2px 6px -1px rgba(0, 0, 0, 0.35),
     0 0 12px var(--btn-glow, rgba(0, 242, 254, 0.5));
 }
+
+/* ==============================================================================
+   BOTONES PÍLDORA 3D PARA FILTRO DE GRÁFICAS (ESTILO TRIAGE URGENTE + COLORES MÓDULOS)
+   ============================================================================== */
+.neo-pill-filter-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.7) 100%);
+  padding: 4px 6px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.neo-pill-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  white-space: nowrap;
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* Estado Inactivo: Gris Café / Grafito suave de las tarjetas de módulos */
+.neo-pill-filter-btn.inactive {
+  background: linear-gradient(180deg, #4d5b62 0%, #38464d 50%, #243036 100%);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #f1f5f9;
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.3),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.35);
+}
+
+.neo-pill-filter-btn.inactive:hover {
+  transform: translateY(-1.5px) scale(1.02);
+  background: linear-gradient(180deg, #5a6a72 0%, #45545c 50%, #2f3c43 100%);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  box-shadow: 
+    0 6px 14px rgba(0, 0, 0, 0.35),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.45);
+}
+
+.neo-pill-filter-btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* ==========================================================
+   ESTADOS ACTIVOS CON LA PALETA DE 4 COLORES DE LAS TARJETAS:
+   ========================================================== */
+
+/* 1. TODAS LAS GRÁFICAS: Gris Café / Grafito Carbón (#45545b) */
+.neo-pill-filter-btn.active-all {
+  background: linear-gradient(180deg, #677881 0%, #45545b 50%, #2a373d 100%);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 5px 16px rgba(42, 55, 61, 0.7),
+    0 0 12px rgba(103, 120, 129, 0.45),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* 2. TRIAGE URGENCIAS: Cian Clínico / Aqua (#36b0d1 / #4faccc) */
+.neo-pill-filter-btn.active-triage {
+  background: linear-gradient(180deg, #5ec9de 0%, #36b0d1 50%, #1c85a1 100%);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    0 5px 18px rgba(54, 176, 209, 0.7),
+    0 0 14px rgba(54, 176, 209, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+}
+
+/* 3. FLUJO HOSPITALARIO: Azul Acero Océano (#467591) */
+.neo-pill-filter-btn.active-flujo {
+  background: linear-gradient(180deg, #5c97ba 0%, #467591 50%, #29516a 100%);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 
+    0 5px 18px rgba(70, 117, 145, 0.7),
+    0 0 14px rgba(70, 117, 145, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.65),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* 4. DINEROS DE CAJA: Lavanda Acero / Periwinkle (#7d85a1) */
+.neo-pill-filter-btn.active-caja {
+  background: linear-gradient(180deg, #959fb9 0%, #7d85a1 50%, #5b6480 100%);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 
+    0 5px 18px rgba(125, 133, 161, 0.7),
+    0 0 14px rgba(125, 133, 161, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.65),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+}
+
+/* ==============================================================================
+   BARRA INFERIOR MÓVIL (DOCK NATIVO ULTRA-TÁCTIL PARA SMARTPHONES E IPHONE)
+   ============================================================================== */
+.neo-mobile-bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100vw !important;
+  max-width: 100% !important;
+  z-index: 9999 !important; /* Siempre visible por encima de cualquier tarjeta o contenido */
+  background: rgba(10, 18, 32, 0.94) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  border-radius: 0 !important;
+  box-shadow: 
+    0 -8px 30px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  padding: 6px 12px !important;
+  padding-bottom: max(10px, env(safe-area-inset-bottom, 10px)) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+}
+
+.neo-mobile-nav-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2.5px !important;
+  padding: 5px 10px !important;
+  border-radius: 14px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+  color: #94a3b8 !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  outline: none !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  position: relative !important;
+  flex: 1 !important;
+  max-width: 68px !important;
+}
+
+.neo-mobile-nav-btn:hover,
+.neo-mobile-nav-btn:focus,
+.neo-mobile-nav-btn:active {
+  color: #ffffff !important;
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.28) 0%, rgba(2, 132, 199, 0.18) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.55) !important;
+  box-shadow: 
+    0 4px 14px rgba(6, 182, 212, 0.35),
+    0 0 10px rgba(56, 189, 248, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
+  transform: translateY(-1.5px) scale(1.04) !important;
+}
+
+.neo-mobile-nav-btn:active {
+  transform: scale(0.94) !important;
+}
+
+.neo-mobile-nav-btn:hover .neo-mobile-nav-icon,
+.neo-mobile-nav-btn:focus .neo-mobile-nav-icon,
+.neo-mobile-nav-btn:active .neo-mobile-nav-icon {
+  color: #38bdf8 !important;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.9)) !important;
+}
+
+.neo-mobile-nav-btn.active {
+  color: #ffffff !important;
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.22) 0%, rgba(2, 132, 199, 0.12) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 
+    0 4px 12px rgba(6, 182, 212, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.neo-mobile-nav-btn.active .neo-mobile-nav-icon {
+  color: #38bdf8 !important;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.85)) !important;
+}
+
+/* ==============================================================================
+   DRAWER / MODAL DEL MENÚ MÓVIL CON BOTONES TÁCTILES PORCELANA 3D
+   ============================================================================== */
+.neo-mobile-drawer-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(10, 15, 29, 0.78) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+}
+
+.neo-mobile-drawer-sheet {
+  width: 100% !important;
+  max-width: 360px !important;
+  max-height: 84vh !important;
+  background: linear-gradient(180deg, #182235 0%, #0d1527 100%) !important;
+  border-radius: 26px !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 
+    0 24px 60px -12px rgba(0, 0, 0, 0.85),
+    0 0 35px rgba(6, 182, 212, 0.25),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.3) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  animation: neoModalPop 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.neo-mobile-drawer-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 14px 18px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(15, 23, 42, 0.6) !important;
+}
+
+.neo-mobile-drawer-body {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  padding: 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 9px !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.neo-mobile-drawer-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 11px 16px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.22),
+    inset 0 1.5px 2px #ffffff,
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.08) !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-align: left !important;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  position: relative !important;
+}
+
+/* Efecto de iluminación en azul vibrante con bisel 3D y brillo cyan:
+   se activa al pasar (hover), al tocar/presionar (active), al deslizar el dedo (is-hovered),
+   al enfocar (focus) y en el módulo activo */
+.neo-mobile-drawer-btn:hover,
+.neo-mobile-drawer-btn:focus,
+.neo-mobile-drawer-btn:active,
+.neo-mobile-drawer-btn.is-hovered,
+.neo-mobile-drawer-btn.active {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    0 8px 24px rgba(2, 132, 199, 0.6),
+    0 0 18px rgba(56, 189, 248, 0.5),
+    inset 0 1.5px 2.5px rgba(255, 255, 255, 0.8),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.2) !important;
+  color: #ffffff !important;
+  transform: translateY(-1.5px) scale(1.015) !important;
+}
+
+.neo-mobile-drawer-btn:active {
+  transform: scale(0.97) !important;
+  box-shadow: 
+    0 3px 10px rgba(2, 132, 199, 0.7),
+    0 0 12px rgba(56, 189, 248, 0.6),
+    inset 0 2px 4px rgba(0, 0, 0, 0.25) !important;
+}
+
+.neo-drawer-icon-box {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+  flex-shrink: 0 !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.neo-mobile-drawer-btn:hover .neo-drawer-icon-box,
+.neo-mobile-drawer-btn:focus .neo-drawer-icon-box,
+.neo-mobile-drawer-btn:active .neo-drawer-icon-box,
+.neo-mobile-drawer-btn.is-hovered .neo-drawer-icon-box,
+.neo-mobile-drawer-btn.active .neo-drawer-icon-box {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  transform: scale(1.08) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
+}
+
+.neo-drawer-chevron {
+  color: #94a3b8 !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  flex-shrink: 0 !important;
+}
+
+.neo-mobile-drawer-btn:hover .neo-drawer-chevron,
+.neo-mobile-drawer-btn:focus .neo-drawer-chevron,
+.neo-mobile-drawer-btn:active .neo-drawer-chevron,
+.neo-mobile-drawer-btn.is-hovered .neo-drawer-chevron,
+.neo-mobile-drawer-btn.active .neo-drawer-chevron {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  transform: translateX(4px) scale(1.15) !important;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)) !important;
+}
+
+.neo-drawer-label {
+  color: inherit !important;
+  transition: color 0.18s ease !important;
+}
+
+.neo-mobile-drawer-btn:hover .neo-drawer-label,
+.neo-mobile-drawer-btn:focus .neo-drawer-label,
+.neo-mobile-drawer-btn:active .neo-drawer-label,
+.neo-mobile-drawer-btn.is-hovered .neo-drawer-label,
+.neo-mobile-drawer-btn.active .neo-drawer-label {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(2, 44, 80, 0.4) !important;
+}

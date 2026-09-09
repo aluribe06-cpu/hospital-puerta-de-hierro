@@ -22,7 +22,8 @@ import {
   Menu,
   X,
   Bell,
-  Home
+  Home,
+  ChevronRight
 } from 'lucide-react';
 
 import { HospitalLogo } from './components/common/HospitalLogo';
@@ -77,6 +78,26 @@ export function App() {
   // Pestaña Activa (Por defecto inicia en el Menú Principal)
   const [activeTab, setActiveTab] = useState<string>('menu');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [hoveredMobileItem, setHoveredMobileItem] = useState<string | null>(null);
+
+  const handleDrawerTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    if (!touch) return;
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const btn = target?.closest<HTMLButtonElement>('[data-drawer-id]');
+    if (btn) {
+      const id = btn.getAttribute('data-drawer-id');
+      if (id && id !== hoveredMobileItem) {
+        setHoveredMobileItem(id);
+      }
+    }
+  };
+
+  const handleDrawerTouchEnd = () => {
+    setTimeout(() => {
+      setHoveredMobileItem(null);
+    }, 250);
+  };
 
   // Estados de Datos con persistencia local
   const [staff, setStaff] = useState<UserProfile[]>(() => {
@@ -292,6 +313,8 @@ export function App() {
           {/* Logotipo y Título */}
           <div className="flex items-center gap-4">
             <button 
+              id="mobile-menu-trigger-btn"
+              aria-label="Abrir Menú Módulos"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 text-slate-400 hover:text-white"
             >
@@ -386,13 +409,13 @@ export function App() {
       {/* 2. Barra de Navegación Táctil Neo-Tactile (Solo visible cuando se navega dentro de un módulo para no duplicar el Menú Principal) */}
       {activeTab !== 'menu' && (
         <nav className="shrink-0 neo-glass-panel border-x-0 rounded-none px-4 md:px-6 py-1.5 overflow-x-auto hidden lg:flex items-center gap-2 bg-white/5 backdrop-blur-xl animate-fadeIn">
-          {/* Botón Destacado para Regresar al Menú Principal */}
+          {/* Botón Destacado para Regresar al Menú Principal con diseño y efecto idéntico a los demás botones */}
           <button
             onClick={() => setActiveTab('menu')}
-            className="btn-neo text-xs px-3.5 py-2 shrink-0 flex items-center gap-1.5 font-bold bg-cyan-950/70 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-900 shadow-[0_0_15px_rgba(0,242,254,0.2)] hover:scale-105 transition-all"
+            className="btn-neo btn-neo-defart text-xs px-4 py-2 shrink-0 flex items-center gap-1.5 font-bold"
             title="Volver al Menú Principal"
           >
-            <Home size={15} className="text-cyan-400" />
+            <Home size={15} className="text-cyan-600 shrink-0" />
             <span>← Menú Principal</span>
           </button>
 
@@ -420,46 +443,77 @@ export function App() {
         </nav>
       )}
 
-      {/* Menú Móvil Desplegable */}
+      {/* Menú Móvil Desplegable (Drawer Modal Neo-Tactile con Botones 3D Porcelana) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden neo-glass-panel m-3 p-4 rounded-2xl border border-white/15 space-y-2 z-40 animate-fadeIn">
-          <button
-            onClick={() => {
-              setActiveTab('menu');
-              setMobileMenuOpen(false);
-            }}
-            className="w-full flex items-center gap-3 p-3 rounded-xl text-left text-xs font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-500/40 shadow-sm"
-          >
-            <Home size={18} />
-            <span>🏠 Ir al Menú Principal</span>
-          </button>
-          {navItems.filter(item => item.id !== 'menu').map((item) => {
-            const isActive = activeTab === item.id;
-            const Icon = item.icon;
-            return (
+        <div 
+          className="lg:hidden neo-mobile-drawer-overlay animate-fadeIn"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setMobileMenuOpen(false);
+          }}
+        >
+          <div className="neo-mobile-drawer-sheet">
+            {/* Header del Modal */}
+            <div className="neo-mobile-drawer-header">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 shadow-sm">
+                  <Menu size={16} />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black text-white tracking-wide">Módulos Hospitalarios</h3>
+                  <p className="text-[10px] font-semibold text-slate-400">Hospital Puerta de Hierro Tepic</p>
+                </div>
+              </div>
               <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`w-full flex items-center gap-3 p-3 rounded-xl text-left text-xs font-bold transition-all ${
-                  isActive 
-                    ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]' 
-                    : 'text-slate-300 hover:bg-slate-900'
-                }`}
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all active:scale-90"
+                title="Cerrar Menú"
               >
-                <Icon size={18} />
-                <span>{item.label}</span>
-                {item.badge && <span className="ml-auto">{item.badge}</span>}
+                <X size={16} />
               </button>
-            );
-          })}
+            </div>
+
+            {/* Lista de Botones 3D Porcelana Táctil con Iluminación Azul Interactiva */}
+            <div 
+              className="neo-mobile-drawer-body"
+              onTouchMove={handleDrawerTouchMove}
+              onTouchEnd={handleDrawerTouchEnd}
+            >
+              {navItems.map((item) => {
+                const isActive = activeTab === item.id;
+                const isHovered = hoveredMobileItem === item.id;
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    data-drawer-id={item.id}
+                    onClick={() => {
+                      setActiveTab(item.id);
+                      setMobileMenuOpen(false);
+                      setHoveredMobileItem(null);
+                    }}
+                    onMouseEnter={() => setHoveredMobileItem(item.id)}
+                    onMouseLeave={() => setHoveredMobileItem(null)}
+                    onTouchStart={() => setHoveredMobileItem(item.id)}
+                    className={`neo-mobile-drawer-btn ${isActive ? 'active' : ''} ${isHovered ? 'is-hovered' : ''}`}
+                  >
+                    <div className="neo-drawer-icon-box">
+                      <Icon size={17} />
+                    </div>
+                    <span className="neo-drawer-label flex-1 text-xs font-black">{item.label}</span>
+                    {item.badge && (
+                      <span className="text-[11px] font-black mr-1">{item.badge}</span>
+                    )}
+                    <ChevronRight size={15} className="neo-drawer-chevron" />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
 
-      {/* 3. Contenido Principal */}
-      <main className="flex-1 overflow-y-auto px-4 py-2.5 md:px-6 md:py-2.5 max-w-7xl w-full mx-auto pb-16 lg:pb-2">
+      {/* 3. Contenido Principal con espaciado inferior seguro para el dock móvil */}
+      <main className="flex-1 overflow-y-auto px-4 py-2.5 md:px-6 md:py-2.5 max-w-7xl w-full mx-auto pb-28 lg:pb-2">
         {activeTab === 'menu' && (
           <MainMenuHub
             currentUser={currentUser}
@@ -569,12 +623,24 @@ export function App() {
             onAddUser={handleAddUser}
           />
         )}
+
+        {/* Pie de Página Móvil Institucional que scrollea naturalmente */}
+        <div className="lg:hidden text-center pt-3 pb-6 text-[10.5px] text-slate-400 space-y-1">
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <span>🏛️ Hospital Puerta de Hierro Tepic</span>
+            <span>•</span>
+            <span className="text-cyan-300 font-mono font-semibold">NOM-024 / NOM-004 / NOM-016</span>
+          </div>
+          <div className="text-cyan-400 font-bold font-mono">
+            Urgencias: (311) 129-5206
+          </div>
+        </div>
       </main>
 
-      {/* 4. Barra Inferior Táctil para Dispositivos Móviles (Smartphones e iPad en mano) */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 neo-glass-panel border-x-0 border-b-0 rounded-none px-3 py-2 flex items-center justify-around z-40 bg-slate-950/90 backdrop-blur-xl">
+      {/* 4. Barra Inferior Táctil para Dispositivos Móviles (Smartphones e iPhone en mano) */}
+      <nav className="lg:hidden neo-mobile-bottom-nav">
         {[
-          { id: 'dashboard', label: 'Inicio', icon: LayoutDashboard },
+          { id: 'menu', label: 'Inicio', icon: Home },
           { id: 'triage', label: 'Triage', icon: Activity },
           { id: 'admision_programada', label: 'Cirugías', icon: CalendarCheck },
           { id: 'hospitalizacion', label: 'Camas', icon: Bed },
@@ -586,19 +652,17 @@ export function App() {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center gap-1 p-1 text-[10px] font-bold ${
-                isActive ? 'text-blue-400' : 'text-slate-400'
-              }`}
+              className={`neo-mobile-nav-btn ${isActive ? 'active' : ''}`}
             >
-              <Icon size={18} />
+              <Icon size={19} className="neo-mobile-nav-icon" />
               <span>{item.label}</span>
             </button>
           );
         })}
-      </div>
+      </nav>
 
       {/* 5. Pie de Página Institucional y Cumplimiento de Normas Mexicanas (Barra de estado compacta) */}
-      <footer className="shrink-0 border-t border-white/15 bg-white/5 backdrop-blur-xl py-1.5 px-4 md:px-6 text-xs text-slate-400 flex flex-wrap items-center justify-between gap-2">
+      <footer className="shrink-0 border-t border-white/15 bg-white/5 backdrop-blur-xl py-1.5 px-4 md:px-6 text-xs text-slate-400 hidden lg:flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-3 text-[11px] text-slate-300">
           <span>🏛️ Hospital Puerta de Hierro Tepic</span>
           <span>•</span>
