@@ -349,6 +349,10 @@ export function App() {
     setScheduledAdmissions([admission, ...scheduledAdmissions]);
   };
 
+  const handleAddPatient = (newPatient: Patient) => {
+    setPatients([newPatient, ...patients]);
+  };
+
   const handleUpdateScheduledStatus = (id: string, status: ScheduledAdmission['status']) => {
     setScheduledAdmissions(scheduledAdmissions.map(s => s.id === id ? { ...s, status } : s));
   };
@@ -761,6 +765,7 @@ export function App() {
             scheduledList={scheduledAdmissions}
             onAddScheduled={handleAddScheduled}
             onUpdateStatus={handleUpdateScheduledStatus}
+            onAddPatient={handleAddPatient}
           />
         )}
 

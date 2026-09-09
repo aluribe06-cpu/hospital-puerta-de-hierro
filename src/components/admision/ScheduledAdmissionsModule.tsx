@@ -16,7 +16,9 @@ import {
   FileText,
   Bed,
   CheckCircle2,
-  Calendar
+  Calendar,
+  UserPlus,
+  X
 } from 'lucide-react';
 import { Patient, ScheduledAdmission, BedArea } from '../../types/hospital';
 import { logAuditAction } from '../../lib/supabaseClient';
@@ -27,6 +29,7 @@ interface ScheduledAdmissionsModuleProps {
   scheduledList: ScheduledAdmission[];
   onAddScheduled: (admission: ScheduledAdmission) => void;
   onUpdateStatus: (id: string, status: ScheduledAdmission['status']) => void;
+  onAddPatient: (patient: Patient) => void;
 }
 
 export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps> = ({
@@ -34,9 +37,28 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
   scheduledList,
   onAddScheduled,
   onUpdateStatus,
+  onAddPatient,
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showNewPatientModal, setShowNewPatientModal] = useState(false);
   const [filterType, setFilterType] = useState<string>('TODOS');
+  const [patientSaved, setPatientSaved] = useState(false);
+
+  // Formulario Nuevo Paciente
+  const [npFirstName, setNpFirstName]     = useState('');
+  const [npLastName, setNpLastName]       = useState('');
+  const [npBirthDate, setNpBirthDate]     = useState('');
+  const [npGender, setNpGender]           = useState<Patient['gender']>('MASCULINO');
+  const [npCurp, setNpCurp]               = useState('');
+  const [npRfc, setNpRfc]                 = useState('');
+  const [npPhone, setNpPhone]             = useState('');
+  const [npOriginario, setNpOriginario]   = useState('');
+  const [npAddress, setNpAddress]         = useState('');
+  const [npBloodType, setNpBloodType]     = useState<Patient['bloodType']>('O+');
+  const [npAllergies, setNpAllergies]     = useState('Ninguna conocida');
+  const [npInsurance, setNpInsurance]     = useState('Particular');
+  const [npEcName, setNpEcName]           = useState('');
+  const [npEcPhone, setNpEcPhone]         = useState('');
 
   // Formulario
   const [patientId, setPatientId] = useState(patients[0]?.id || '');
@@ -95,6 +117,47 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
     setNotes('');
   };
 
+  // Guardar nuevo paciente
+  const handleSaveNewPatient = (e: React.FormEvent) => {
+    e.preventDefault();
+    const now = new Date();
+    const year = now.getFullYear();
+    const seq  = String(patients.length + 1).padStart(4, '0');
+    const newPatient: Patient = {
+      id: 'pat-' + Date.now(),
+      patientNumber: `HPDH-${year}-${seq}`,
+      firstName: npFirstName.trim(),
+      lastName:  npLastName.trim(),
+      birthDate: npBirthDate,
+      gender:    npGender,
+      curp:      npCurp.trim().toUpperCase(),
+      rfc:       npRfc.trim().toUpperCase() || undefined,
+      phone:     npPhone.trim() || undefined,
+      originario: npOriginario.trim() || undefined,
+      address:   npAddress.trim() || undefined,
+      bloodType: npBloodType,
+      allergies: npAllergies.trim(),
+      weightKg:  70,
+      heightCm:  170,
+      emergencyContactName:  npEcName.trim(),
+      emergencyContactPhone: npEcPhone.trim(),
+      insuranceCompany: npInsurance,
+      createdAt: now.toISOString(),
+    };
+    onAddPatient(newPatient);
+    setPatientSaved(true);
+    setTimeout(() => {
+      setPatientSaved(false);
+      setShowNewPatientModal(false);
+      // Reset
+      setNpFirstName(''); setNpLastName(''); setNpBirthDate('');
+      setNpCurp(''); setNpRfc(''); setNpPhone('');
+      setNpOriginario(''); setNpAddress('');
+      setNpEcName(''); setNpEcPhone('');
+      setNpAllergies('Ninguna conocida');
+    }, 1200);
+  };
+
   const exportScheduledExcel = () => {
     const data = scheduledList.map(s => ({
       'Folio Paciente': s.patientNumber,
@@ -151,6 +214,14 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
             Exportar Agenda (.xlsx)
           </button>
           <button 
+            onClick={() => setShowNewPatientModal(true)}
+            className="btn-neo text-xs"
+            style={{ background: 'rgba(16,185,129,0.15)', borderColor: 'rgba(16,185,129,0.4)', color: '#34d399' }}
+          >
+            <UserPlus size={16} />
+            Nuevo Paciente
+          </button>
+          <button 
             onClick={() => setShowModal(true)}
             className="btn-neo btn-neo-active text-xs"
           >
@@ -159,6 +230,178 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
           </button>
         </div>
       </div>
+
+      {/* ===== MODAL NUEVO PACIENTE ===== */}
+      {showNewPatientModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.75)' }}>
+          <div className="neo-glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="text-lg font-black text-white flex items-center gap-2">
+                  <UserPlus size={20} className="text-emerald-400" />
+                  Alta de Nuevo Paciente
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">Registro inicial en el directorio hospitalario</p>
+              </div>
+              <button onClick={() => setShowNewPatientModal(false)} className="text-slate-400 hover:text-white transition-colors p-1 bg-transparent border-none" style={{ background: 'none' }}>
+                <X size={20} />
+              </button>
+            </div>
+
+            {patientSaved && (
+              <div className="mb-4 p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 flex items-center gap-2 text-emerald-300 text-sm">
+                <CheckCircle2 size={18} /> Paciente registrado exitosamente
+              </div>
+            )}
+
+            <form onSubmit={handleSaveNewPatient} className="space-y-4">
+              {/* Nombre */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Nombre(s) *</label>
+                  <input required value={npFirstName} onChange={e => setNpFirstName(e.target.value)}
+                    className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                    placeholder="Ej: Roberto"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Apellidos *</label>
+                  <input required value={npLastName} onChange={e => setNpLastName(e.target.value)}
+                    className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                    placeholder="Ej: González Parra"
+                  />
+                </div>
+              </div>
+
+              {/* Fecha nacimiento y Género */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Fecha de Nacimiento *</label>
+                  <input required type="date" value={npBirthDate} onChange={e => setNpBirthDate(e.target.value)}
+                    className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Género</label>
+                  <select value={npGender} onChange={e => setNpGender(e.target.value as Patient['gender'])}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm">
+                    <option value="MASCULINO">Masculino</option>
+                    <option value="FEMENINO">Femenino</option>
+                    <option value="OTRO">Otro</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* CURP y RFC */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">CURP *</label>
+                  <input required value={npCurp} onChange={e => setNpCurp(e.target.value.toUpperCase())}
+                    maxLength={18}
+                    className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm font-mono uppercase"
+                    placeholder="GOPR850312HNLNRB09"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">RFC <span className="text-slate-500">(opcional)</span></label>
+                  <input value={npRfc} onChange={e => setNpRfc(e.target.value.toUpperCase())}
+                    maxLength={13}
+                    className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm font-mono uppercase"
+                    placeholder="GOPR850312XXX"
+                  />
+                </div>
+              </div>
+
+              {/* Teléfono */}
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Teléfono de Contacto</label>
+                <input type="tel" value={npPhone} onChange={e => setNpPhone(e.target.value)}
+                  className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                  placeholder="311 XXX XXXX"
+                />
+              </div>
+
+              {/* Originario y Domicilio */}
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Originario de <span className="text-slate-500">(ciudad / estado)</span></label>
+                <input value={npOriginario} onChange={e => setNpOriginario(e.target.value)}
+                  className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                  placeholder="Ej: Tepic, Nayarit"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Domicilio Actual</label>
+                <textarea value={npAddress} onChange={e => setNpAddress(e.target.value)}
+                  rows={2}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm resize-none"
+                  placeholder="Calle, Número, Colonia, Ciudad, CP"
+                />
+              </div>
+
+              {/* Sangre y Seguro */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Tipo de Sangre</label>
+                  <select value={npBloodType} onChange={e => setNpBloodType(e.target.value as Patient['bloodType'])}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm">
+                    {['A+','A-','B+','B-','AB+','AB-','O+','O-'].map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Aseguradora / Servicio</label>
+                  <select value={npInsurance} onChange={e => setNpInsurance(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm">
+                    {['Particular','IMSS','ISSSTE','GNP','AXA','MetLife','Mapfre','HDI'].map(ins => <option key={ins} value={ins}>{ins}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              {/* Alergias */}
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Alergias conocidas</label>
+                <input value={npAllergies} onChange={e => setNpAllergies(e.target.value)}
+                  className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                  placeholder="Ninguna conocida / Penicilina..."
+                />
+              </div>
+
+              {/* Contacto de emergencia */}
+              <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-600/30 space-y-3">
+                <p className="text-xs font-bold text-slate-300 uppercase tracking-wider">Contacto de Emergencia</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Nombre *</label>
+                    <input required value={npEcName} onChange={e => setNpEcName(e.target.value)}
+                      className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-600/40 text-white text-sm"
+                      placeholder="Nombre completo"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Teléfono *</label>
+                    <input required type="tel" value={npEcPhone} onChange={e => setNpEcPhone(e.target.value)}
+                      className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-600/40 text-white text-sm"
+                      placeholder="311 XXX XXXX"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setShowNewPatientModal(false)}
+                  className="flex-1 py-2.5 rounded-xl border border-slate-600/40 text-slate-300 text-sm hover:bg-slate-700/40 transition-colors">
+                  Cancelar
+                </button>
+                <button type="submit"
+                  className="flex-1 py-2.5 rounded-xl font-bold text-sm text-white"
+                  style={{ background: 'linear-gradient(135deg, #059669, #10b981)' }}>
+                  <CheckCircle2 size={16} className="inline mr-1.5" />
+                  Registrar Paciente
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Tarjetas de Resumen de Protocolo */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

@@ -68,11 +68,16 @@ export interface Patient {
   id: string;
   patientNumber: string; // Expediente HPDH-2026-XXXX
   curp: string;
+  rfc?: string;
   firstName: string;
   lastName: string;
   birthDate: string;
+  age?: number;
   gender: 'MASCULINO' | 'FEMENINO' | 'OTRO';
   bloodType: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+  phone?: string;
+  originario?: string;   // Ciudad/Estado de origen
+  address?: string;      // Domicilio completo
   allergies: string;
   chronicConditions?: string;
   weightKg: number;      // Peso en kg
