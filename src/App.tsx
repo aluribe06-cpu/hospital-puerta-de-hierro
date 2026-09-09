@@ -118,7 +118,21 @@ export function App() {
   // Estados de Datos con persistencia local
   const [staff, setStaff] = useState<UserProfile[]>(() => {
     const saved = localStorage.getItem('hpdh_staff');
-    return saved ? JSON.parse(saved) : INITIAL_STAFF;
+    if (saved) {
+      try {
+        const parsed: UserProfile[] = JSON.parse(saved);
+        // Si algún usuario no tiene contraseña (datos viejos), resetear al estado inicial
+        const hasValidPasswords = parsed.every(u => u.password && u.password.length > 0);
+        if (!hasValidPasswords || parsed.length === 0) {
+          localStorage.removeItem('hpdh_staff');
+          return INITIAL_STAFF;
+        }
+        return parsed;
+      } catch {
+        return INITIAL_STAFF;
+      }
+    }
+    return INITIAL_STAFF;
   });
 
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
