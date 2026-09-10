@@ -762,6 +762,8 @@ export function App() {
             triageList={triageList}
             onAddTriage={handleAddTriage}
             onUpdateTriageStatus={handleUpdateTriageStatus}
+            onAddPatient={handleAddPatient}
+            onEmergencyAdmit={handleEmergencyAdmit}
           />
         )}
 
