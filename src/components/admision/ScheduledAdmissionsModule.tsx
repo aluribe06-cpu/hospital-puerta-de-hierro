@@ -18,9 +18,11 @@ import {
   CheckCircle2,
   Calendar,
   UserPlus,
-  X
+  X,
+  AlertTriangle,
+  Zap
 } from 'lucide-react';
-import { Patient, ScheduledAdmission, BedArea } from '../../types/hospital';
+import { Patient, ScheduledAdmission, BedArea, TriageAdmission } from '../../types/hospital';
 import { logAuditAction } from '../../lib/supabaseClient';
 import * as XLSX from 'xlsx';
 
@@ -30,6 +32,7 @@ interface ScheduledAdmissionsModuleProps {
   onAddScheduled: (admission: ScheduledAdmission) => void;
   onUpdateStatus: (id: string, status: ScheduledAdmission['status']) => void;
   onAddPatient: (patient: Patient) => void;
+  onEmergencyAdmit: (patient: Patient, triage: TriageAdmission) => void;
 }
 
 export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps> = ({
@@ -38,11 +41,28 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
   onAddScheduled,
   onUpdateStatus,
   onAddPatient,
+  onEmergencyAdmit,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showNewPatientModal, setShowNewPatientModal] = useState(false);
+  const [showEmergencyModal, setShowEmergencyModal] = useState(false);
   const [filterType, setFilterType] = useState<string>('TODOS');
   const [patientSaved, setPatientSaved] = useState(false);
+  const [emergencySaved, setEmergencySaved] = useState(false);
+  const [emergencyExpediente, setEmergencyExpediente] = useState('');
+
+  // ---- Formulario Emergencia (campos mínimos) ----
+  const [emFirstName, setEmFirstName] = useState('NN');
+  const [emLastName, setEmLastName]   = useState('No identificado');
+  const [emAge, setEmAge]             = useState(30);
+  const [emGender, setEmGender]       = useState<Patient['gender']>('MASCULINO');
+  const [emBloodType, setEmBloodType] = useState<Patient['bloodType']>('O+');
+  const [emCause, setEmCause]         = useState('');
+  const [emBp, setEmBp]               = useState('120/80');
+  const [emHr, setEmHr]               = useState(80);
+  const [emSpo2, setEmSpo2]           = useState(95);
+  const [emTemp, setEmTemp]           = useState(36.5);
+  const [emDestination, setEmDestination] = useState<'SALA_CHOQUE' | 'CONSULTORIO_URGENCIAS' | 'SALA_OBSERVACION' | 'HOSPITALIZACION'>('SALA_CHOQUE');
 
   // Formulario Nuevo Paciente
   const [npFirstName, setNpFirstName]     = useState('');
@@ -158,6 +178,85 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
     }, 1200);
   };
 
+  // Guardar ingreso de emergencia directa (Código Rojo)
+  const handleEmergencySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const now = new Date();
+    const year = now.getFullYear();
+    const seq = String(patients.length + 1).padStart(4, '0');
+    const expediente = `HPDH-${year}-${seq}`;
+
+    const newPatient: Patient = {
+      id: 'pat-' + Date.now(),
+      patientNumber: expediente,
+      firstName: emFirstName.trim() || 'NN',
+      lastName: emLastName.trim() || 'No identificado',
+      birthDate: `${year - (Number(emAge) || 30)}-01-01`,
+      age: Number(emAge) || 30,
+      gender: emGender,
+      curp: 'EMERGENCIA-PENDIENTE',
+      bloodType: emBloodType,
+      allergies: 'No evaluado (Emergencia)',
+      weightKg: 70,
+      heightCm: 170,
+      emergencyContactName: 'Pendiente de captura',
+      emergencyContactPhone: 'Pendiente',
+      insuranceCompany: 'Particular (Urgencias)',
+      createdAt: now.toISOString(),
+    };
+
+    const newTriage: TriageAdmission = {
+      id: 'trg-' + Date.now(),
+      patientId: newPatient.id,
+      patientName: `${newPatient.firstName} ${newPatient.lastName}`,
+      patientNumber: expediente,
+      priority: 'ROJO_REANIMACION',
+      bloodPressure: emBp || '120/80',
+      heartRate: Number(emHr) || 80,
+      respiratoryRate: 20,
+      temperatureC: Number(emTemp) || 36.5,
+      oxygenSaturation: Number(emSpo2) || 95,
+      bloodGlucose: 100,
+      painScaleEva: 10,
+      weightKg: 70,
+      heightCm: 170,
+      chiefComplaint: emCause.trim() || 'Ingreso directo por Código Rojo de Urgencias',
+      initialDiagnosis: emCause.trim() || 'En valoración emergente - Código Rojo',
+      evaluatingPhysician: 'Médico Urgencias / Código Rojo',
+      assignedDestination: emDestination,
+      waitTimeMinutes: 0,
+      status: 'EN_ATENCION',
+      admissionTimestamp: now.toISOString(),
+    };
+
+    onEmergencyAdmit(newPatient, newTriage);
+    setEmergencyExpediente(expediente);
+    setEmergencySaved(true);
+
+    logAuditAction({
+      userName: 'Admisión Urgencias',
+      userRole: 'ENFERMERO_TRIAGE',
+      actionType: 'INGRESO_EMERGENCIA_ROJO',
+      resourceAffected: `Expediente ${expediente}`,
+      details: `Ingreso emergente directo Código Rojo: ${newPatient.firstName} ${newPatient.lastName}. Causa: ${emCause}. Destino: ${emDestination}.`,
+    });
+
+    setTimeout(() => {
+      setEmergencySaved(false);
+      setShowEmergencyModal(false);
+      // Reset
+      setEmFirstName('NN');
+      setEmLastName('No identificado');
+      setEmAge(30);
+      setEmCause('');
+      setEmBp('120/80');
+      setEmHr(80);
+      setEmSpo2(95);
+      setEmTemp(36.5);
+      setEmDestination('SALA_CHOQUE');
+    }, 1800);
+  };
+
   const exportScheduledExcel = () => {
     const data = scheduledList.map(s => ({
       'Folio Paciente': s.patientNumber,
@@ -206,6 +305,21 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
+          {/* BOTÓN ROJO DE EMERGENCIA DIRECTA */}
+          <button 
+            onClick={() => setShowEmergencyModal(true)}
+            className="btn-neo text-xs font-black flex items-center gap-1.5 animate-pulse"
+            style={{ 
+              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.45))', 
+              borderColor: 'rgba(239, 68, 68, 0.8)', 
+              color: '#fca5a5',
+              boxShadow: '0 0 15px rgba(239, 68, 68, 0.3)'
+            }}
+          >
+            <AlertTriangle size={16} className="text-red-400 animate-bounce" />
+            <span>🚨 INGRESO DE EMERGENCIA</span>
+          </button>
+
           <button 
             onClick={exportScheduledExcel}
             className="btn-neo btn-neo-defart text-xs"
@@ -403,7 +517,162 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
         </div>
       )}
 
-      {/* Tarjetas de Resumen de Protocolo */}
+      {/* ===== MODAL INGRESO DE EMERGENCIA DIRECTA (CÓDIGO ROJO) ===== */}
+      {showEmergencyModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.85)' }}>
+          <div className="neo-glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6" style={{ borderColor: 'rgba(239, 68, 68, 0.4)', boxShadow: '0 0 30px rgba(239, 68, 68, 0.2)' }}>
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-500/20 text-red-400 border border-red-500/30">
+                  <AlertTriangle size={22} className="animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-red-300 flex items-center gap-2">
+                    Ingreso Rápido de Emergencia
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/40 font-mono">
+                      CÓDIGO ROJO / SALA DE CHOQUE
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">Captura expedita para reanimación inmediata. Los datos completos y kardex se complementan después.</p>
+                </div>
+              </div>
+              <button onClick={() => setShowEmergencyModal(false)} className="text-slate-400 hover:text-white transition-colors p-1 bg-transparent border-none" style={{ background: 'none' }}>
+                <X size={20} />
+              </button>
+            </div>
+
+            {emergencySaved && (
+              <div className="mb-4 p-4 rounded-xl bg-red-950/80 border border-red-500/60 text-white space-y-1">
+                <div className="flex items-center gap-2 text-emerald-400 font-bold">
+                  <CheckCircle2 size={18} /> ¡Código Rojo Activado e Ingreso Registrado!
+                </div>
+                <p className="text-xs text-slate-200">
+                  Expediente generado: <span className="font-mono font-bold text-red-300">{emergencyExpediente}</span>. Paciente canalizado a <span className="font-semibold text-white">{emDestination.replace(/_/g, ' ')}</span> con prioridad <span className="text-red-400 font-bold">ROJO REANIMACIÓN</span>.
+                </p>
+              </div>
+            )}
+
+            <form onSubmit={handleEmergencySubmit} className="space-y-4">
+              <div className="p-3 rounded-xl bg-red-950/30 border border-red-500/30 text-xs text-red-200 flex items-center gap-2">
+                <Zap size={16} className="text-red-400 shrink-0" />
+                <span>Genera automáticamente el expediente y la ficha de Triage en código rojo con pase directo a atención.</span>
+              </div>
+
+              {/* Datos Generales Rápidos */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Nombre(s) del Paciente / NN</label>
+                  <input value={emFirstName} onChange={e => setEmFirstName(e.target.value)}
+                    className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                    placeholder="NN si no está identificado"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Apellidos / Referencia</label>
+                  <input value={emLastName} onChange={e => setEmLastName(e.target.value)}
+                    className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                    placeholder="No identificado / Familiar que acompaña"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Edad Aprox.</label>
+                  <input type="number" min={0} max={120} value={emAge} onChange={e => setEmAge(Number(e.target.value))}
+                    className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Género</label>
+                  <select value={emGender} onChange={e => setEmGender(e.target.value as Patient['gender'])}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm">
+                    <option value="MASCULINO">Masculino</option>
+                    <option value="FEMENINO">Femenino</option>
+                    <option value="OTRO">Otro</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-1">Tipo de Sangre</label>
+                  <select value={emBloodType} onChange={e => setEmBloodType(e.target.value as Patient['bloodType'])}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm">
+                    {['O+','O-','A+','A-','B+','B-','AB+','AB-'].map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              {/* Motivo de Urgencia / Causa */}
+              <div>
+                <label className="block text-xs font-bold text-red-300 mb-1">Motivo de Emergencia / Causa de Ingreso *</label>
+                <input required value={emCause} onChange={e => setEmCause(e.target.value)}
+                  className="neo-auth-input w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-red-500/50 text-white text-sm"
+                  placeholder="Ej: Paro cardiorrespiratorio, Politraumatismo, Choque hipovolémico, EVC..."
+                />
+              </div>
+
+              {/* Signos Vitales Rápidos */}
+              <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-600/30 space-y-3">
+                <p className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Activity size={14} className="text-cyan-400" />
+                  Signos Vitales Rápidos de Ingreso
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">T/A (Presión)</label>
+                    <input value={emBp} onChange={e => setEmBp(e.target.value)}
+                      className="neo-auth-input w-full px-2.5 py-1.5 rounded-lg bg-slate-900/60 border border-slate-600/40 text-white text-xs font-mono text-center"
+                      placeholder="120/80"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">FC (lpm)</label>
+                    <input type="number" value={emHr} onChange={e => setEmHr(Number(e.target.value))}
+                      className="neo-auth-input w-full px-2.5 py-1.5 rounded-lg bg-slate-900/60 border border-slate-600/40 text-white text-xs font-mono text-center"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">SpO2 (%)</label>
+                    <input type="number" value={emSpo2} onChange={e => setEmSpo2(Number(e.target.value))}
+                      className="neo-auth-input w-full px-2.5 py-1.5 rounded-lg bg-slate-900/60 border border-slate-600/40 text-white text-xs font-mono text-center"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Temp (°C)</label>
+                    <input type="number" step="0.1" value={emTemp} onChange={e => setEmTemp(Number(e.target.value))}
+                      className="neo-auth-input w-full px-2.5 py-1.5 rounded-lg bg-slate-900/60 border border-slate-600/40 text-white text-xs font-mono text-center"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Destino Inmediato */}
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Destino Inmediato del Paciente</label>
+                <select value={emDestination} onChange={e => setEmDestination(e.target.value as any)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-600/40 text-white text-sm">
+                  <option value="SALA_CHOQUE">🚨 Sala de Choque / Reanimación (Prioridad 1)</option>
+                  <option value="CONSULTORIO_URGENCIAS">Consultorio de Urgencias</option>
+                  <option value="SALA_OBSERVACION">Sala de Observación</option>
+                  <option value="HOSPITALIZACION">Hospitalización Directa</option>
+                </select>
+              </div>
+
+              <div className="flex gap-3 pt-3">
+                <button type="button" onClick={() => setShowEmergencyModal(false)}
+                  className="flex-1 py-2.5 rounded-xl border border-slate-600/40 text-slate-300 text-sm hover:bg-slate-700/40 transition-colors">
+                  Cancelar
+                </button>
+                <button type="submit"
+                  className="flex-1 py-2.5 rounded-xl font-black text-sm text-white flex items-center justify-center gap-2 shadow-lg"
+                  style={{ background: 'linear-gradient(135deg, #dc2626, #b91c1c)', boxShadow: '0 0 15px rgba(220, 38, 38, 0.4)' }}>
+                  <AlertTriangle size={16} />
+                  ACTIVAR CÓDIGO ROJO E INGRESAR
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="neo-glass-panel p-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">

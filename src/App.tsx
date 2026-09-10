@@ -353,6 +353,12 @@ export function App() {
     setPatients([newPatient, ...patients]);
   };
 
+  // Ingreso de emergencia: crea paciente + triage ROJO al mismo tiempo
+  const handleEmergencyAdmit = (newPatient: Patient, triage: TriageAdmission) => {
+    setPatients(prev => [newPatient, ...prev]);
+    setTriageList(prev => [triage, ...prev]);
+  };
+
   const handleUpdateScheduledStatus = (id: string, status: ScheduledAdmission['status']) => {
     setScheduledAdmissions(scheduledAdmissions.map(s => s.id === id ? { ...s, status } : s));
   };
@@ -766,6 +772,7 @@ export function App() {
             onAddScheduled={handleAddScheduled}
             onUpdateStatus={handleUpdateScheduledStatus}
             onAddPatient={handleAddPatient}
+            onEmergencyAdmit={handleEmergencyAdmit}
           />
         )}
 
