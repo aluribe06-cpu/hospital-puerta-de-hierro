@@ -638,13 +638,30 @@ export const CajaCobroModule: React.FC<CajaCobroModuleProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-3 flex-wrap">
-          {/* Selector de Turno Táctil */}
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+          {/* Selector de Turno Táctil con indicador de color dinámico */}
           <div className="neo-shift-pill">
             <div className="neo-shift-icon-box">
               <Clock size={14} />
             </div>
             <span className="text-[11px] font-bold text-slate-400 font-mono tracking-wider">TURNO:</span>
+            {/* Dot indicador de color según turno */}
+            <span style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '9999px',
+              flexShrink: 0,
+              background: selectedShift === 'MATUTINO'
+                ? '#f59e0b'
+                : selectedShift === 'VESPERTINO'
+                ? '#38bdf8'
+                : '#a78bfa',
+              boxShadow: selectedShift === 'MATUTINO'
+                ? '0 0 8px #f59e0b'
+                : selectedShift === 'VESPERTINO'
+                ? '0 0 8px #38bdf8'
+                : '0 0 8px #a78bfa',
+            }} />
             <div className="neo-shift-select-container">
               <select
                 value={selectedShift}
@@ -652,44 +669,42 @@ export const CajaCobroModule: React.FC<CajaCobroModuleProps> = ({
                 className="neo-shift-select"
                 title="Seleccionar Turno de Operación en Caja"
               >
-                <option value="MATUTINO">MATUTINO (07-15h)</option>
-                <option value="VESPERTINO">VESPERTINO (14-21h)</option>
-                <option value="NOCTURNO_A">NOCTURNO A</option>
-                <option value="NOCTURNO_B">NOCTURNO B</option>
+                <option value="MATUTINO">☀ MATUTINO (07-15h)</option>
+                <option value="VESPERTINO">🌤 VESPERTINO (14-21h)</option>
+                <option value="NOCTURNO_A">🌙 NOCTURNO A (21-01h)</option>
+                <option value="NOCTURNO_B">🌙 NOCTURNO B (01-07h)</option>
               </select>
               <ChevronDown size={13} className="neo-shift-chevron" />
             </div>
           </div>
 
+          {/* Separador visual */}
+          <div style={{ width: '1px', height: '32px', background: 'rgba(148,163,184,0.2)', margin: '0 2px' }} />
+
           {/* Botón Facturar CFDI 4.0 Directo */}
           <button 
             onClick={() => {
               const targetTx = transactions.find(t => !t.isInvoiceIssued) || transactions[0];
-              if (targetTx) {
-                handleOpenStampModal(targetTx);
-              }
+              if (targetTx) handleOpenStampModal(targetTx);
             }}
             className="btn-neo-factura-head"
             title="Emitir y timbrar Factura SAT CFDI 4.0 (Anexo 20)"
           >
             <FileText size={15} />
-            <span>Facturar CFDI 4.0</span>
+            <span>CFDI 4.0</span>
           </button>
 
           {/* Botón Ticket de Pago Térmico */}
           <button 
             onClick={() => {
               const targetTx = transactions[0];
-              if (targetTx) {
-                setTicketTx(targetTx);
-                setShowTicketModal(true);
-              }
+              if (targetTx) { setTicketTx(targetTx); setShowTicketModal(true); }
             }}
             className="btn-neo-ticket-head"
             title="Emitir e imprimir Ticket Térmico Oficial de Caja (80mm)"
           >
             <Printer size={15} />
-            <span>Ticket de Pago</span>
+            <span>Ticket</span>
           </button>
 
           {/* Botón Arqueo de Dinero / Conteo Físico */}
@@ -699,7 +714,7 @@ export const CajaCobroModule: React.FC<CajaCobroModuleProps> = ({
             title="Conteo interactivo de billetes/monedas y conciliación de caja en tiempo real"
           >
             <Coins size={15} />
-            <span>Arqueo de Caja</span>
+            <span>Arqueo</span>
           </button>
 
           {/* Botón Corte de Turno */}
@@ -709,7 +724,7 @@ export const CajaCobroModule: React.FC<CajaCobroModuleProps> = ({
             title="Balance financiero por turno, retiro a bóveda y acta oficial"
           >
             <Scale size={15} />
-            <span>Corte de Turno</span>
+            <span>Corte</span>
           </button>
 
           {/* Botón Exportar Corte Fiscal Excel (.xlsx) */}
@@ -719,21 +734,24 @@ export const CajaCobroModule: React.FC<CajaCobroModuleProps> = ({
             title="Descargar libro de cálculo oficial de corte de caja con desglose de convenios, IVA y UUID SAT"
           >
             <FileSpreadsheet size={16} />
-            <span>Exportar Corte Fiscal</span>
+            <span>Corte Fiscal</span>
             <span className="badge-xlsx">.XLSX</span>
           </button>
+
+          {/* Separador visual */}
+          <div style={{ width: '1px', height: '32px', background: 'rgba(148,163,184,0.2)', margin: '0 2px' }} />
           
+          {/* Botón Nuevo Cobro Principal */}
           <button 
             onClick={() => {
-              if (patients.length > 0) {
-                handleSelectPatient(patients[0].id);
-              }
+              if (patients.length > 0) handleSelectPatient(patients[0].id);
               setShowModal(true);
             }}
-            className="btn-neo btn-neo-success text-xs font-bold"
+            className="btn-neo-nuevo-cobro"
+            title="Registrar nuevo cobro, convenio o pago con aseguradora"
           >
             <Plus size={16} />
-            Nuevo Cobro / Convenio Seguro
+            <span>Nuevo Cobro</span>
           </button>
         </div>
       </div>

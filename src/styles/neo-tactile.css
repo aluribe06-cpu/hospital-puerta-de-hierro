@@ -2736,6 +2736,60 @@ body {
   transform: translateY(1px) !important;
 }
 
+/* 5. Botón Nuevo Cobro / Principal CTA */
+.btn-neo-nuevo-cobro {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 8px 18px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #059669 100%) !important;
+  border: 1.5px solid rgba(167, 243, 208, 0.85) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  outline: none !important;
+  box-shadow: 
+    0 4px 16px rgba(16, 185, 129, 0.5),
+    0 0 14px rgba(52, 211, 153, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.65),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-neo-nuevo-cobro svg {
+  color: #a7f3d0 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.btn-neo-nuevo-cobro:hover {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 22px rgba(16, 185, 129, 0.75),
+    0 0 20px rgba(52, 211, 153, 0.55),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-neo-nuevo-cobro:hover svg {
+  transform: scale(1.15) rotate(90deg) !important;
+  color: #ffffff !important;
+}
+
+.btn-neo-nuevo-cobro:active {
+  transform: translateY(1px) !important;
+  box-shadow: 
+    0 2px 8px rgba(16, 185, 129, 0.5),
+    inset 0 2px 4px rgba(0, 0, 0, 0.35) !important;
+}
+
+
 /* ==============================================================================
    VISOR REALISTA DE TICKET TÉRMICO (80MM)
    ============================================================================== */

@@ -463,6 +463,142 @@ export const INITIAL_TRIAGE: TriageAdmission[] = [
   },
 ];
 
+export const INITIAL_CONSULTATION_NOTES: ConsultationNote[] = [
+  {
+    id: 'not-101',
+    patientId: 'pat-1',
+    patientName: 'Roberto González Parra',
+    physicianId: 'usr-4',
+    physicianName: 'Dr. Fernando Garza Galindo',
+    physicianLicense: '7894561',
+    noteType: 'NOTA_EVOLUCION',
+    subjectiveNotes: 'Paciente masculino de 68 años acude por dolor retroesternal opresivo de 45 minutos de evolución irradiado a mandíbula y brazo izquierdo, acompañado de diaforesis profusa y disnea en reposo.',
+    objectiveFindings: 'TA: 155/95 mmHg, FC: 104 lpm, FR: 24 rpm, Temp: 36.7 °C, SpO2: 94%. Ruidos cardíacos rítmicos, taquicárdicos, sin soplos audibles. Campos pulmonares con discreto murmullo vesicular rudo basal bilateral sin estertores francos. Extremidades íntegras sin edema.',
+    cie10Code: 'I21.9',
+    cie10Description: 'Infarto agudo del miocardio, sin otra especificación',
+    cie11Code: 'BA41.0',
+    cie11Description: 'Infarto agudo de miocardio con elevación del segmento ST (IAMCEST)',
+    aiAssistedPrescription: true,
+    aiRecommendedLabs: [
+      'Troponina I de alta sensibilidad (hs-cTnI) seriada (0h y 3h)',
+      'Electrocardiograma de 12 derivaciones continuo',
+      'Biometría hemática completa con plaquetas',
+      'Perfil lipídico completo y glucemia sérica'
+    ],
+    aiGeneralCare: [
+      'Monitoreo electrocardiográfico y hemodinámico continuo en cama de cuidados intensivos/hemodinamia.',
+      'Reposo absoluto en cama con cabecera a 30 grados.',
+      'Oxigenoterapia suplementaria por puntas nasales solo en caso de SpO2 menor a 90%.'
+    ],
+    treatmentPlan: '• Protocolo Código Infarto Puerta de Hierro activado.\n• Traslado urgente a Sala de Hemodinamia para Cateterismo Cardíaco e Intervención Coronaria Percutánea (ICP) primaria.\n• Doble antiagregación plaquetaria y anticoagulación parenteral.\n• Solicitar Troponina I ultrasensible y ECG seriados cada 3 horas.',
+    prognosis: 'Reservado a evolución hemodinámica posangioplastia (NOM-004).',
+    prescriptions: [
+      {
+        drugName: 'Ácido Acetilsalicílico (Aspirina)',
+        dosage: '300 mg (Dosis de Carga)',
+        frequency: 'Dosis única inicial masticada',
+        duration: '1 día',
+        instructions: 'Vía oral masticar de inmediato para absorción rápida.'
+      },
+      {
+        drugName: 'Clopidogrel',
+        dosage: '300 mg (Dosis de Carga)',
+        frequency: 'Dosis única de carga previa a ICP',
+        duration: '1 día',
+        instructions: 'Vía oral con medio vaso de agua.'
+      },
+      {
+        drugName: 'Atorvastatina',
+        dosage: '80 mg',
+        frequency: 'Cada 24 horas (Noche)',
+        duration: 'Continuo',
+        instructions: 'Vía oral antes de dormir.'
+      }
+    ],
+    digitalSignatureHash: '8f7d9a1c2e4b6d0e8f1a2c3e4b5d6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e',
+    triageVitalSignsSnap: {
+      bp: '155/95',
+      hr: 104,
+      rr: 24,
+      temp: 36.7,
+      spo2: 94,
+      glucose: 142,
+      eva: 9,
+      weight: 78.5,
+      height: 172.0,
+      bmi: 26.54,
+      triagePriority: 'ROJO_REANIMACION'
+    },
+    createdAt: '2026-09-07T07:45:00Z'
+  },
+  {
+    id: 'not-102',
+    patientId: 'pat-2',
+    patientName: 'Elena Navarro Ortiz',
+    physicianId: 'usr-1',
+    physicianName: 'Dr. Carlos Mendoza Alatorre',
+    physicianLicense: '4981203',
+    noteType: 'HISTORIA_CLINICA',
+    subjectiveNotes: 'Femenino de 42 años acude por dolor tipo cólico biliar intenso en hipocondrio derecho de 6 horas de evolución posterior a ingesta de alimentos copiosos colecistoquinéticos, con náusea y vómito de contenido gastroalimentario.',
+    objectiveFindings: 'TA: 120/80 mmHg, FC: 84 lpm, FR: 18 rpm, Temp: 37.8 °C afebril, SpO2: 98%. Abdomen blando, doloroso a la palpación profunda en hipocondrio derecho con signo de Murphy positivo Franco. Sin datos de irritación peritoneal generalizada ni ictericia escleral.',
+    cie10Code: 'K80.0',
+    cie10Description: 'Cálculo de la vesícula biliar con colecistitis aguda',
+    cie11Code: 'DC11',
+    cie11Description: 'Colecistitis aguda litiásica',
+    aiAssistedPrescription: true,
+    aiRecommendedLabs: [
+      'Ultrasonido de hígado y vías biliares de alta resolución',
+      'Biometría hemática completa con conteo leucocitario diferencial',
+      'Pruebas de función hepática (PFH) y Bilirrubinas totales/directas',
+      'Amilasa y lipasa sérica'
+    ],
+    aiGeneralCare: [
+      'Ayuno absoluto para descompresión gástrica y reposo vesicular.',
+      'Hidratación parenteral con Solución Hartmann 1000 ml para 8 horas.'
+    ],
+    treatmentPlan: '• Protocolo de Colecistitis Aguda Quirúrgica.\n• Programar Colecistectomía Laparoscópica en quirófano de urgencias.\n• Solicitar USG de hígado y vías biliares y PFH urgentes.\n• Terapia antibiótica y analgesia parenteral.',
+    prognosis: 'Favorable para la vida y la función posquirúrgica (NOM-004).',
+    prescriptions: [
+      {
+        drugName: 'Ceftriaxona',
+        dosage: '1 g',
+        frequency: 'Cada 12 horas',
+        duration: '5 días',
+        instructions: 'Vía intravenosa diluido en 100 ml de solución salina.'
+      },
+      {
+        drugName: 'Ketorolaco',
+        dosage: '30 mg',
+        frequency: 'Cada 8 horas',
+        duration: '3 días',
+        instructions: 'Vía intravenosa lenta.'
+      },
+      {
+        drugName: 'Omeprazol',
+        dosage: '40 mg',
+        frequency: 'Cada 24 horas',
+        duration: '5 días',
+        instructions: 'Vía intravenosa lenta en ayuno.'
+      }
+    ],
+    digitalSignatureHash: '4b6d0e8f1a2c3e4b5d6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e8f7d9a1c2e',
+    triageVitalSignsSnap: {
+      bp: '120/80',
+      hr: 84,
+      rr: 18,
+      temp: 37.8,
+      spo2: 98,
+      glucose: 95,
+      eva: 7,
+      weight: 64.0,
+      height: 160.0,
+      bmi: 25.0,
+      triagePriority: 'AMARILLO_URGENCIA'
+    },
+    createdAt: '2026-09-07T08:30:00Z'
+  }
+];
+
 export const INITIAL_BEDS: HospitalBed[] = [
   {
     id: 'bed-1',

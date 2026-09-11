@@ -54,6 +54,7 @@ import {
   INITIAL_PATIENTS,
   INITIAL_SCHEDULED_ADMISSIONS,
   INITIAL_TRIAGE,
+  INITIAL_CONSULTATION_NOTES,
   INITIAL_BEDS,
   INITIAL_PHARMACY,
   INITIAL_LAB_ORDERS,
@@ -208,7 +209,7 @@ export function App() {
 
   const [notes, setNotes] = useState<ConsultationNote[]>(() => {
     const saved = localStorage.getItem('hpdh_notes');
-    return saved ? JSON.parse(saved) : [];
+    return saved ? JSON.parse(saved) : INITIAL_CONSULTATION_NOTES;
   });
 
   const [beds, setBeds] = useState<HospitalBed[]>(() => {

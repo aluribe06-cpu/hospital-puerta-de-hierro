@@ -817,15 +817,53 @@ export const ConsultoriosModule: React.FC<ConsultoriosModuleProps> = ({
 
                   {/* Fármacos Prescritos en esta Nota */}
                   {note.prescriptions && note.prescriptions.length > 0 && (
-                    <div className="p-3 rounded-xl bg-slate-950/40 border border-white/5 text-xs">
-                      <strong className="text-cyan-300 block mb-1.5 flex items-center gap-1.5">
-                        <Pill size={14} /> Prescripción Médica Vinculada ({note.prescriptions.length} fármacos):
-                      </strong>
-                      <div className="space-y-1">
+                    <div className="p-3.5 rounded-xl bg-slate-950/50 border border-white/10 text-xs space-y-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2">
+                        <strong className="text-cyan-300 flex items-center gap-1.5">
+                          <Pill size={14} /> Prescripción Médica Oficial ({note.prescriptions.length} fármacos):
+                        </strong>
+                        <button
+                          type="button"
+                          onClick={() => generateMedicalPrescriptionPDF({
+                            patient: activePatient,
+                            physicianName: note.physicianName,
+                            physicianLicense: note.physicianLicense,
+                            specialty: 'Medicina General y Especialidades',
+                            diagnosis: note.cie10Description,
+                            cie10: note.cie10Code,
+                            cie11: note.cie11Code,
+                            cie11Desc: note.cie11Description,
+                            items: note.prescriptions.map(p => ({
+                              drugName: p.drugName,
+                              dosage: p.dosage,
+                              frequency: p.frequency || 'Cada 8 hrs',
+                              duration: p.duration || '7 días',
+                              instructions: p.instructions || 'Vía oral con alimentos'
+                            })),
+                            vitalSigns: note.triageVitalSignsSnap ? {
+                              bp: note.triageVitalSignsSnap.bp,
+                              hr: note.triageVitalSignsSnap.hr,
+                              temp: note.triageVitalSignsSnap.temp,
+                              weight: note.triageVitalSignsSnap.weight,
+                              height: note.triageVitalSignsSnap.height,
+                              bmi: note.triageVitalSignsSnap.bmi,
+                              spo2: note.triageVitalSignsSnap.spo2,
+                              glucose: note.triageVitalSignsSnap.glucose,
+                              painScale: note.triageVitalSignsSnap.eva
+                            } : undefined,
+                            generalCare: note.aiGeneralCare
+                          })}
+                          className="btn-neo btn-neo-cyan text-xs flex items-center gap-1.5 px-3 py-1 shadow-sm shrink-0"
+                        >
+                          <Printer size={13} />
+                          Descargar Receta en PDF
+                        </button>
+                      </div>
+                      <div className="space-y-1.5">
                         {note.prescriptions.map((pr, i) => (
-                          <div key={i} className="text-slate-300 flex items-center gap-2">
+                          <div key={i} className="text-slate-300 flex items-center gap-2 flex-wrap">
                             <span className="text-cyan-400 font-bold">• {pr.drugName}</span>
-                            <span className="text-slate-400">({pr.dosage}, {pr.frequency})</span>
+                            <span className="text-slate-400 font-mono font-medium">({pr.dosage}, {pr.frequency})</span>
                             <span className="text-slate-500 italic">- {pr.instructions}</span>
                           </div>
                         ))}
