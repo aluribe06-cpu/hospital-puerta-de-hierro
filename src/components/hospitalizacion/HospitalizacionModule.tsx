@@ -135,15 +135,15 @@ export const HospitalizacionModule: React.FC<HospitalizacionModuleProps> = ({
       {/* Encabezado */}
       <div className="neo-glass-panel p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="neo-badge" style={{ background: 'rgba(37, 99, 235, 0.15)', borderColor: 'rgba(59, 130, 246, 0.3)', color: '#60a5fa' }}>
-              <span className="neo-badge-dot" style={{ background: '#3b82f6' }}></span>
+          <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+            <span className="neo-badge neo-badge-blue">
+              <span className="neo-badge-dot" style={{ background: '#3b82f6', boxShadow: '0 0 10px #3b82f6' }}></span>
               CENSO DINÁMICO HOSPITALARIO
             </span>
-            <span className="text-xs text-slate-400 font-mono">MAPA DE CAMAS EN TIEMPO REAL</span>
+            <span className="text-xs text-blue-200 font-bold font-mono tracking-wider drop-shadow-sm">MAPA DE CAMAS EN TIEMPO REAL</span>
           </div>
-          <h2 className="text-2xl font-black text-white">Hospitalización y Cuidados Críticos</h2>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-sm">Hospitalización y Cuidados Críticos</h2>
+          <p className="text-slate-100 text-sm mt-1 font-medium leading-relaxed drop-shadow-sm">
             Monitoreo interactivo de camas en UCI Adultos, UCIN Neonatal, Terapia Intermedia, Pisos y Suites.
           </p>
         </div>

@@ -141,15 +141,15 @@ export const LaboratorioModule: React.FC<LaboratorioModuleProps> = ({
       {/* Encabezado */}
       <div className="neo-glass-panel p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="neo-badge" style={{ background: 'rgba(6, 182, 212, 0.15)', borderColor: 'rgba(6, 182, 212, 0.3)', color: '#22d3ee' }}>
-              <span className="neo-badge-dot" style={{ background: '#06b6d4' }}></span>
+          <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+            <span className="neo-badge neo-badge-cyan">
+              <span className="neo-badge-dot" style={{ background: '#00f2fe', boxShadow: '0 0 10px #00f2fe' }}></span>
               LABORATORIO CLÍNICO 24 HORAS
             </span>
-            <span className="text-xs text-slate-400 font-mono">NOM-007-SSA3-2011 ACREDITADO</span>
+            <span className="text-xs text-cyan-200 font-bold font-mono tracking-wider drop-shadow-sm">NOM-007-SSA3-2011 ACREDITADO</span>
           </div>
-          <h2 className="text-2xl font-black text-white">Órdenes Analíticas y Validación</h2>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-sm">Órdenes Analíticas y Validación</h2>
+          <p className="text-slate-100 text-sm mt-1 font-medium leading-relaxed drop-shadow-sm">
             Hematología, bioquímica, tiempos de coagulación, troponinas y gasometría con alertas críticas.
           </p>
         </div>

@@ -20,7 +20,8 @@ import {
   ArrowUpRight, 
   Sparkles,
   Boxes,
-  ShoppingBag
+  ShoppingBag,
+  HeartHandshake
 } from 'lucide-react';
 import { UserProfile, TriageAdmission, HospitalBed } from '../../types/hospital';
 
@@ -292,6 +293,23 @@ export const MainMenuHub: React.FC<MainMenuHubProps> = ({
       badge: pendingOrdersCount > 0 ? `${pendingOrdersCount} OC por Autorizar` : 'Padrón Calificado',
       norm: 'Firma Digital NOM-024',
       tag: 'Adquisiciones'
+    },
+    {
+      id: 'trabajo_social',
+      stepNumber: '15',
+      title: 'Trabajo Social',
+      subtitle: 'Estudios, Actas de Defunción & MP',
+      icon: HeartHandshake,
+      folderBg: 'linear-gradient(150deg, #6fd2e6 0%, #4faccc 50%, #328ea9 100%)',
+      folderAccent: '#36b0d1',
+      folderGlow: 'rgba(79, 172, 204, 0.45)',
+      badgeBg: '#e0f7fa',
+      badgeColor: '#0e7490',
+      tagColor: '#0284c7',
+      indicator: '100%',
+      badge: 'Atención Asistencial',
+      norm: 'NOM-004 / Registro Civil',
+      tag: 'Asistencia Social'
     },
   ];
 

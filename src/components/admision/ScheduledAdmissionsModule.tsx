@@ -20,7 +20,8 @@ import {
   UserPlus,
   X,
   AlertTriangle,
-  Zap
+  Zap,
+  Siren
 } from 'lucide-react';
 import { Patient, ScheduledAdmission, BedArea, TriageAdmission } from '../../types/hospital';
 import { logAuditAction } from '../../lib/supabaseClient';
@@ -291,15 +292,15 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
       {/* Encabezado */}
       <div className="neo-glass-panel p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="neo-badge" style={{ background: 'rgba(6, 182, 212, 0.15)', borderColor: 'rgba(6, 182, 212, 0.3)', color: '#22d3ee' }}>
-              <span className="neo-badge-dot" style={{ background: '#06b6d4' }}></span>
+          <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+            <span className="neo-badge neo-badge-cyan">
+              <span className="neo-badge-dot" style={{ background: '#00f2fe', boxShadow: '0 0 10px #00f2fe' }}></span>
               PROGRAMACIÓN QUIRÚRGICA Y ELECTIVA
             </span>
-            <span className="text-xs text-slate-400 font-mono">GESTIÓN DE INGRESOS PLANEADOS</span>
+            <span className="text-xs text-cyan-200 font-bold font-mono tracking-wider drop-shadow-sm">GESTIÓN DE INGRESOS PLANEADOS</span>
           </div>
-          <h2 className="text-2xl font-black text-white">Admisión Hospitalaria Programada</h2>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-sm">Admisión Hospitalaria Programada</h2>
+          <p className="text-slate-100 text-sm mt-1 font-medium leading-relaxed drop-shadow-sm">
             Control de pacientes con cirugías electivas, hemodinamia o consultas de internamiento planeado.
           </p>
         </div>
@@ -308,39 +309,42 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
           {/* BOTÓN ROJO DE EMERGENCIA DIRECTA */}
           <button 
             onClick={() => setShowEmergencyModal(true)}
-            className="btn-neo text-xs font-black flex items-center gap-1.5 animate-pulse"
-            style={{ 
-              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.45))', 
-              borderColor: 'rgba(239, 68, 68, 0.8)', 
-              color: '#fca5a5',
-              boxShadow: '0 0 15px rgba(239, 68, 68, 0.3)'
-            }}
+            className="btn-neo btn-neo-emergency btn-neo-emergency-pulse text-xs font-black flex items-center gap-2 group"
+            title="Activar ingreso inmediato de código rojo"
           >
-            <AlertTriangle size={16} className="text-red-400 animate-bounce" />
-            <span>🚨 INGRESO DE EMERGENCIA</span>
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-85"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
+            </span>
+            <Siren size={16} className="text-white group-hover:rotate-12 transition-transform duration-200" />
+            <span>Ingreso de Emergencia</span>
           </button>
 
           <button 
             onClick={exportScheduledExcel}
             className="btn-neo btn-neo-defart text-xs"
+            title="Exportar agenda programada a Excel"
           >
-            <FileSpreadsheet size={16} />
+            <FileSpreadsheet size={16} className="text-emerald-600" />
             Exportar Agenda (.xlsx)
           </button>
+
           <button 
             onClick={() => setShowNewPatientModal(true)}
-            className="btn-neo text-xs"
-            style={{ background: 'rgba(16,185,129,0.15)', borderColor: 'rgba(16,185,129,0.4)', color: '#34d399' }}
+            className="btn-neo btn-neo-success text-xs font-bold flex items-center gap-1.5"
+            title="Registrar nuevo paciente en el hospital"
           >
             <UserPlus size={16} />
-            Nuevo Paciente
+            <span>Nuevo Paciente</span>
           </button>
+
           <button 
             onClick={() => setShowModal(true)}
-            className="btn-neo btn-neo-active text-xs"
+            className="btn-neo btn-neo-active text-xs font-bold flex items-center gap-1.5"
+            title="Programar nueva admisión hospitalaria"
           >
             <Plus size={16} />
-            Programar Paciente
+            <span>Programar Paciente</span>
           </button>
         </div>
       </div>
@@ -679,7 +683,7 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
             <Calendar size={20} />
           </div>
           <div>
-            <span className="text-xs text-slate-400 block">Total Programados</span>
+            <span className="text-xs text-slate-200 font-semibold block tracking-wide">Total Programados</span>
             <span className="text-xl font-bold text-white">{scheduledList.length} Pacientes</span>
           </div>
         </div>
@@ -689,7 +693,7 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
             <ShieldCheck size={20} />
           </div>
           <div>
-            <span className="text-xs text-slate-400 block">Consentimientos y Ayuno</span>
+            <span className="text-xs text-slate-200 font-semibold block tracking-wide">Consentimientos y Ayuno</span>
             <span className="text-xl font-bold text-emerald-400">
               {scheduledList.filter(s => s.consentFormSigned && s.fastingConfirmed).length} Listos
             </span>
@@ -701,7 +705,7 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
             <Bed size={20} />
           </div>
           <div>
-            <span className="text-xs text-slate-400 block">Camas y Quirófanos Asignados</span>
+            <span className="text-xs text-slate-200 font-semibold block tracking-wide">Camas y Quirófanos Asignados</span>
             <span className="text-xl font-bold text-blue-400">
               {scheduledList.filter(s => s.reservedBedNumber).length} Reservados
             </span>
@@ -737,13 +741,13 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-3 flex-wrap">
-                  <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                  <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     {item.admissionType.replace(/_/g, ' ')}
                   </span>
                   <h3 className="text-lg font-bold text-white">
                     {item.patientName}
                   </h3>
-                  <span className="text-xs font-mono text-slate-400 bg-slate-800/60 px-2 py-0.5 rounded">
+                  <span className="text-xs font-mono text-cyan-200 font-semibold bg-slate-900/80 border border-white/10 px-2 py-0.5 rounded">
                     Exp: {item.patientNumber}
                   </span>
                 </div>
@@ -752,8 +756,8 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
                   <span>🔬 {item.procedureName}</span>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
-                  <span className="flex items-center gap-1 text-white">
+                <div className="flex items-center gap-4 text-xs text-slate-200 font-medium flex-wrap">
+                  <span className="flex items-center gap-1 text-white font-semibold">
                     <Clock size={14} className="text-amber-400" />
                     {item.scheduledDate} a las {item.scheduledTime} hrs
                   </span>
@@ -763,7 +767,7 @@ export const ScheduledAdmissionsModule: React.FC<ScheduledAdmissionsModuleProps>
                 </div>
 
                 {item.notes && (
-                  <p className="text-xs text-slate-400 italic">
+                  <p className="text-xs text-slate-300 italic">
                     Notas: {item.notes}
                   </p>
                 )}

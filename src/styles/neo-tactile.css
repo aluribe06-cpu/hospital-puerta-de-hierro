@@ -230,7 +230,12 @@ body {
 }
 
 .neo-modal-content .neo-select {
+  appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
 }
 
 .neo-modal-content option {
@@ -334,25 +339,119 @@ body {
 /* Botón Rojo (Código Urgencias) */
 .btn-neo-danger {
   background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
-  color: #ffffff;
+  color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 
     0 8px 24px rgba(220, 38, 38, 0.6),
     inset 0 2px 2px rgba(255, 255, 255, 0.5),
     inset 0 -2px 3px rgba(0, 0, 0, 0.2);
-  padding: 10px 26px;
+  padding: 10px 24px;
 }
 
-/* Botón Verde (Éxito / Alta) */
-.btn-neo-success {
-  background: linear-gradient(180deg, #34d399 0%, #059669 100%);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+.btn-neo-danger:hover {
+  transform: translateY(-2px);
   box-shadow: 
-    0 8px 24px rgba(5, 150, 105, 0.6),
-    inset 0 2px 2px rgba(255, 255, 255, 0.5),
+    0 12px 30px rgba(220, 38, 38, 0.8),
+    inset 0 2px 2px rgba(255, 255, 255, 0.7);
+}
+
+.btn-neo-danger:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 3px 10px rgba(220, 38, 38, 0.5),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Botón Emergencia Táctil Especializado (Código Rojo Urgente) */
+.btn-neo-emergency {
+  background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+  color: #ffffff !important;
+  border: 1.5px solid rgba(254, 202, 202, 0.55);
+  box-shadow: 
+    0 8px 24px rgba(220, 38, 38, 0.6),
+    0 0 16px rgba(239, 68, 68, 0.35),
+    inset 0 2px 2px rgba(255, 255, 255, 0.65),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3);
+  padding: 10px 22px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.btn-neo-emergency:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 12px 32px rgba(220, 38, 38, 0.85),
+    0 0 24px rgba(239, 68, 68, 0.6),
+    inset 0 2px 3px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.btn-neo-emergency:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 3px 10px rgba(220, 38, 38, 0.5),
+    inset 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+/* Animación de halo pulsante para botón de emergencia */
+@keyframes emergencyHaloPulse {
+  0% {
+    box-shadow: 
+      0 8px 24px rgba(220, 38, 38, 0.6),
+      0 0 0 0 rgba(239, 68, 68, 0.65),
+      inset 0 2px 2px rgba(255, 255, 255, 0.65),
+      inset 0 -2px 3px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 10px 28px rgba(220, 38, 38, 0.8),
+      0 0 0 8px rgba(239, 68, 68, 0),
+      inset 0 2px 2px rgba(255, 255, 255, 0.75),
+      inset 0 -2px 3px rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    box-shadow: 
+      0 8px 24px rgba(220, 38, 38, 0.6),
+      0 0 0 0 rgba(239, 68, 68, 0.65),
+      inset 0 2px 2px rgba(255, 255, 255, 0.65),
+      inset 0 -2px 3px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.btn-neo-emergency-pulse {
+  animation: emergencyHaloPulse 2.4s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Botón Verde (Éxito / Alta Paciente) */
+.btn-neo-success {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 
+    0 8px 24px rgba(5, 150, 105, 0.55),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+  padding: 10px 24px;
+}
+
+.btn-neo-success:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+  border-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 
+    0 12px 28px rgba(5, 150, 105, 0.75),
+    inset 0 2px 2px rgba(255, 255, 255, 0.75),
     inset 0 -2px 3px rgba(0, 0, 0, 0.2);
-  padding: 10px 26px;
+}
+
+.btn-neo-success:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 3px 10px rgba(5, 150, 105, 0.5),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* ==============================================================================
@@ -533,19 +632,51 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
+  padding: 5px 14px;
   border-radius: 9999px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-transform: uppercase;
+}
+
+.neo-badge-cyan {
+  background: rgba(8, 47, 73, 0.92) !important;
+  border-color: rgba(6, 182, 212, 0.65) !important;
+  color: #67e8f9 !important;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+.neo-badge-red {
+  background: rgba(69, 10, 10, 0.92) !important;
+  border-color: rgba(239, 68, 68, 0.65) !important;
+  color: #fca5a5 !important;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+.neo-badge-blue {
+  background: rgba(15, 23, 42, 0.92) !important;
+  border-color: rgba(59, 130, 246, 0.65) !important;
+  color: #93c5fd !important;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+.neo-badge-green {
+  background: rgba(6, 78, 59, 0.92) !important;
+  border-color: rgba(16, 185, 129, 0.65) !important;
+  color: #6ee7b7 !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .neo-badge-dot {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  box-shadow: 0 0 8px currentColor;
+  box-shadow: 0 0 10px currentColor;
   animation: pulseBadge 1.8s infinite;
 }
 
@@ -1698,5 +1829,1403 @@ body {
   border: 1.5px solid #00f2fe !important;
   color: #ffffff !important;
   box-shadow: 0 0 14px rgba(0, 242, 254, 0.35) !important;
+}
+
+/* ==============================================================================
+   BARRA DE FILTROS TÁCTILES NEO-TACTILE (BOTONES CON DISEÑO, COLOR Y BADGES)
+   ============================================================================== */
+.neo-filter-bar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.88) 0%, rgba(10, 15, 26, 0.96) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.14) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  border-bottom: 2.5px solid rgba(6, 182, 212, 0.4) !important;
+  border-radius: 22px !important;
+  padding: 10px 14px !important;
+  box-shadow: 
+    0 16px 36px -6px rgba(0, 0, 0, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.12) !important;
+}
+
+.neo-filter-tabs-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  overflow-x: auto !important;
+  padding: 2px 2px 4px 2px !important;
+  max-width: 100% !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent !important;
+}
+
+.neo-filter-tabs-wrapper::-webkit-scrollbar {
+  height: 4px !important;
+}
+
+.neo-filter-tabs-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-radius: 4px !important;
+}
+
+/* Botón Base de Filtro */
+.neo-filter-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 14px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+  cursor: pointer !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+  border-width: 1.5px !important;
+  border-style: solid !important;
+  outline: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.neo-filter-btn:hover {
+  transform: translateY(-2px) !important;
+}
+
+.neo-filter-btn:active {
+  transform: translateY(1px) !important;
+}
+
+/* Badge Contador dentro de botón */
+.neo-filter-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  padding: 0 6px !important;
+  border-radius: 9999px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  font-family: var(--font-mono) !important;
+  line-height: 1 !important;
+  transition: all 0.2s ease !important;
+}
+
+/* -------------------------------------------------------------
+   TEMAS DE COLOR INDIVIDUALES (ESTADO INACTIVO Y ACTIVO)
+   ------------------------------------------------------------- */
+
+/* 1. TODOS LOS MOVIMIENTOS (Electric Blue & Cyan) */
+.neo-filter-btn-all {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+}
+
+.neo-filter-btn-all svg {
+  color: #38bdf8 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.neo-filter-btn-all:hover {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-all .neo-filter-badge {
+  background: rgba(56, 189, 248, 0.2) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.45) !important;
+}
+
+.neo-filter-btn-all.active {
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
+  border-color: #7dd3fc !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 8px 24px rgba(2, 132, 199, 0.6),
+    0 0 18px rgba(56, 189, 248, 0.45),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.neo-filter-btn-all.active svg {
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-all.active .neo-filter-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 2. CONVENIOS ASEGURADORAS (Golden Amber & Orange) */
+.neo-filter-btn-insurance {
+  background: linear-gradient(180deg, #45240a 0%, #241205 100%) !important;
+  border-color: rgba(245, 158, 11, 0.5) !important;
+  color: #fef3c7 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(251, 191, 36, 0.2) !important;
+}
+
+.neo-filter-btn-insurance svg {
+  color: #fbbf24 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.neo-filter-btn-insurance:hover {
+  background: linear-gradient(180deg, #78350f 0%, #451a03 100%) !important;
+  border-color: #fbbf24 !important;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-insurance .neo-filter-badge {
+  background: rgba(245, 158, 11, 0.3) !important;
+  color: #fde047 !important;
+  border: 1px solid rgba(245, 158, 11, 0.55) !important;
+}
+
+.neo-filter-btn-insurance.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%) !important;
+  border-color: #fef08a !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 8px 24px rgba(217, 119, 6, 0.65),
+    0 0 20px rgba(245, 158, 11, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.neo-filter-btn-insurance.active svg {
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-insurance.active .neo-filter-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 3. FACTURADOS CFDI 4.0 (Emerald & Mint Green) */
+.neo-filter-btn-invoiced {
+  background: linear-gradient(180deg, #063c29 0%, #032117 100%) !important;
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  color: #d1fae5 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(52, 211, 153, 0.2) !important;
+}
+
+.neo-filter-btn-invoiced svg {
+  color: #34d399 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.neo-filter-btn-invoiced:hover {
+  background: linear-gradient(180deg, #065f46 0%, #043829 100%) !important;
+  border-color: #34d399 !important;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-invoiced .neo-filter-badge {
+  background: rgba(16, 185, 129, 0.3) !important;
+  color: #6ee7b7 !important;
+  border: 1px solid rgba(16, 185, 129, 0.55) !important;
+}
+
+.neo-filter-btn-invoiced.active {
+  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%) !important;
+  border-color: #a7f3d0 !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 8px 24px rgba(5, 150, 105, 0.65),
+    0 0 20px rgba(16, 185, 129, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.neo-filter-btn-invoiced.active svg {
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-invoiced.active .neo-filter-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 4. PENDIENTES FACTURAR (Rose & Coral Red) */
+.neo-filter-btn-pending {
+  background: linear-gradient(180deg, #4c1120 0%, #260810 100%) !important;
+  border-color: rgba(244, 63, 94, 0.5) !important;
+  color: #ffe4e6 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(251, 113, 133, 0.2) !important;
+}
+
+.neo-filter-btn-pending svg {
+  color: #fb7185 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.neo-filter-btn-pending:hover {
+  background: linear-gradient(180deg, #881337 0%, #4c0519 100%) !important;
+  border-color: #fb7185 !important;
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-pending .neo-filter-badge {
+  background: rgba(244, 63, 94, 0.3) !important;
+  color: #fda4af !important;
+  border: 1px solid rgba(244, 63, 94, 0.55) !important;
+}
+
+.neo-filter-btn-pending.active {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #be123c 100%) !important;
+  border-color: #fecdd3 !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 8px 24px rgba(225, 29, 72, 0.65),
+    0 0 20px rgba(244, 63, 94, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.neo-filter-btn-pending.active svg {
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-pending.active .neo-filter-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 5. CON IVA 16% (Cyan & Aqua Neon) */
+.neo-filter-btn-iva {
+  background: linear-gradient(180deg, #0b3d52 0%, #05202c 100%) !important;
+  border-color: rgba(6, 182, 212, 0.5) !important;
+  color: #cffafe !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(34, 211, 238, 0.2) !important;
+}
+
+.neo-filter-btn-iva svg {
+  color: #22d3ee !important;
+  transition: transform 0.2s ease !important;
+}
+
+.neo-filter-btn-iva:hover {
+  background: linear-gradient(180deg, #0e7490 0%, #083344 100%) !important;
+  border-color: #22d3ee !important;
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-iva .neo-filter-badge {
+  background: rgba(6, 182, 212, 0.3) !important;
+  color: #67e8f9 !important;
+  border: 1px solid rgba(6, 182, 212, 0.55) !important;
+}
+
+.neo-filter-btn-iva.active {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 50%, #0e7490 100%) !important;
+  border-color: #a5f3fc !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 8px 24px rgba(8, 145, 178, 0.65),
+    0 0 20px rgba(6, 182, 212, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.neo-filter-btn-iva.active svg {
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-iva.active .neo-filter-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 6. EXENTOS MÉDICO (Royal Indigo & Violet) */
+.neo-filter-btn-exempt {
+  background: linear-gradient(180deg, #24205c 0%, #12102f 100%) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+  color: #e0e7ff !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(129, 140, 248, 0.2) !important;
+}
+
+.neo-filter-btn-exempt svg {
+  color: #818cf8 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.neo-filter-btn-exempt:hover {
+  background: linear-gradient(180deg, #3730a3 0%, #1e1b4b 100%) !important;
+  border-color: #818cf8 !important;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-exempt .neo-filter-badge {
+  background: rgba(99, 102, 241, 0.3) !important;
+  color: #a5b4fc !important;
+  border: 1px solid rgba(99, 102, 241, 0.55) !important;
+}
+
+.neo-filter-btn-exempt.active {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3730a3 100%) !important;
+  border-color: #c7d2fe !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 8px 24px rgba(79, 70, 229, 0.65),
+    0 0 20px rgba(99, 102, 241, 0.5),
+    inset 0 2px 2px rgba(255, 255, 255, 0.6) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.neo-filter-btn-exempt.active svg {
+  color: #ffffff !important;
+}
+
+.neo-filter-btn-exempt.active .neo-filter-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Buscador Inteligente en Barra de Filtros */
+.neo-filter-search-box {
+  position: relative !important;
+  min-width: 280px !important;
+  max-width: 380px !important;
+  flex: 1 1 280px !important;
+}
+
+.neo-filter-search-input {
+  width: 100% !important;
+  padding: 8px 12px 8px 36px !important;
+  border-radius: 14px !important;
+  background: rgba(10, 16, 28, 0.85) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-family: var(--font-sans) !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35) !important;
+}
+
+.neo-filter-search-input:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.35) !important;
+}
+
+.neo-filter-search-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* ==============================================================================
+   BOTONES DE ACCIÓN DE DOCUMENTOS & CFDI (FINIQUITO GMM, FACTURA PDF, XML SAT)
+   ============================================================================== */
+
+/* Base para botones de la columna Documentos */
+.btn-action-doc {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 6px 12px !important;
+  border-radius: 12px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+  outline: none !important;
+  border-width: 1.5px !important;
+  border-style: solid !important;
+}
+
+.btn-action-doc:hover {
+  transform: translateY(-1.5px) !important;
+}
+
+.btn-action-doc:active {
+  transform: translateY(1px) !important;
+}
+
+/* 1. Finiquito GMM (Ámbar Dorado Convenios) */
+.btn-action-finiquito {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+  border-color: rgba(254, 240, 138, 0.75) !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 4px 14px rgba(217, 119, 6, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+}
+
+.btn-action-finiquito svg {
+  color: #fef08a !important;
+}
+
+.btn-action-finiquito:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 18px rgba(245, 158, 11, 0.65),
+    0 0 14px rgba(245, 158, 11, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 2. Factura Oficial SAT PDF (Azul Eléctrico Institucional) */
+.btn-action-factura {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  border-color: rgba(147, 197, 253, 0.75) !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 4px 14px rgba(37, 99, 235, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+}
+
+.btn-action-factura svg {
+  color: #a5f3fc !important;
+}
+
+.btn-action-factura:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 18px rgba(37, 99, 235, 0.65),
+    0 0 14px rgba(59, 130, 246, 0.45),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 3. XML SAT Oficial Anexo 20 (Cian Tecnológico) */
+.btn-action-xml {
+  background: linear-gradient(135deg, #0e7490 0%, #083344 100%) !important;
+  border-color: rgba(34, 211, 238, 0.75) !important;
+  color: #ffffff !important;
+  font-family: var(--font-mono) !important;
+  letter-spacing: 0.04em !important;
+  box-shadow: 
+    0 4px 14px rgba(6, 182, 212, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+}
+
+.btn-action-xml svg {
+  color: #67e8f9 !important;
+}
+
+.btn-action-xml:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 18px rgba(6, 182, 212, 0.65),
+    0 0 14px rgba(6, 182, 212, 0.45),
+    inset 0 1px 2px rgba(255, 255, 255, 0.65) !important;
+}
+
+/* 4. Recibo Oficial de Caja (Verde Esmeralda) */
+.btn-action-receipt {
+  padding: 6px 9px !important;
+  background: linear-gradient(135deg, #065f46 0%, #064e3b 100%) !important;
+  border-color: rgba(52, 211, 153, 0.65) !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 4px 12px rgba(16, 185, 129, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn-action-receipt svg {
+  color: #34d399 !important;
+}
+
+.btn-action-receipt:hover {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 16px rgba(16, 185, 129, 0.6),
+    0 0 12px rgba(16, 185, 129, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+}
+
+.btn-action-receipt:hover svg {
+  color: #ffffff !important;
+}
+
+/* 5. Timbrar CFDI Express (Verde Timbrado SAT) */
+.btn-action-stamp {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border-color: rgba(167, 243, 208, 0.8) !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 4px 14px rgba(16, 185, 129, 0.55),
+    0 0 14px rgba(16, 185, 129, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+}
+
+.btn-action-stamp svg {
+  color: #fef08a !important;
+  fill: #fef08a !important;
+}
+
+.btn-action-stamp:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 20px rgba(16, 185, 129, 0.7),
+    0 0 18px rgba(16, 185, 129, 0.55),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ==============================================================================
+   SELECTOR DE TURNO Y BOTÓN EXPORTAR CORTE FISCAL (.XLSX)
+   ============================================================================== */
+.neo-shift-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  padding: 6px 12px !important;
+  border-radius: 14px !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 
+    0 4px 14px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+  transition: all 0.2s ease !important;
+}
+
+.neo-shift-pill:hover {
+  border-color: rgba(56, 189, 248, 0.6) !important;
+  box-shadow: 
+    0 6px 18px rgba(56, 189, 248, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+.neo-shift-icon-box {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 8px !important;
+  background: rgba(56, 189, 248, 0.15) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  color: #38bdf8 !important;
+}
+
+.neo-shift-select-container {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.neo-shift-select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  border-radius: 10px !important;
+  color: #e0f2fe !important;
+  font-family: var(--font-mono) !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  padding: 5px 26px 5px 10px !important;
+  outline: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+.neo-shift-select:focus,
+.neo-shift-select:hover {
+  border-color: #38bdf8 !important;
+  background: rgba(2, 132, 199, 0.2) !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.35), inset 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.neo-shift-select option {
+  background: #0b1329 !important;
+  color: #f8fafc !important;
+  font-family: var(--font-mono) !important;
+  padding: 8px !important;
+}
+
+.neo-shift-chevron {
+  position: absolute !important;
+  right: 8px !important;
+  pointer-events: none !important;
+  color: #38bdf8 !important;
+  transition: transform 0.2s ease !important;
+}
+
+/* Botón Exportar Corte Fiscal Excel (.xlsx) */
+.btn-neo-excel {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 8px 16px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  background: linear-gradient(135deg, #15803d 0%, #166534 50%, #14532d 100%) !important;
+  border: 1.5px solid rgba(134, 239, 172, 0.7) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  outline: none !important;
+  box-shadow: 
+    0 4px 16px rgba(22, 101, 52, 0.5),
+    0 0 12px rgba(34, 197, 94, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative !important;
+}
+
+.btn-neo-excel svg {
+  color: #86efac !important;
+  transition: transform 0.2s ease !important;
+}
+
+.btn-neo-excel .badge-xlsx {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1px 6px !important;
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  font-size: 10px !important;
+  font-family: var(--font-mono) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  color: #ffffff !important;
+}
+
+.btn-neo-excel:hover {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 50%, #166534 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 22px rgba(22, 101, 52, 0.7),
+    0 0 18px rgba(34, 197, 94, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-neo-excel:hover svg {
+  transform: scale(1.1) !important;
+  color: #ffffff !important;
+}
+
+.btn-neo-excel:active {
+  transform: translateY(1px) !important;
+  box-shadow: 
+    0 2px 8px rgba(22, 101, 52, 0.5),
+    inset 0 2px 4px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* ==============================================================================
+   BOTONES DE CABECERA: FACTURA DIRECTA, TICKET, ARQUEO DE CAJA Y CORTE DE TURNO
+   ============================================================================== */
+
+/* 1. Botón Nueva Factura CFDI 4.0 */
+.btn-neo-factura-head {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 8px 15px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%) !important;
+  border: 1.5px solid rgba(147, 197, 253, 0.75) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  outline: none !important;
+  box-shadow: 
+    0 4px 14px rgba(37, 99, 235, 0.45),
+    0 0 12px rgba(59, 130, 246, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-neo-factura-head svg {
+  color: #bfdbfe !important;
+  transition: transform 0.2s ease !important;
+}
+
+.btn-neo-factura-head:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 20px rgba(37, 99, 235, 0.65),
+    0 0 16px rgba(59, 130, 246, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-neo-factura-head:active {
+  transform: translateY(1px) !important;
+}
+
+/* 2. Botón Ticket de Pago Express */
+.btn-neo-ticket-head {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 8px 15px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%) !important;
+  border: 1.5px solid rgba(153, 246, 228, 0.75) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  outline: none !important;
+  box-shadow: 
+    0 4px 14px rgba(13, 148, 136, 0.45),
+    0 0 12px rgba(20, 184, 166, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-neo-ticket-head svg {
+  color: #99f6e4 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.btn-neo-ticket-head:hover {
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 20px rgba(13, 148, 136, 0.65),
+    0 0 16px rgba(20, 184, 166, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-neo-ticket-head:active {
+  transform: translateY(1px) !important;
+}
+
+/* 3. Botón Arqueo de Dinero / Caja */
+.btn-neo-audit-head {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 8px 15px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%) !important;
+  border: 1.5px solid rgba(254, 240, 138, 0.8) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  outline: none !important;
+  box-shadow: 
+    0 4px 14px rgba(217, 119, 6, 0.5),
+    0 0 12px rgba(245, 158, 11, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-neo-audit-head svg {
+  color: #fef08a !important;
+  transition: transform 0.2s ease !important;
+}
+
+.btn-neo-audit-head:hover {
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 20px rgba(217, 119, 6, 0.7),
+    0 0 16px rgba(245, 158, 11, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-neo-audit-head:active {
+  transform: translateY(1px) !important;
+}
+
+/* 4. Botón Corte de Caja y Turno */
+.btn-neo-corte-head {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 8px 15px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 50%, #6366f1 100%) !important;
+  border: 1.5px solid rgba(199, 210, 254, 0.8) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  outline: none !important;
+  box-shadow: 
+    0 4px 14px rgba(79, 70, 229, 0.5),
+    0 0 12px rgba(99, 102, 241, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-neo-corte-head svg {
+  color: #c7d2fe !important;
+  transition: transform 0.2s ease !important;
+}
+
+.btn-neo-corte-head:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 
+    0 6px 20px rgba(79, 70, 229, 0.7),
+    0 0 16px rgba(99, 102, 241, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-neo-corte-head:active {
+  transform: translateY(1px) !important;
+}
+
+/* ==============================================================================
+   VISOR REALISTA DE TICKET TÉRMICO (80MM)
+   ============================================================================== */
+.neo-thermal-ticket {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-family: 'Courier New', Courier, monospace !important;
+  width: 100% !important;
+  max-width: 380px !important;
+  margin: 0 auto !important;
+  padding: 24px 20px !important;
+  border-radius: 4px !important;
+  box-shadow: 
+    0 20px 40px -10px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+  position: relative !important;
+  border-top: 4px dashed #94a3b8 !important;
+  border-bottom: 4px dashed #94a3b8 !important;
+}
+
+.neo-thermal-ticket hr {
+  border: none !important;
+  border-top: 1px dashed #64748b !important;
+  margin: 8px 0 !important;
+}
+
+.neo-thermal-ticket * {
+  color: inherit !important;
+}
+
+/* Denomination input in Cash Audit */
+.denomination-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 6px 10px !important;
+  background: rgba(15, 23, 42, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.denomination-row:focus-within {
+  border-color: #38bdf8 !important;
+  background: rgba(30, 41, 59, 0.9) !important;
+}
+
+.denomination-input {
+  width: 70px !important;
+  text-align: right !important;
+  padding: 4px 8px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  color: #ffffff !important;
+  font-family: var(--font-mono) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  outline: none !important;
+}
+
+.denomination-input:focus {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3) !important;
+}
+
+/* 6. Botón Ticket Térmico 80mm en Tabla */
+.btn-action-ticket {
+  padding: 6px 9px !important;
+  background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%) !important;
+  border-color: rgba(153, 246, 228, 0.65) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.btn-action-ticket svg {
+  color: #99f6e4 !important;
+}
+
+.btn-action-ticket:hover {
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(13, 148, 136, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+}
+
+.btn-action-ticket:hover svg {
+  color: #ffffff !important;
+}
+
+/* 7. Modal Dark Theme para Operaciones Financieras (Arqueo y Corte) */
+.neo-modal-content.neo-modal-dark {
+  background: linear-gradient(145deg, #0b1120 0%, #0f172a 50%, #1e293b 100%) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.4) !important;
+  border-bottom: 3.5px solid #38bdf8 !important;
+  color: #f8fafc !important;
+  box-shadow: 
+    0 35px 80px -10px rgba(0, 0, 0, 0.7),
+    0 0 50px rgba(56, 189, 248, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+}
+
+.neo-modal-content.neo-modal-dark h1,
+.neo-modal-content.neo-modal-dark h2,
+.neo-modal-content.neo-modal-dark h3,
+.neo-modal-content.neo-modal-dark h4 {
+  color: #ffffff !important;
+}
+
+.neo-modal-content.neo-modal-dark p {
+  color: #94a3b8 !important;
+}
+
+.neo-modal-content.neo-modal-dark label {
+  color: #e2e8f0 !important;
+}
+
+.neo-modal-content.neo-modal-dark .border-b {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.neo-modal-content.neo-modal-dark .neo-input {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+.neo-modal-content.neo-modal-dark .neo-input:focus {
+  border-color: #38bdf8 !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3) !important;
+}
+
+/* ==============================================================================
+   8. BOTONES DE PATOLOGÍAS FRECUENTES CIE-11 (DISEÑO TÁCTIL PARA FONDO CLARO)
+   ============================================================================== */
+.cie11-frecuentes-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%) !important;
+  border: 1.5px solid #0284c7 !important;
+  color: #0369a1 !important;
+  padding: 6px 12px !important;
+  border-radius: 12px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.15) !important;
+}
+
+.cie11-chip-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 8px 14px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  text-decoration: none !important;
+  outline: none !important;
+  user-select: none !important;
+  white-space: nowrap !important;
+}
+
+.cie11-chip-btn:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+}
+
+.cie11-chip-label {
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.cie11-chip-badge {
+  font-family: monospace !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  padding: 2px 7px !important;
+  border-radius: 6px !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* 1. Infarto IAM (Rojo Carmesí / Rose) */
+.cie11-chip-rose {
+  background: #fff1f2 !important;
+  border: 1.5px solid #f43f5e !important;
+  color: #9f1239 !important;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.15) !important;
+}
+.cie11-chip-rose:hover {
+  background: #ffe4e6 !important;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.25) !important;
+}
+.cie11-chip-rose .cie11-chip-label {
+  color: #9f1239 !important;
+}
+.cie11-chip-rose .cie11-chip-icon {
+  color: #e11d48 !important;
+}
+.cie11-chip-rose .cie11-chip-badge {
+  background: #ffe4e6 !important;
+  color: #be123c !important;
+  border: 1px solid #fda4af !important;
+}
+.cie11-chip-rose.active {
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+  border: 2px solid #9f1239 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(225, 29, 72, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.04) !important;
+}
+.cie11-chip-rose.active .cie11-chip-label {
+  color: #ffffff !important;
+}
+.cie11-chip-rose.active .cie11-chip-icon {
+  color: #ffffff !important;
+}
+.cie11-chip-rose.active .cie11-chip-check {
+  color: #ffffff !important;
+}
+.cie11-chip-rose.active .cie11-chip-badge {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 2. Hipertensión (Azul Zafiro) */
+.cie11-chip-blue {
+  background: #eff6ff !important;
+  border: 1.5px solid #3b82f6 !important;
+  color: #1e40af !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15) !important;
+}
+.cie11-chip-blue:hover {
+  background: #dbeafe !important;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25) !important;
+}
+.cie11-chip-blue .cie11-chip-label {
+  color: #1e40af !important;
+}
+.cie11-chip-blue .cie11-chip-icon {
+  color: #2563eb !important;
+}
+.cie11-chip-blue .cie11-chip-badge {
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #93c5fd !important;
+}
+.cie11-chip-blue.active {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  border: 2px solid #1e3a8a !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.04) !important;
+}
+.cie11-chip-blue.active .cie11-chip-label {
+  color: #ffffff !important;
+}
+.cie11-chip-blue.active .cie11-chip-icon {
+  color: #ffffff !important;
+}
+.cie11-chip-blue.active .cie11-chip-check {
+  color: #ffffff !important;
+}
+.cie11-chip-blue.active .cie11-chip-badge {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 3. Diabetes Tipo 2 (Ámbar Dorado) */
+.cie11-chip-amber {
+  background: #fffbeb !important;
+  border: 1.5px solid #f59e0b !important;
+  color: #92400e !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15) !important;
+}
+.cie11-chip-amber:hover {
+  background: #fef3c7 !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25) !important;
+}
+.cie11-chip-amber .cie11-chip-label {
+  color: #92400e !important;
+}
+.cie11-chip-amber .cie11-chip-icon {
+  color: #d97706 !important;
+}
+.cie11-chip-amber .cie11-chip-badge {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+  border: 1px solid #fcd34d !important;
+}
+.cie11-chip-amber.active {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+  border: 2px solid #78350f !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(217, 119, 6, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.04) !important;
+}
+.cie11-chip-amber.active .cie11-chip-label {
+  color: #ffffff !important;
+}
+.cie11-chip-amber.active .cie11-chip-icon {
+  color: #ffffff !important;
+}
+.cie11-chip-amber.active .cie11-chip-check {
+  color: #ffffff !important;
+}
+.cie11-chip-amber.active .cie11-chip-badge {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 4. Dengue (Naranja Fuego) */
+.cie11-chip-orange {
+  background: #fff7ed !important;
+  border: 1.5px solid #f97316 !important;
+  color: #9a3412 !important;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.15) !important;
+}
+.cie11-chip-orange:hover {
+  background: #ffedd5 !important;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25) !important;
+}
+.cie11-chip-orange .cie11-chip-label {
+  color: #9a3412 !important;
+}
+.cie11-chip-orange .cie11-chip-icon {
+  color: #ea580c !important;
+}
+.cie11-chip-orange .cie11-chip-badge {
+  background: #ffedd5 !important;
+  color: #c2410c !important;
+  border: 1px solid #fdba74 !important;
+}
+.cie11-chip-orange.active {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+  border: 2px solid #7c2d12 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(234, 88, 12, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.04) !important;
+}
+.cie11-chip-orange.active .cie11-chip-label {
+  color: #ffffff !important;
+}
+.cie11-chip-orange.active .cie11-chip-icon {
+  color: #ffffff !important;
+}
+.cie11-chip-orange.active .cie11-chip-check {
+  color: #ffffff !important;
+}
+.cie11-chip-orange.active .cie11-chip-badge {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 5. Apendicitis Aguda (Púrpura Quirúrgico) */
+.cie11-chip-purple {
+  background: #faf5ff !important;
+  border: 1.5px solid #a855f7 !important;
+  color: #6b21a8 !important;
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.15) !important;
+}
+.cie11-chip-purple:hover {
+  background: #f3e8ff !important;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.25) !important;
+}
+.cie11-chip-purple .cie11-chip-label {
+  color: #6b21a8 !important;
+}
+.cie11-chip-purple .cie11-chip-icon {
+  color: #9333ea !important;
+}
+.cie11-chip-purple .cie11-chip-badge {
+  background: #f3e8ff !important;
+  color: #7e22ce !important;
+  border: 1px solid #d8b4fe !important;
+}
+.cie11-chip-purple.active {
+  background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%) !important;
+  border: 2px solid #581c87 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(147, 51, 234, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.04) !important;
+}
+.cie11-chip-purple.active .cie11-chip-label {
+  color: #ffffff !important;
+}
+.cie11-chip-purple.active .cie11-chip-icon {
+  color: #ffffff !important;
+}
+.cie11-chip-purple.active .cie11-chip-check {
+  color: #ffffff !important;
+}
+.cie11-chip-purple.active .cie11-chip-badge {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 6. Asma Bronquial (Cian / Turquesa) */
+.cie11-chip-cyan {
+  background: #ecfeff !important;
+  border: 1.5px solid #06b6d4 !important;
+  color: #0e7490 !important;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.15) !important;
+}
+.cie11-chip-cyan:hover {
+  background: #cffafe !important;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25) !important;
+}
+.cie11-chip-cyan .cie11-chip-label {
+  color: #0e7490 !important;
+}
+.cie11-chip-cyan .cie11-chip-icon {
+  color: #0891b2 !important;
+}
+.cie11-chip-cyan .cie11-chip-badge {
+  background: #cffafe !important;
+  color: #0e7490 !important;
+  border: 1px solid #67e8f9 !important;
+}
+.cie11-chip-cyan.active {
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%) !important;
+  border: 2px solid #155e75 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(8, 145, 178, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.04) !important;
+}
+.cie11-chip-cyan.active .cie11-chip-label {
+  color: #ffffff !important;
+}
+.cie11-chip-cyan.active .cie11-chip-icon {
+  color: #ffffff !important;
+}
+.cie11-chip-cyan.active .cie11-chip-check {
+  color: #ffffff !important;
+}
+.cie11-chip-cyan.active .cie11-chip-badge {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 7. Colecistitis (Verde Esmeralda) */
+.cie11-chip-emerald {
+  background: #ecfdf5 !important;
+  border: 1.5px solid #10b981 !important;
+  color: #065f46 !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15) !important;
+}
+.cie11-chip-emerald:hover {
+  background: #d1fae5 !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25) !important;
+}
+.cie11-chip-emerald .cie11-chip-label {
+  color: #065f46 !important;
+}
+.cie11-chip-emerald .cie11-chip-icon {
+  color: #059669 !important;
+}
+.cie11-chip-emerald .cie11-chip-badge {
+  background: #d1fae5 !important;
+  color: #047857 !important;
+  border: 1px solid #6ee7b7 !important;
+}
+.cie11-chip-emerald.active {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  border: 2px solid #064e3b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(5, 150, 105, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.04) !important;
+}
+.cie11-chip-emerald.active .cie11-chip-label {
+  color: #ffffff !important;
+}
+.cie11-chip-emerald.active .cie11-chip-icon {
+  color: #ffffff !important;
+}
+.cie11-chip-emerald.active .cie11-chip-check {
+  color: #ffffff !important;
+}
+.cie11-chip-emerald.active .cie11-chip-badge {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
 }
 

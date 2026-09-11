@@ -98,15 +98,15 @@ export const FarmaciaModule: React.FC<FarmaciaModuleProps> = ({
       {/* Encabezado */}
       <div className="neo-glass-panel p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="neo-badge" style={{ background: 'rgba(16, 185, 129, 0.15)', borderColor: 'rgba(16, 185, 129, 0.3)', color: '#34d399' }}>
-              <span className="neo-badge-dot" style={{ background: '#10b981' }}></span>
+          <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+            <span className="neo-badge neo-badge-green">
+              <span className="neo-badge-dot" style={{ background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
               FARMACIA HOSPITALARIA CENTRAL
             </span>
-            <span className="text-xs text-slate-400 font-mono">DISPENSACIÓN Y CONTROL COFEPRIS</span>
+            <span className="text-xs text-emerald-200 font-bold font-mono tracking-wider drop-shadow-sm">DISPENSACIÓN Y CONTROL COFEPRIS</span>
           </div>
-          <h2 className="text-2xl font-black text-white">Inventario y Control de Fármacos</h2>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-sm">Inventario y Control de Fármacos</h2>
+          <p className="text-slate-100 text-sm mt-1 font-medium leading-relaxed drop-shadow-sm">
             Trazabilidad de lotes, fechas de caducidad, psicotrópicos controlados y cadena de frío.
           </p>
         </div>

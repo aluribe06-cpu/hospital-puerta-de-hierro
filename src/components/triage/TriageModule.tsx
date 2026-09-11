@@ -20,7 +20,8 @@ import {
   AlertTriangle,
   Zap,
   X,
-  User
+  User,
+  Siren
 } from 'lucide-react';
 import { Patient, TriageAdmission, TriagePriority } from '../../types/hospital';
 import { generateTriageSheetPDF, exportPatientsToExcel } from '../../lib/exportEngine';
@@ -317,15 +318,15 @@ export const TriageModule: React.FC<TriageModuleProps> = ({
       {/* Barra de Encabezado y Filtros */}
       <div className="neo-glass-panel p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="neo-badge" style={{ background: 'rgba(239, 68, 68, 0.15)', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#f87171' }}>
-              <span className="neo-badge-dot" style={{ background: '#ef4444' }}></span>
+          <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+            <span className="neo-badge neo-badge-red">
+              <span className="neo-badge-dot" style={{ background: '#ef4444', boxShadow: '0 0 10px #ef4444' }}></span>
               URGENCIAS MÉDICO-QUIRÚRGICAS 24/7
             </span>
-            <span className="text-xs text-slate-400 font-mono">SELECCIÓN Y CLASIFICACIÓN MANCHESTER</span>
+            <span className="text-xs text-red-200 font-bold font-mono tracking-wider drop-shadow-sm">SELECCIÓN Y CLASIFICACIÓN MANCHESTER</span>
           </div>
-          <h2 className="text-2xl font-black text-white">Triage Hospitalario de Admisión</h2>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-sm">Triage Hospitalario de Admisión</h2>
+          <p className="text-slate-100 text-sm mt-1 font-medium leading-relaxed drop-shadow-sm">
             Evaluación de signos vitales, somatometría, IMC y estratificación de riesgo según la NOM-004 y NOM-024.
           </p>
         </div>
@@ -334,23 +335,22 @@ export const TriageModule: React.FC<TriageModuleProps> = ({
           {/* BOTÓN ROJO DE EMERGENCIA DIRECTA */}
           <button 
             onClick={() => setShowEmergencyModal(true)}
-            className="btn-neo text-xs font-black flex items-center gap-1.5 animate-pulse"
-            style={{ 
-              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(220, 38, 38, 0.55))', 
-              borderColor: 'rgba(239, 68, 68, 0.85)', 
-              color: '#fca5a5',
-              boxShadow: '0 0 16px rgba(239, 68, 68, 0.35)'
-            }}
+            className="btn-neo btn-neo-emergency btn-neo-emergency-pulse text-xs font-black flex items-center gap-2 group"
+            title="Activar ingreso inmediato de código rojo"
           >
-            <AlertTriangle size={16} className="text-red-400 animate-bounce" />
-            <span>🚨 INGRESO DE EMERGENCIA</span>
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-85"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
+            </span>
+            <Siren size={16} className="text-white group-hover:rotate-12 transition-transform duration-200" />
+            <span>Ingreso de Emergencia</span>
           </button>
 
           <button 
             onClick={() => exportPatientsToExcel(patients)}
             className="btn-neo btn-neo-defart text-xs"
           >
-            <FileSpreadsheet size={16} />
+            <FileSpreadsheet size={16} className="text-emerald-600" />
             Exportar Excel (.xlsx)
           </button>
 
@@ -359,11 +359,11 @@ export const TriageModule: React.FC<TriageModuleProps> = ({
               setPatientMode('NUEVO');
               setShowModal(true);
             }}
-            className="btn-neo text-xs"
-            style={{ background: 'rgba(16,185,129,0.15)', borderColor: 'rgba(16,185,129,0.4)', color: '#34d399' }}
+            className="btn-neo btn-neo-success text-xs flex items-center gap-1.5"
+            title="Dar de alta y registrar un nuevo paciente"
           >
             <UserPlus size={16} />
-            + Alta Nuevo Paciente
+            <span>Alta Nuevo Paciente</span>
           </button>
 
           <button 
@@ -371,10 +371,11 @@ export const TriageModule: React.FC<TriageModuleProps> = ({
               setPatientMode('EXISTENTE');
               setShowModal(true);
             }}
-            className="btn-neo btn-neo-active text-xs"
+            className="btn-neo btn-neo-active text-xs flex items-center gap-1.5"
+            title="Ingresar paciente existente a valoración de Triage"
           >
             <Plus size={16} />
-            Ingresar Paciente a Triage
+            <span>Ingresar Paciente a Triage</span>
           </button>
         </div>
       </div>

@@ -26,7 +26,8 @@ import {
   ChevronRight,
   LogOut,
   Boxes,
-  ShoppingBag
+  ShoppingBag,
+  HeartHandshake
 } from 'lucide-react';
 
 import { LoginWelcomeModal } from './components/auth/LoginWelcomeModal';
@@ -46,6 +47,7 @@ import { MedicalChatModule } from './components/chat/MedicalChatModule';
 import { PersonalTurnosModule } from './components/personal/PersonalTurnosModule';
 import { AlmacenModule } from './components/almacen/AlmacenModule';
 import { ComprasModule } from './components/compras/ComprasModule';
+import { TrabajoSocialModule } from './components/trabajosocial/TrabajoSocialModule';
 
 import {
   INITIAL_STAFF,
@@ -65,6 +67,7 @@ import {
   INITIAL_SUPPLIERS,
   INITIAL_PURCHASE_ORDERS,
   INITIAL_REQUISITIONS,
+  INITIAL_SOCIAL_WORK_CASES,
 } from './lib/hospitalData';
 
 import { 
@@ -85,7 +88,9 @@ import {
   WarehouseDispatch,
   Supplier,
   PurchaseOrder,
-  PurchaseRequisition
+  PurchaseRequisition,
+  SocialWorkRecord,
+  SocialCaseStatus
 } from './types/hospital';
 
 import { exportPatientsToExcel } from './lib/exportEngine';
@@ -233,7 +238,17 @@ export function App() {
 
   const [transactions, setTransactions] = useState<CashTransaction[]>(() => {
     const saved = localStorage.getItem('hpdh_transactions');
-    return saved ? JSON.parse(saved) : INITIAL_TRANSACTIONS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length >= INITIAL_TRANSACTIONS.length && parsed[0]?.taxCategory) {
+          return parsed;
+        }
+      } catch (e) {
+        // fallback to INITIAL_TRANSACTIONS
+      }
+    }
+    return INITIAL_TRANSACTIONS;
   });
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
@@ -265,6 +280,11 @@ export function App() {
   const [requisitions, setRequisitions] = useState<PurchaseRequisition[]>(() => {
     const saved = localStorage.getItem('hpdh_requisitions');
     return saved ? JSON.parse(saved) : INITIAL_REQUISITIONS;
+  });
+
+  const [socialWorkCases, setSocialWorkCases] = useState<SocialWorkRecord[]>(() => {
+    const saved = localStorage.getItem('hpdh_social_work_cases');
+    return saved ? JSON.parse(saved) : INITIAL_SOCIAL_WORK_CASES;
   });
 
   // Guardar en LocalStorage cada vez que cambian
@@ -336,7 +356,18 @@ export function App() {
     localStorage.setItem('hpdh_requisitions', JSON.stringify(requisitions));
   }, [requisitions]);
 
+  useEffect(() => {
+    localStorage.setItem('hpdh_social_work_cases', JSON.stringify(socialWorkCases));
+  }, [socialWorkCases]);
+
   // Manejadores de eventos de actualización
+  const handleAddSocialWorkCase = (newCase: SocialWorkRecord) => {
+    setSocialWorkCases(prev => [newCase, ...prev]);
+  };
+
+  const handleUpdateSocialWorkStatus = (id: string, status: SocialCaseStatus) => {
+    setSocialWorkCases(prev => prev.map(c => c.id === id ? { ...c, status } : c));
+  };
   const handleAddTriage = (newTriage: TriageAdmission) => {
     setTriageList([newTriage, ...triageList]);
   };
@@ -404,6 +435,10 @@ export function App() {
 
   const handleAddTransaction = (newTx: CashTransaction) => {
     setTransactions([newTx, ...transactions]);
+  };
+
+  const handleUpdateTransaction = (updatedTx: CashTransaction) => {
+    setTransactions(prev => prev.map(t => t.id === updatedTx.id ? updatedTx : t));
   };
 
   const handleAddCeyeBatch = (batch: CeyeBatch) => {
@@ -492,6 +527,7 @@ export function App() {
     { id: 'personal', label: 'Personal & Turnos', icon: Users },
     { id: 'almacen', label: 'Almacén General', icon: Boxes, badge: warehouse.filter(i => i.stockCurrent <= i.stockMinimum).length > 0 ? '⚠️' : undefined },
     { id: 'compras', label: 'Compras & Proveedores', icon: ShoppingBag, badge: purchaseOrders.filter(o => o.status === 'PENDIENTE_AUTORIZACION').length > 0 ? '📝' : undefined },
+    { id: 'trabajo_social', label: 'Trabajo Social', icon: HeartHandshake },
   ];
 
   const isFullAdmin = currentUser.role === 'ADMINISTRADOR_UNICO' || (currentUser.allowedModules && currentUser.allowedModules.includes('*'));
@@ -782,6 +818,7 @@ export function App() {
           <ConsultoriosModule
             patients={patients}
             notes={notes}
+            triageList={triageList}
             onAddNote={handleAddNote}
           />
         )}
@@ -819,7 +856,9 @@ export function App() {
           <CajaCobroModule
             transactions={transactions}
             patients={patients}
+            currentUser={currentUser}
             onAddTransaction={handleAddTransaction}
+            onUpdateTransaction={handleUpdateTransaction}
           />
         )}
 
@@ -871,6 +910,16 @@ export function App() {
             onUpdateOrderStatus={handleUpdateOrderStatus}
             onAddSupplier={handleAddSupplier}
             onApproveRequisition={handleApproveRequisition}
+          />
+        )}
+
+        {activeTab === 'trabajo_social' && (
+          <TrabajoSocialModule
+            cases={socialWorkCases}
+            patients={patients}
+            currentUser={currentUser}
+            onAddCase={handleAddSocialWorkCase}
+            onUpdateCaseStatus={handleUpdateSocialWorkStatus}
           />
         )}
 
